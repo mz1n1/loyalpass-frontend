@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LoyalPass — Business Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#09090b;--ink2:#111114;--ink3:#18181c;--border:#242428;--border2:#2e2e34;--muted:#52525c;--paper:#f4f2ee;--gold:#c8973a;--gold-l:#e2b35a;--gold-dim:rgba(200,151,58,.12);--green:#22c55e;--red:#ef4444;--blue:#3b82f6;--r:14px;--r2:10px;--sidebar:240px}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;font-size:14px}
+body{display:flex;min-height:100vh}
+#login-screen{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column}
+#login-screen.hide{animation:fadeOut .3s forwards;pointer-events:none}
+@keyframes fadeOut{to{opacity:0;transform:scale(1.03)}}
+.login-card{width:360px;background:var(--ink2);border:1px solid var(--border2);border-radius:20px;padding:36px 32px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.6)}
+.login-logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
+.login-title{font-size:1.5rem;font-weight:700;margin-bottom:4px}
+.login-sub{font-size:.78rem;color:var(--muted);margin-bottom:28px}
+.inp-field{width:100%;background:var(--ink3);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--paper);font-family:'Inter',sans-serif;font-size:.82rem;outline:none;transition:.14s}
+.inp-field:focus{border-color:rgba(200,151,58,.4)}
+.send-btn{display:flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:.17s}
+.send-btn:hover{background:var(--gold-l)}
+.sidebar{width:var(--sidebar);flex-shrink:0;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
+.sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-logo-mark{width:30px;height:30px;border-radius:7px;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:14px}
+.sb-biz{padding:12px 14px;margin:10px 10px 2px;background:var(--gold-dim);border:1px solid rgba(200,151,58,.2);border-radius:var(--r2);cursor:pointer}
+.sb-biz-name{font-size:.8rem;font-weight:600;margin-bottom:1px}
+.sb-biz-plan{font-size:.65rem;color:var(--gold);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.sb-nav{flex:1;padding:6px 8px;overflow-y:auto}
+.sb-section{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 8px 5px}
+.sbi{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:.13s;color:var(--muted);font-size:.82rem;font-weight:500;margin-bottom:1px;position:relative}
+.sbi:hover,.sbi.active{background:var(--ink3);color:var(--paper)}
+.sbi.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:2px;background:var(--gold);border-radius:2px}
+.sb-bottom{padding:10px;border-top:1px solid var(--border)}
+.sb-user{display:flex;align-items:center;gap:9px;padding:9px;border-radius:7px;cursor:pointer;transition:.15s}
+.sb-user:hover{background:var(--ink3)}
+.sb-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:var(--ink);flex-shrink:0}
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column}
+.topbar{height:56px;background:rgba(9,9,11,.88);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:90}
+.content{padding:24px;flex:1}
+.tab-pane{display:none}.tab-pane.active{display:block}
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.stat-card{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px}
+.stat-label{font-size:.64rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.stat-val{font-size:2rem;line-height:1;margin-bottom:5px}
+.stat-sub{font-size:.7rem;color:var(--muted)}
+.panel{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+.panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-size:.8rem;font-weight:600}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tb-btn{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.76rem;font-weight:500;cursor:pointer;transition:.14s}
+.tb-btn:hover{background:var(--ink3);color:var(--paper)}
+.tb-btn.gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
+.bar-chart{display:flex;align-items:flex-end;gap:5px;height:130px;padding:16px 16px 0}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--gold-l),var(--gold));min-height:3px;transition:height .9s cubic-bezier(.4,0,.2,1)}
+.bar-x{display:flex;justify-content:space-around;padding:5px 6px 12px;font-size:.59rem;color:var(--muted)}
+.feed-item{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.03);transition:.13s}
+.feed-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;flex-shrink:0}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:.62rem;font-weight:700}
+.tag-stamp{background:rgba(59,130,246,.1);color:#93c5fd}
+.tag-reward{background:var(--gold-dim);color:var(--gold)}
+.tag-new{background:rgba(34,197,94,.1);color:#86efac}
+.admin-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(200,151,58,.25);padding:2px 7px;border-radius:100px;margin-left:auto}
+.notif-compose{background:var(--ink3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:14px}
+.n-label{font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.n-textarea{width:100%;background:var(--ink2);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;color:var(--paper);font-family:'Inter',sans-serif;font-size:.82rem;resize:vertical;min-height:76px;outline:none;line-height:1.6}
+.n-textarea:focus{border-color:rgba(200,151,58,.4)}
+.inp-group{margin-bottom:14px}
+.inp-label{font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:9px 15px;text-align:left;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
+.tbl td{padding:11px 15px;font-size:.76rem;border-bottom:1px solid rgba(255,255,255,.03)}
+.admin-biz-card{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:10px;cursor:pointer;transition:.15s}
+.admin-biz-card:hover{border-color:var(--border2)}
+.plan-tag{font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:100px}
+.plan-business{background:rgba(59,130,246,.1);color:#93c5fd}
+.plan-agency{background:var(--gold-dim);color:var(--gold)}
+.toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--ink3);border:1px solid var(--border2);color:var(--paper);padding:11px 16px;border-radius:9px;font-size:.78rem;display:flex;align-items:center;gap:8px;transform:translateY(14px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+</style>
+</head>
+<body>
+
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">✦</div>
+    <div class="login-title">LoyalPass</div>
+    <div class="login-sub">Sign in to your dashboard</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div>
+        <div class="n-label" style="margin-bottom:5px;text-align:left">Username</div>
+        <input id="login-user" type="text" class="inp-field" placeholder="e.g. carmel" onkeydown="if(event.key==='Enter')doLogin()" style="font-size:.9rem;padding:11px 14px"/>
+      </div>
+      <div>
+        <div class="n-label" style="margin-bottom:5px;text-align:left">Password</div>
+        <input id="login-pass" type="password" class="inp-field" placeholder="Your password" onkeydown="if(event.key==='Enter')doLogin()" style="font-size:.9rem;padding:11px 14px"/>
+      </div>
+    </div>
+    <div id="login-error" style="color:var(--red);font-size:.72rem;text-align:center;min-height:18px;margin-bottom:8px"></div>
+    <button onclick="doLogin()" class="send-btn" style="width:100%;justify-content:center;font-size:.9rem;padding:12px">Sign in →</button>
+    <div style="font-size:.65rem;color:var(--muted);padding-top:14px;border-top:1px solid var(--border);margin-top:14px;text-align:center">Need access? <a href="mailto:contact@loyalpass.co.il" style="color:var(--gold)">contact@loyalpass.co.il</a></div>
+  </div>
+  <div style="margin-top:20px;font-size:.65rem;color:var(--muted)">Powered by LoyalPass · loyalpass.co.il</div>
+</div>
+
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-logo-mark">✦</div>
+    <div style="font-size:1.1rem;font-weight:700">Loyal<span style="color:var(--gold)">·</span>Pass</div>
+  </div>
+  <div class="sb-biz" onclick="showTab('profile',null)">
+    <div class="sb-biz-name" id="sb-name">Café Carmel</div>
+    <div class="sb-biz-plan">Business Plan · Active</div>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-section">Main</div>
+    <div class="sbi active" onclick="showTab('overview',this)">◆ Overview</div>
+    <div class="sbi" onclick="showTab('feed',this)">⚡ Live Feed</div>
+    <div class="sbi" onclick="showTab('analytics',this)">◉ Analytics</div>
+    <div class="sb-section">Engagement</div>
+    <div class="sbi" onclick="showTab('notifications',this)">🔔 Notifications</div>
+    <div class="sbi" onclick="showTab('customers',this)">♟ Customers</div>
+    <div class="sb-section">Settings</div>
+    <div class="sbi" onclick="showTab('profile',this)">◇ Business Profile</div>
+    <div class="sbi" id="admin-nav" style="display:none" onclick="showTab('admin',this)">🛡️ All Businesses<span class="admin-badge">Admin</span></div>
+  </nav>
+  <div class="sb-bottom">
+    <div class="sb-user" onclick="logout()" title="Sign out">
+      <div class="sb-avatar" id="sb-avatar">MZ</div>
+      <div><div style="font-size:.78rem;font-weight:600" id="sb-uname">Meir Zini</div><div style="font-size:.65rem;color:var(--muted)" id="sb-role">LoyalPass Admin</div></div>
+      <div style="margin-left:auto;font-size:.75rem;color:var(--muted)">⏏</div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div style="font-family:'Georgia',serif;font-size:1.1rem" id="page-title">Overview</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);padding:5px 10px;border-radius:100px;border:1px solid var(--border)"><div class="live-dot"></div>Live</div>
+      <button class="tb-btn" onclick="showTab('notifications',document.querySelectorAll('.sbi')[3])">🔔 Send notification</button>
+      <button class="tb-btn gold" id="card-link-btn" onclick="openCardLink()">📱 My card link</button>
+    </div>
+  </div>
+  <div class="content">
+
+  <!-- OVERVIEW -->
+  <div id="tab-overview" class="tab-pane active">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total Cardholders</div><div class="stat-val" id="ov-total">847</div><div class="stat-sub" style="color:var(--green)">↑ 12% vs last month</div></div>
+      <div class="stat-card"><div class="stat-label">Active this month</div><div class="stat-val">312</div><div class="stat-sub" style="color:var(--green)">↑ 8% vs last month</div></div>
+      <div class="stat-card"><div class="stat-label">Rewards redeemed</div><div class="stat-val">124</div><div class="stat-sub" style="color:var(--green)">↑ 19% this month</div></div>
+      <div class="stat-card"><div class="stat-label">Avg visit frequency</div><div class="stat-val">2.4×</div><div class="stat-sub">per month per customer</div></div>
+    </div>
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-hdr"><div><div class="panel-title">Weekly Scans</div><div style="font-size:.7rem;color:var(--muted)">Stamps & rewards this week</div></div></div>
+        <div class="bar-chart" id="weekly-bars"></div>
+        <div class="bar-x" id="weekly-x"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><div class="panel-title">Recent Activity</div><button class="tb-btn" onclick="showTab('feed',document.querySelectorAll('.sbi')[1])">View all →</button></div>
+        <div id="ov-feed"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE FEED -->
+  <div id="tab-feed" class="tab-pane">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px"><span style="width:12px;height:2px;background:var(--gold);border-radius:2px;display:inline-block"></span>Live Feed</div>
+    </div>
+    <div class="panel"><div class="panel-hdr"><div><div class="panel-title" style="display:flex;align-items:center;gap:8px"><div class="live-dot"></div>Real-time activity</div><div style="font-size:.7rem;color:var(--muted)">Updates automatically</div></div></div><div id="main-feed" style="max-height:500px;overflow-y:auto"></div></div>
+  </div>
+
+  <!-- ANALYTICS -->
+  <div id="tab-analytics" class="tab-pane">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px">
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:7px"><span style="width:12px;height:2px;background:var(--gold);border-radius:2px;display:inline-block"></span>Analytics</div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Conversion Rate</div><div class="stat-val">68%</div><div class="stat-sub">Scans → cardholders</div></div>
+      <div class="stat-card"><div class="stat-label">Retention (30d)</div><div class="stat-val">54%</div><div class="stat-sub" style="color:var(--green)">↑ 6% vs prior period</div></div>
+      <div class="stat-card"><div class="stat-label">Avg Stamps / Visit</div><div class="stat-val">1.2</div><div class="stat-sub">per customer per visit</div></div>
+      <div class="stat-card"><div class="stat-label">Reward Redemption</div><div class="stat-val">81%</div><div class="stat-sub">Of earned rewards used</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-hdr"><div class="panel-title">Monthly Scans — Last 12 Months</div></div>
+      <div class="bar-chart" id="monthly-bars"></div>
+      <div class="bar-x" id="monthly-x"></div>
+    </div>
+  </div>
+
+  <!-- NOTIFICATIONS -->
+  <div id="tab-notifications" class="tab-pane">
+    <div class="grid-2">
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px"><span style="width:12px;height:2px;background:var(--gold);border-radius:2px;display:inline-block"></span>Send Notification</div>
+        <div class="notif-compose">
+          <div class="n-label">Message</div>
+          <textarea class="n-textarea" id="notif-msg" maxlength="160" placeholder="e.g. ☀️ Double stamps today until 14:00! Come visit us 🥐" oninput="updateChar()"></textarea>
+          <div style="display:flex;justify-content:space-between;margin-top:4px"><div style="font-size:.65rem;color:var(--muted)">Delivered as push to Wallet</div><span style="font-size:.65rem;color:var(--muted)" id="char-c">0/160</span></div>
+          <div class="n-label" style="margin-top:14px">Send to segment</div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin:11px 0" id="seg-grid"></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
+            <div style="font-size:.72rem;color:var(--muted)">Sending to <strong id="recip-c" style="color:var(--paper)">847</strong> cardholders</div>
+            <button class="send-btn" id="send-btn" onclick="sendNotif()" disabled>📤 Send now</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px"><span style="width:12px;height:2px;background:var(--gold);border-radius:2px;display:inline-block"></span>Sent History</div>
+        <div class="panel" id="notif-hist"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOMERS -->
+  <div id="tab-customers" class="tab-pane">
+    <div class="panel">
+      <div class="panel-hdr"><div class="panel-title">All Customers</div><input placeholder="Search..." style="background:var(--ink3);border:1px solid var(--border2);color:var(--paper);padding:6px 10px;border-radius:7px;font-family:'Inter',sans-serif;font-size:.76rem;outline:none" oninput="filterCusts(this.value)"/></div>
+      <table class="tbl"><thead><tr><th>Name</th><th>Phone</th><th>Stamps</th><th>Visits</th><th>Joined</th></tr></thead><tbody id="cust-tbody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div id="tab-profile" class="tab-pane">
+    <div class="grid-2">
+      <div class="panel">
+        <div class="panel-hdr"><div class="panel-title">Business Details</div></div>
+        <div style="padding:20px">
+          <div class="inp-group"><div class="inp-label">Business Name</div><input class="inp-field" id="prof-name" value="Café Carmel"/></div>
+          <div class="inp-group"><div class="inp-label">Reward Description</div><input class="inp-field" id="prof-reward" value="Buy 9 meals → 10th FREE + fries & drink"/></div>
+          <div class="inp-group"><div class="inp-label">Stamps to Reward</div><input class="inp-field" type="number" value="10" min="3" max="20"/></div>
+          <button class="send-btn" style="margin-top:8px">Save changes</button>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hdr"><div class="panel-title">Card QR Code</div></div>
+        <div style="padding:20px;text-align:center">
+          <canvas id="qr-canvas" style="border-radius:12px;background:white;padding:12px;margin:0 auto 18px;display:block"></canvas>
+          <div style="font-size:.72rem;color:var(--muted);margin-bottom:12px;word-break:break-all" id="card-url"></div>
+          <button class="send-btn" style="margin:0 auto" onclick="copyCardLink()">Copy link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="tab-admin" class="tab-pane">
+    <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:7px"><span style="width:12px;height:2px;background:var(--gold);border-radius:2px;display:inline-block"></span>All Businesses — Admin</div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Active Businesses</div><div class="stat-val">3</div><div style="font-size:.7rem;color:var(--muted)">of 4 total</div></div>
+      <div class="stat-card"><div class="stat-label">Total Cardholders</div><div class="stat-val">1,891</div><div style="font-size:.7rem;color:var(--muted)">across all clients</div></div>
+      <div class="stat-card"><div class="stat-label">Agency Plans</div><div class="stat-val">1</div><div style="font-size:.7rem;color:var(--muted)">₪499/mo each</div></div>
+      <div class="stat-card"><div class="stat-label">Monthly Revenue</div><div class="stat-val">₪797</div><div style="font-size:.7rem;color:var(--muted)">active plans</div></div>
+    </div>
+    <div id="admin-biz-list"></div>
+  </div>
+
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BUSINESSES = [
+  {id:'cafe-carmel',   name:'Café Carmel',   emoji:'🍽️', plan:'business', username:'carmel',  password:'Carmel2026!',  customers:847, color:'#1a1030', active:true},
+  {id:'ofeh-yisraeli', name:'Ofeh Yisraeli', emoji:'🥐', plan:'business', username:'ofeh',    password:'Ofeh2026!',    customers:312, color:'#2c1206', active:true},
+  {id:'powerup-gym',   name:'PowerUp Gym',   emoji:'🏋️', plan:'agency',   username:'powerup', password:'PowerUp2026!', customers:534, color:'#061a10', active:true},
+  {id:'teva-hashuk',   name:'Teva HaShuk',   emoji:'🌿', plan:'business', username:'teva',    password:'Teva2026!',    customers:198, color:'#062030', active:false},
+];
+const ADMIN_USER = 'admin', ADMIN_PASS = 'LoyalPass2026!';
+const BASE_URL = 'https://loyalpass-frontend.pages.dev';
+
+let currentBiz = BUSINESSES[0], isAdmin = false;
+
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value.trim();
+  const err = document.getElementById('login-error');
+  if (!u || !p) { err.textContent = 'Enter username and password'; return; }
+  if (u === ADMIN_USER && p === ADMIN_PASS) { isAdmin = true; currentBiz = BUSINESSES[0]; unlockDashboard(); return; }
+  const biz = BUSINESSES.find(b => b.username === u && b.password === p && b.active);
+  if (biz) { isAdmin = false; currentBiz = biz; unlockDashboard(); return; }
+  err.textContent = 'Incorrect username or password';
+  document.getElementById('login-pass').value = '';
+}
+
+function unlockDashboard() {
+  const ls = document.getElementById('login-screen');
+  ls.classList.add('hide');
+  setTimeout(() => ls.style.display = 'none', 400);
+  document.getElementById('sb-name').textContent = currentBiz.name;
+  document.getElementById('sb-uname').textContent = isAdmin ? 'Meir Zini' : currentBiz.name;
+  document.getElementById('sb-role').textContent = isAdmin ? 'LoyalPass Admin' : currentBiz.plan + ' plan';
+  document.getElementById('sb-avatar').textContent = isAdmin ? 'MZ' : currentBiz.name.substring(0,2).toUpperCase();
+  document.getElementById('ov-total').textContent = currentBiz.customers.toLocaleString();
+  if (isAdmin) document.getElementById('admin-nav').style.display = 'flex';
+  const url = BASE_URL + '/?biz=' + currentBiz.id;
+  document.getElementById('card-url').textContent = url;
+  renderAll();
+}
+
+function logout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-screen').classList.remove('hide');
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+function showTab(id, el) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sbi').forEach(s => s.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+  document.getElementById('page-title').textContent = id.charAt(0).toUpperCase() + id.slice(1);
+  if (id === 'analytics') renderMonthly();
+  if (id === 'customers') renderCustomers();
+  if (id === 'notifications') renderNotif();
+  if (id === 'admin') renderAdmin();
+  if (id === 'profile') renderQR();
+}
+
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const MONTHS = ['Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb'];
+
+function renderBar(containerId, xId, vals, labels) {
+  const mx = Math.max(...vals);
+  const bc = document.getElementById(containerId);
+  const bx = document.getElementById(xId);
+  if (!bc) return;
+  bc.innerHTML = vals.map((v,i) => `<div class="bar-col"><div class="bar" style="height:${mx?v/mx*100:5}%"></div></div>`).join('');
+  if (bx) bx.innerHTML = labels.map(l => `<span>${l}</span>`).join('');
+}
+
+const EVENTS = [
+  {name:'Avi Goldberg',    type:'stamp',  time:'2m ago',  av:'AG', color:'#3b82f6'},
+  {name:'Shira Cohen',     type:'reward', time:'8m ago',  av:'SC', color:'#f59e0b'},
+  {name:'Yonatan Dahan',   type:'stamp',  time:'14m ago', av:'YD', color:'#8b5cf6'},
+  {name:'Michal Bar',      type:'new',    time:'21m ago', av:'MB', color:'#22c55e'},
+  {name:'Dana Peretz',     type:'stamp',  time:'35m ago', av:'DP', color:'#ef4444'},
+  {name:'Ron Levy',        type:'stamp',  time:'1h ago',  av:'RL', color:'#06b6d4'},
+];
+
+function feedItem(e) {
+  const tag = e.type==='stamp'?'<span class="tag tag-stamp">STAMP</span>':e.type==='reward'?'<span class="tag tag-reward">REWARD</span>':'<span class="tag tag-new">NEW</span>';
+  return `<div class="feed-item"><div class="feed-av" style="background:${e.color}20;color:${e.color}">${e.av}</div><div style="flex:1"><div style="font-size:.8rem;font-weight:600;margin-bottom:2px">${e.name}</div><div style="font-size:.7rem;color:var(--muted)">${tag}</div></div><div style="font-size:.64rem;color:var(--muted)">${e.time}</div></div>`;
+}
+
+function renderAll() {
+  renderBar('weekly-bars','weekly-x',[42,38,55,61,48,72,65],DAYS);
+  document.getElementById('ov-feed').innerHTML = EVENTS.slice(0,5).map(feedItem).join('');
+  document.getElementById('main-feed').innerHTML = EVENTS.map(feedItem).join('');
+}
+
+function renderMonthly() {
+  renderBar('monthly-bars','monthly-x',[210,245,198,320,415,380,520,490,610,580,720,810],MONTHS);
+}
+
+const CUSTS = [
+  {name:'Avi Goldberg',  phone:'050-123-4567', stamps:7, visits:28, joined:'Jan 2026'},
+  {name:'Shira Cohen',   phone:'052-234-5678', stamps:9, visits:31, joined:'Dec 2025'},
+  {name:'Michal Bar',    phone:'054-345-6789', stamps:3, visits:23, joined:'Feb 2026'},
+  {name:'Dana Peretz',   phone:'055-456-7890', stamps:5, visits:27, joined:'Nov 2025'},
+  {name:'Ron Levy',      phone:'053-567-8901', stamps:2, visits:19, joined:'Mar 2026'},
+  {name:'Yonatan Dahan', phone:'050-678-9012', stamps:8, visits:30, joined:'Jan 2026'},
+];
+
+function renderCustomers(q='') {
+  const rows = CUSTS.filter(c => !q || c.name.toLowerCase().includes(q.toLowerCase()));
+  document.getElementById('cust-tbody').innerHTML = rows.map(c =>
+    `<tr><td style="font-weight:600">${c.name}</td><td style="color:var(--muted)">${c.phone}</td><td>${'★'.repeat(c.stamps)}${'☆'.repeat(10-c.stamps)}</td><td>${c.visits}</td><td style="color:var(--muted)">${c.joined}</td></tr>`
+  ).join('');
+}
+
+function filterCusts(q) { renderCustomers(q); }
+
+const SEGS = [{id:'all',label:'All cardholders',n:currentBiz?.customers||847},{id:'active',label:'Active (30d)',n:312},{id:'reward',label:'Near reward',n:127},{id:'new',label:'New (7d)',n:43}];
+let selSeg = 'all';
+function renderNotif() {
+  document.getElementById('seg-grid').innerHTML = SEGS.map(s =>
+    `<button style="padding:6px 12px;border-radius:7px;border:1px solid ${s.id===selSeg?'var(--gold)':'var(--border2)'};background:${s.id===selSeg?'var(--gold-dim)':'transparent'};color:${s.id===selSeg?'var(--gold)':'var(--muted)'};font-family:'Inter',sans-serif;font-size:.72rem;cursor:pointer" onclick="selSeg='${s.id}';renderNotif();document.getElementById('recip-c').textContent='${s.n}'">${s.label} (${s.n})</button>`
+  ).join('');
+  document.getElementById('notif-hist').innerHTML = [
+    {msg:'☀️ Double stamps today!',seg:'All',sent:'Mar 18',rate:'68%'},
+    {msg:'🎁 Reward waiting for you',seg:'Near reward',sent:'Mar 10',rate:'81%'},
+  ].map(h => `<div class="feed-item"><div style="flex:1"><div style="font-size:.78rem;color:var(--paper);margin-bottom:4px">${h.msg}</div><div style="font-size:.65rem;color:var(--muted)">${h.seg} · ${h.sent}</div></div><div style="font-size:.78rem;font-weight:700;color:var(--green)">${h.rate}</div></div>`).join('');
+}
+function updateChar() {
+  const v = document.getElementById('notif-msg').value;
+  document.getElementById('char-c').textContent = v.length + '/160';
+  document.getElementById('send-btn').disabled = v.length === 0;
+}
+function sendNotif() {
+  showToast('✅ Notification sent to ' + document.getElementById('recip-c').textContent + ' cardholders');
+  document.getElementById('notif-msg').value = '';
+  document.getElementById('char-c').textContent = '0/160';
+  document.getElementById('send-btn').disabled = true;
+}
+
+function renderAdmin() {
+  document.getElementById('admin-biz-list').innerHTML = BUSINESSES.map(b =>
+    `<div class="admin-biz-card"><div style="font-size:2rem">${b.emoji}</div><div style="flex:1"><div style="font-size:.9rem;font-weight:700;margin-bottom:3px">${b.name}</div><div style="font-size:.7rem;color:var(--muted);display:flex;gap:10px">${b.customers} customers · <span class="plan-tag plan-${b.plan}">${b.plan}</span>${b.active?'':'<span style="color:var(--red);font-size:.65rem">inactive</span>'}</div></div></div>`
+  ).join('');
+}
+
+function renderQR() {
+  const url = BASE_URL + '/?biz=' + currentBiz.id;
+  // Simple QR placeholder
+  const c = document.getElementById('qr-canvas');
+  if (!c) return;
+  c.width = 160; c.height = 160;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0,0,160,160);
+  ctx.fillStyle = '#111';
+  ctx.font = '10px monospace';
+  ctx.textAlign = 'center';
+  ctx.fillText('QR: ' + url.substring(0,30), 80, 80);
+  ctx.fillText('(scan to get card)', 80, 95);
+}
+
+function openCardLink() {
+  const url = BASE_URL + '/?biz=' + currentBiz.id;
+  window.open(url, '_blank');
+}
+function copyCardLink() {
+  const url = BASE_URL + '/?biz=' + currentBiz.id;
+  navigator.clipboard.writeText(url).then(() => showToast('📋 Link copied!'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// Auto-focus login
+setTimeout(() => document.getElementById('login-user')?.focus(), 200);
+</script>
+</body>
+</html>
