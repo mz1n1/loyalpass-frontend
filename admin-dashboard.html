@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LoyalPass Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#080810;--bg2:#0f0f1a;--bg3:#161625;--bg4:#1e1e30;--border:#ffffff0f;--border2:#ffffff18;--text:#e2e2f0;--text2:#7878a0;--text3:#4a4a6a;--gold:#f0b429;--gold2:#ffd166;--gold-dim:#f0b42914;--green:#00e676;--red:#ff4d6d;--blue:#4d9fff;--sidebar:220px;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;font-size:13px}
+#login{position:fixed;inset:0;z-index:999;background:var(--bg);display:flex;align-items:center;justify-content:center}
+#login.out{animation:fo .4s ease forwards;pointer-events:none}
+@keyframes fo{to{opacity:0;transform:scale(1.04)}}
+.lb{width:340px;background:var(--bg2);border:1px solid var(--border2);border-radius:16px;padding:36px 32px}
+.ll{font-family:'DM Mono',monospace;font-size:1.4rem;color:var(--gold);margin-bottom:6px}
+.ls{font-size:.78rem;color:var(--text2);margin-bottom:28px}
+.fi{margin-bottom:12px}
+.fi label{display:block;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--text2);margin-bottom:5px}
+.fi input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.85rem;outline:none;transition:.15s}
+.fi input:focus{border-color:var(--gold)}
+.lerr{font-size:.72rem;color:var(--red);min-height:18px;margin-bottom:8px;text-align:center}
+.lbtn{width:100%;background:var(--gold);border:none;border-radius:8px;padding:11px;color:#0a0a10;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer}
+.lbtn:hover{background:var(--gold2)}
+body.on{display:flex}
+.sb{width:var(--sidebar);flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:10}
+.sb-br{padding:20px 16px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.sb-mk{width:28px;height:28px;border-radius:7px;background:linear-gradient(135deg,var(--gold),#a06800);display:flex;align-items:center;justify-content:center;font-size:13px;font-family:'DM Mono',monospace;color:#0a0a10;flex-shrink:0}
+.sb-tl{font-family:'DM Mono',monospace;font-size:.9rem}
+.sb-bp{margin:10px 10px 4px;background:var(--gold-dim);border:1px solid #f0b42930;border-radius:8px;padding:9px 10px}
+.sb-bn{font-size:.8rem;font-weight:600;margin-bottom:1px}
+.sb-bb{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.sb-nv{flex:1;padding:6px 8px;overflow-y:auto}
+.sb-sc{font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);padding:12px 6px 5px}
+.ni{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:7px;cursor:pointer;font-size:.78rem;font-weight:500;color:var(--text2);transition:.12s;margin-bottom:1px;position:relative}
+.ni:hover,.ni.on{background:var(--bg3);color:var(--text)}
+.ni.on::before{content:'';position:absolute;left:0;top:25%;bottom:25%;width:2px;background:var(--gold);border-radius:2px}
+.ic{font-size:14px;width:18px;text-align:center}
+.sb-ft{padding:10px;border-top:1px solid var(--border)}
+.su{display:flex;align-items:center;gap:8px;padding:8px;border-radius:7px;cursor:pointer}
+.su:hover{background:var(--bg3)}
+.av{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a06800);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:#0a0a10;flex-shrink:0}
+.ui{flex:1;min-width:0}
+.un{font-size:.75rem;font-weight:600}
+.ur{font-size:.6rem;color:var(--text3)}
+.mn{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.tb{height:52px;background:rgba(8,8,16,.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:9}
+.pt{font-family:'DM Mono',monospace;font-size:.95rem}
+.tr{display:flex;align-items:center;gap:8px}
+.ld{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--text2);padding:4px 9px;border-radius:100px;border:1px solid var(--border2)}
+.ldt{width:5px;height:5px;border-radius:50%;background:var(--green);animation:p 2s infinite}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.4}}
+.tbb{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:500;cursor:pointer;transition:.13s}
+.tbb:hover{background:var(--bg3);color:var(--text)}
+.tbb.g{background:var(--gold);border-color:var(--gold);color:#0a0a10;font-weight:700}
+.cn{padding:20px;flex:1}
+.tp{display:none}.tp.on{display:block}
+.sg{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}
+.sc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden}
+.sc::after{content:'';position:absolute;top:0;right:0;width:60px;height:60px;border-radius:50%;opacity:.06;transform:translate(15px,-15px)}
+.sc.go::after{background:var(--gold)}.sc.gr::after{background:var(--green)}.sc.bl::after{background:var(--blue)}.sc.rd::after{background:var(--red)}
+.sl{font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text2);margin-bottom:8px}
+.sv{font-family:'DM Mono',monospace;font-size:1.8rem;line-height:1;margin-bottom:4px;font-weight:500}
+.sb2{font-size:.68rem;color:var(--text3)}
+.sv.ld2{color:var(--text3);font-size:1rem}
+.pn{background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.ph{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pt2{font-size:.78rem;font-weight:600}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+table{width:100%;border-collapse:collapse}
+th{padding:8px 14px;text-align:left;font-size:.6rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+td{padding:10px 14px;font-size:.75rem;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--bg3)}
+.mo{font-family:'DM Mono',monospace;font-size:.7rem;color:var(--text2)}
+.sp{display:flex;gap:2px}
+.pp{width:7px;height:7px;border-radius:50%}
+.pp.on{background:var(--gold)}.pp.off{background:var(--bg4)}
+.es{padding:32px;text-align:center;color:var(--text3);font-size:.8rem}
+.bc{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bcc{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px}
+.be{font-size:1.8rem;flex-shrink:0}
+.bi{flex:1;min-width:0}
+.bn{font-size:.85rem;font-weight:600;margin-bottom:3px}
+.bm{font-size:.68rem;color:var(--text2)}
+.bs{font-family:'DM Mono',monospace;font-size:1.3rem;font-weight:500;color:var(--gold);flex-shrink:0}
+.toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:10px 14px;border-radius:9px;font-size:.75rem;opacity:0;transform:translateY(10px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .7s linear infinite;display:inline-block}
+select,input[type=text],input[type=tel]{background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:6px 9px;border-radius:6px;font-family:'DM Sans',sans-serif;font-size:.75rem;outline:none}
+</style>
+</head>
+<body>
+<div id="login">
+  <div class="lb">
+    <div class="ll">✦ LoyalPass</div>
+    <div class="ls">Admin dashboard — sign in</div>
+    <div class="fi"><label>Username</label><input id="lu" type="text" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="fi"><label>Password</label><input id="lp" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <div class="lerr" id="lerr"></div>
+    <button class="lbtn" onclick="doLogin()">Sign in →</button>
+  </div>
+</div>
+<aside class="sb">
+  <div class="sb-br"><div class="sb-mk">✦</div><div class="sb-tl">LoyalPass</div></div>
+  <div class="sb-bp"><div class="sb-bn" id="sbn">All Businesses</div><div class="sb-bb" id="sbb">Admin</div></div>
+  <nav class="sb-nv">
+    <div class="sb-sc">Views</div>
+    <div class="ni on" onclick="goTab('ov',this)"><span class="ic">◆</span>Dashboard</div>
+    <div class="ni" onclick="goTab('cu',this)"><span class="ic">♟</span>Customers</div>
+    <div class="ni" onclick="goTab('bz',this)"><span class="ic">◉</span>Businesses</div>
+    <div class="ni" onclick="goTab('st',this)"><span class="ic">⬡</span>Stamp Tool</div>
+  </nav>
+  <div class="sb-ft">
+    <div class="su" onclick="logout()">
+      <div class="av" id="sav">MZ</div>
+      <div class="ui"><div class="un" id="sun">Meir Zini</div><div class="ur" id="sur">Admin</div></div>
+      <div style="font-size:10px;color:var(--text3)">⏏</div>
+    </div>
+  </div>
+</aside>
+<main class="mn">
+  <div class="tb">
+    <div class="pt" id="pt">Dashboard</div>
+    <div class="tr">
+      <div class="ld"><div class="ldt"></div>Live</div>
+      <button class="tbb" onclick="refresh()" id="rfb">↻ Refresh</button>
+      <button class="tbb g" onclick="goTab('st',document.querySelectorAll('.ni')[3])">⬡ Stamp Customer</button>
+    </div>
+  </div>
+  <div class="cn">
+
+    <!-- OVERVIEW -->
+    <div id="tab-ov" class="tp on">
+      <div class="sg">
+        <div class="sc go"><div class="sl">Total Customers</div><div class="sv ld2" id="st1">—</div><div class="sb2">all businesses</div></div>
+        <div class="sc gr"><div class="sl">Total Stamps</div><div class="sv ld2" id="st2">—</div><div class="sb2">all time</div></div>
+        <div class="sc bl"><div class="sl">Businesses</div><div class="sv ld2" id="st3">—</div><div class="sb2" id="st3s">with customers</div></div>
+        <div class="sc rd"><div class="sl">Near Reward</div><div class="sv ld2" id="st4">—</div><div class="sb2">8+ stamps</div></div>
+      </div>
+      <div class="g2">
+        <div class="pn"><div class="ph"><div><div class="pt2">Customers by Business</div><div style="font-size:.65rem;color:var(--text2)">live from database</div></div></div><div id="bbd"></div></div>
+        <div class="pn"><div class="ph"><div class="pt2">Recent Registrations</div></div><div id="rcl"></div></div>
+      </div>
+    </div>
+
+    <!-- CUSTOMERS -->
+    <div id="tab-cu" class="tp">
+      <div class="pn">
+        <div class="ph">
+          <div><div class="pt2">All Customers</div><div class="sb2" id="ccl">loading...</div></div>
+          <div style="display:flex;gap:6px">
+            <select id="bf" onchange="filterC()"><option value="">All businesses</option><option value="cafe-carmel">Café Carmel</option><option value="ofeh-yisraeli">Ofeh Yisraeli</option><option value="powerup-gym">PowerUp Gym</option><option value="teva-hashuk">Teva HaShuk</option></select>
+            <input type="text" id="cs" placeholder="Search name / phone..." oninput="filterC()" style="width:180px"/>
+          </div>
+        </div>
+        <table><thead><tr><th>Name</th><th>Phone</th><th>Business</th><th>Stamps</th><th>Progress</th></tr></thead><tbody id="ctb"></tbody></table>
+      </div>
+    </div>
+
+    <!-- BUSINESSES -->
+    <div id="tab-bz" class="tp">
+      <div class="sg">
+        <div class="sc go"><div class="sl">Café Carmel</div><div class="sv ld2" id="bc1">—</div><div class="sb2">customers</div></div>
+        <div class="sc gr"><div class="sl">Ofeh Yisraeli</div><div class="sv ld2" id="bc2">—</div><div class="sb2">customers</div></div>
+        <div class="sc bl"><div class="sl">PowerUp Gym</div><div class="sv ld2" id="bc3">—</div><div class="sb2">customers</div></div>
+        <div class="sc rd"><div class="sl">Teva HaShuk</div><div class="sv ld2" id="bc4">—</div><div class="sb2">customers</div></div>
+      </div>
+      <div class="bc" id="bcl"></div>
+    </div>
+
+    <!-- STAMP TOOL -->
+    <div id="tab-st" class="tp">
+      <div style="max-width:400px">
+        <div class="pn">
+          <div class="ph"><div class="pt2">⬡ Add Stamp</div></div>
+          <div style="padding:18px;display:flex;flex-direction:column;gap:12px">
+            <div class="fi" style="margin:0"><label>Business</label>
+              <select id="sbz" style="width:100%;padding:10px 12px;font-size:.85rem">
+                <option value="cafe-carmel">Café Carmel</option>
+                <option value="ofeh-yisraeli">Ofeh Yisraeli</option>
+                <option value="powerup-gym">PowerUp Gym</option>
+                <option value="teva-hashuk">Teva HaShuk</option>
+              </select>
+            </div>
+            <div class="fi" style="margin:0"><label>Phone Number</label>
+              <input id="sph" type="tel" placeholder="e.g. 0501234567" style="width:100%;padding:10px 12px;font-size:.85rem;border-radius:8px"/>
+            </div>
+            <div id="slr" style="font-size:.75rem;color:var(--text2);min-height:18px"></div>
+            <button onclick="lookupC()" style="background:var(--bg3);border:1px solid var(--border2);color:var(--text);padding:9px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer">🔍 Lookup customer</button>
+            <button onclick="addStamp()" id="stb" style="background:var(--gold);border:none;color:#0a0a10;padding:11px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:700;cursor:pointer">⬡ Add Stamp</button>
+            <div id="str" style="font-size:.78rem;text-align:center;min-height:20px"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+<div class="toast" id="toast"></div>
+<script>
+const API='https://loyalpass-backend-production-5c8a.up.railway.app';
+const CREDS={admin:{p:'LoyalPass2026!',n:'Meir Zini',r:'Admin',biz:null},carmel:{p:'Carmel2026!',n:'Café Carmel',r:'Business Owner',biz:'cafe-carmel'},ofeh:{p:'Ofeh2026!',n:'Ofeh Yisraeli',r:'Business Owner',biz:'ofeh-yisraeli'},powerup:{p:'PowerUp2026!',n:'PowerUp Gym',r:'Business Owner',biz:'powerup-gym'},teva:{p:'Teva2026!',n:'Teva HaShuk',r:'Business Owner',biz:'teva-hashuk'}};
+const BIZ={
+  'cafe-carmel':{n:'Café Carmel',e:'🍽️',c:'var(--gold)'},
+  'ofeh-yisraeli':{n:'Ofeh Yisraeli',e:'🥐',c:'var(--green)'},
+  'powerup-gym':{n:'PowerUp Gym',e:'🏋️',c:'var(--blue)'},
+  'teva-hashuk':{n:'Teva HaShuk',e:'🌿',c:'var(--red)'}
+};
+let user=null,custs=[];
+
+function doLogin(){
+  const u=document.getElementById('lu').value.trim().toLowerCase();
+  const p=document.getElementById('lp').value;
+  const c=CREDS[u];
+  if(!c||c.p!==p){document.getElementById('lerr').textContent='Incorrect username or password';document.getElementById('lp').value='';return;}
+  user={u,...c};
+  document.getElementById('login').classList.add('out');
+  setTimeout(()=>document.getElementById('login').style.display='none',400);
+  document.body.classList.add('on');
+  document.getElementById('sun').textContent=c.n;
+  document.getElementById('sur').textContent=c.r;
+  document.getElementById('sav').textContent=c.n.substring(0,2).toUpperCase();
+  document.getElementById('sbn').textContent=c.biz?BIZ[c.biz]?.n||c.n:'All Businesses';
+  document.getElementById('sbb').textContent=c.biz?'Business view':'Admin view';
+  if(c.biz)document.getElementById('sbz').value=c.biz;
+  loadAll();
+}
+
+function logout(){
+  user=null;custs=[];
+  document.getElementById('login').style.display='flex';
+  document.getElementById('login').classList.remove('out');
+  document.getElementById('lu').value='';document.getElementById('lp').value='';
+  document.getElementById('lerr').textContent='';
+  document.body.classList.remove('on');
+}
+
+function goTab(id,el){
+  document.querySelectorAll('.tp').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
+  document.getElementById('tab-'+id).classList.add('on');
+  if(el)el.classList.add('on');
+  const T={ov:'Dashboard',cu:'Customers',bz:'Businesses',st:'Stamp Tool'};
+  document.getElementById('pt').textContent=T[id]||id;
+}
+
+async function loadAll(){
+  custs=[];
+  const bizIds=user?.biz?[user.biz]:Object.keys(BIZ);
+  await Promise.all(bizIds.map(async biz=>{
+    try{
+      const r=await fetch(API+'/api/pass/lookup?all=true&businessId='+biz);
+      if(r.ok){const d=await r.json();if(d.customers)custs.push(...d.customers.map(c=>({...c,business_id:biz})));}
+    }catch(e){}
+  }));
+  renderAll();
+}
+
+function renderAll(){renderOv();renderCu();renderBz();}
+
+function renderOv(){
+  const tot=custs.length;
+  const stamps=custs.reduce((s,c)=>s+(c.stamps||0),0);
+  const near=custs.filter(c=>(c.stamps||0)>=8).length;
+  const bizSet=new Set(custs.map(c=>c.business_id).filter(Boolean));
+  ['st1','st2','st3','st4'].forEach(id=>document.getElementById(id).className='sv');
+  document.getElementById('st1').textContent=tot;
+  document.getElementById('st2').textContent=stamps;
+  document.getElementById('st3').textContent=bizSet.size||Object.keys(BIZ).length;
+  document.getElementById('st3s').textContent=bizSet.size+' with customers';
+  document.getElementById('st4').textContent=near;
+
+  const breakdown={};
+  custs.forEach(c=>{const b=c.business_id||'?';breakdown[b]=(breakdown[b]||0)+1;});
+  const mx=Math.max(...Object.values(breakdown),1);
+  const bbd=document.getElementById('bbd');
+  bbd.innerHTML=tot===0
+    ?'<div class="es">📭 No customers yet.<br/>Share your card links to get started!</div>'
+    :Object.entries(BIZ).map(([id,inf])=>{
+      const cnt=breakdown[id]||0;
+      const pct=Math.round(cnt/mx*100);
+      return `<div style="padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px">
+        <span style="font-size:1.1rem">${inf.e}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.75rem;font-weight:600;margin-bottom:4px">${inf.n}</div>
+          <div style="background:var(--bg3);border-radius:3px;height:4px;overflow:hidden">
+            <div style="height:100%;background:${inf.c};width:${pct}%;transition:.6s;border-radius:3px"></div>
+          </div>
+        </div>
+        <span style="font-family:'DM Mono',monospace;font-size:.85rem;color:${inf.c}">${cnt}</span>
+      </div>`;
+    }).join('');
+
+  const rcl=document.getElementById('rcl');
+  const recent=[...custs].sort((a,b)=>new Date(b.created_at||0)-new Date(a.created_at||0)).slice(0,6);
+  rcl.innerHTML=recent.length===0
+    ?'<div class="es">🌱 No customers yet</div>'
+    :recent.map(c=>{
+      const b=BIZ[c.business_id]||{e:'?',n:c.business_id};
+      const init=(c.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+      return `<div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
+        <div style="width:28px;height:28px;border-radius:50%;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:700;color:var(--text2);flex-shrink:0">${init}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:.78rem;font-weight:600">${c.name||'?'}</div>
+          <div style="font-size:.65rem;color:var(--text2)">${b.e} ${b.n}</div>
+        </div>
+        <div style="font-family:'DM Mono',monospace;font-size:.7rem;color:var(--gold)">${c.stamps||0}★</div>
+      </div>`;
+    }).join('');
+}
+
+function renderCu(){filterC();}
+function filterC(){
+  const q=(document.getElementById('cs')?.value||'').toLowerCase();
+  const bf=document.getElementById('bf')?.value||'';
+  const fil=custs.filter(c=>{
+    if(bf&&c.business_id!==bf)return false;
+    if(q&&!((c.name||'').toLowerCase().includes(q)||(c.phone||'').includes(q)))return false;
+    return true;
+  });
+  document.getElementById('ccl').textContent=`${fil.length} customer${fil.length!==1?'s':''}${q||bf?' (filtered)':' total'}`;
+  document.getElementById('ctb').innerHTML=fil.length===0
+    ?'<tr><td colspan="5" style="text-align:center;padding:28px;color:var(--text3)">'+(custs.length===0?'No customers yet — share your card links!':'No results')+'</td></tr>'
+    :fil.map(c=>{
+      const b=BIZ[c.business_id]||{e:'?',n:c.business_id||'?'};
+      const s=c.stamps||0;
+      const pips=Array.from({length:10},(_,i)=>`<div class="pp ${i<s?'on':'off'}"></div>`).join('');
+      return `<tr><td style="font-weight:600">${c.name||'—'}</td><td class="mo">${c.phone||'—'}</td><td>${b.e} <span style="color:var(--text2)">${b.n}</span></td><td style="font-family:'DM Mono',monospace;color:var(--gold)">${s}/10</td><td><div class="sp">${pips}</div></td></tr>`;
+    }).join('');
+}
+
+function renderBz(){
+  const bd={};custs.forEach(c=>{const b=c.business_id||'?';bd[b]=(bd[b]||0)+1;});
+  document.getElementById('bc1').textContent=bd['cafe-carmel']||0;document.getElementById('bc1').className='sv';
+  document.getElementById('bc2').textContent=bd['ofeh-yisraeli']||0;document.getElementById('bc2').className='sv';
+  document.getElementById('bc3').textContent=bd['powerup-gym']||0;document.getElementById('bc3').className='sv';
+  document.getElementById('bc4').textContent=bd['teva-hashuk']||0;document.getElementById('bc4').className='sv';
+  document.getElementById('bcl').innerHTML=Object.entries(BIZ).map(([id,inf])=>{
+    const cnt=bd[id]||0;
+    const stamps=custs.filter(c=>c.business_id===id).reduce((s,c)=>s+(c.stamps||0),0);
+    const url='https://loyalpass-frontend.pages.dev/?biz='+id;
+    return `<div class="bcc">
+      <div class="be">${inf.e}</div>
+      <div class="bi">
+        <div class="bn">${inf.n}</div>
+        <div class="bm">${cnt} customers · ${stamps} stamps</div>
+        <div style="margin-top:6px"><span style="font-size:.62rem;color:var(--text3);cursor:pointer;text-decoration:underline" onclick="navigator.clipboard.writeText('${url}');toast('📋 Copied!')">Copy card link</span></div>
+      </div>
+      <div class="bs">${cnt}</div>
+    </div>`;
+  }).join('');
+}
+
+async function lookupC(){
+  const ph=document.getElementById('sph').value.trim();
+  const bz=document.getElementById('sbz').value;
+  const el=document.getElementById('slr');
+  if(!ph){el.textContent='Enter a phone number';return;}
+  el.textContent='⏳ Looking up...';
+  try{
+    const r=await fetch(API+'/api/pass/lookup?phone='+encodeURIComponent(ph)+'&businessId='+bz);
+    const d=await r.json();
+    el.innerHTML=d.found?'<span style="color:var(--green)">✓ Found: <strong>'+d.name+'</strong> — '+(d.stamps||0)+'/10 stamps</span>':'<span style="color:var(--text3)">New customer — will register on stamp</span>';
+  }catch(e){el.innerHTML='<span style="color:var(--red)">Error: '+e.message+'</span>';}
+}
+
+async function addStamp(){
+  const ph=document.getElementById('sph').value.trim();
+  const bz=document.getElementById('sbz').value;
+  const btn=document.getElementById('stb');
+  const res=document.getElementById('str');
+  if(!ph){res.innerHTML='<span style="color:var(--red)">Enter a phone number</span>';return;}
+  btn.disabled=true;btn.textContent='⏳ Adding...';res.textContent='';
+  try{
+    const r=await fetch(API+'/api/pass/stamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone:ph,businessId:bz})});
+    const d=await r.json();
+    if(r.ok&&d.stamps!==undefined){
+      res.innerHTML='<span style="color:var(--green)">✓ Stamp added! '+d.name+' now has '+d.stamps+'/10</span>';
+      document.getElementById('slr').innerHTML='<span style="color:var(--green)">✓ Updated: <strong>'+d.name+'</strong> — '+d.stamps+'/10</span>';
+      toast('⬡ Stamp added — '+d.stamps+'/10');
+      loadAll();
+    }else{res.innerHTML='<span style="color:var(--red)">'+( d.error||'Error')+'</span>';}
+  }catch(e){res.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';}
+  btn.disabled=false;btn.textContent='⬡ Add Stamp';
+}
+
+async function refresh(){
+  const btn=document.getElementById('rfb');
+  btn.innerHTML='<span class="spin">↻</span>';btn.disabled=true;
+  await loadAll();
+  btn.innerHTML='↻ Refresh';btn.disabled=false;
+  toast('✓ Refreshed');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+setTimeout(()=>document.getElementById('lu').focus(),200);
+</script>
+</body>
+</html>
