@@ -20,6 +20,13 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
 .reward-text{text-align:center;font-size:.78rem;color:var(--text2);margin-bottom:24px}
 .inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'Inter',sans-serif;font-size:.9rem;outline:none;margin-bottom:10px;transition:.15s}
 .inp:focus{border-color:rgba(245,166,35,.4)}
+.wallet-choice{display:none;flex-direction:column;gap:10px;width:100%;margin-bottom:10px}
+.wallet-choice.show{display:flex}
+.wallet-choice-title{font-size:.78rem;color:var(--text2);text-align:center;margin-bottom:2px}
+.btn-google{width:100%;background:#fff;border:none;border-radius:10px;padding:13px;color:#111;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-google:hover{background:#f0f0f0}
+.btn-apple{width:100%;background:#000;border:1px solid #333;border-radius:10px;padding:13px;color:#fff;font-family:'Inter',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-apple:hover{background:#111}
 .btn{width:100%;background:var(--gold);border:none;border-radius:10px;padding:13px;color:#111;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:.15s}
 .btn:hover{background:var(--gold2)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
@@ -27,94 +34,27 @@ html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;
 .msg{font-size:.8rem;text-align:center;min-height:20px;margin-bottom:8px}
 .msg.ok{color:var(--success)}.msg.err{color:var(--error)}
 .demo-bar{position:fixed;top:0;left:0;right:0;background:#1a1030;border-bottom:1px solid var(--border);padding:8px 16px;font-size:.72rem;color:var(--gold);text-align:center;z-index:100}
+.divider{display:flex;align-items:center;gap:10px;margin:4px 0 6px}
+.divider-line{flex:1;height:1px;background:var(--border)}
+.divider-text{font-size:.7rem;color:var(--text2)}
 </style>
 </head>
 <body>
 <div id="app" class="app"><div style="color:var(--text2);font-size:.85rem">Loading...</div></div>
-
 <script>
-const API_BASE = window.LP_API || 'https://loyalpass-backend-production-5c8a.up.railway.app';
-
-const BIZ_MAP = {
-  'cafe-carmel':   {name:'Café Carmel',   emoji:'🍽️', color:'#1a1030', max:10, reward:'Buy 9 meals → 10th FREE + fries & drink'},
-  'ofeh-yisraeli': {name:'Ofeh Yisraeli', emoji:'🥐', color:'#2c1206', max:10, reward:'Buy 9 items → 10th FREE'},
-  'powerup-gym':   {name:'PowerUp Gym',   emoji:'🏋️', color:'#061a10', max:10, reward:'10 visits → FREE month'},
-  'teva-hashuk':   {name:'Teva HaShuk',   emoji:'🌿', color:'#062030', max:10, reward:'10 purchases → 20% OFF'},
-};
-
-const params = new URLSearchParams(window.location.search);
-const bizId  = params.get('biz');
-const isDemo = params.get('demo') === 'true' || !bizId;
-const biz    = BIZ_MAP[bizId] || BIZ_MAP['cafe-carmel'];
-let stamps   = 0;
-
-function renderCard(s) {
-  stamps = s || 0;
-  const filled = Array.from({length:biz.max}, (_,i) =>
-    `<div class="stamp ${i < stamps ? 'filled' : ''}">${i < stamps ? '★' : ''}</div>`
-  ).join('');
-  return `
-    <div class="card">
-      <div class="biz-emoji">${biz.emoji}</div>
-      <div class="biz-name">${biz.name}</div>
-      <div class="biz-sub">Your digital loyalty card</div>
-      <div class="stamps">${filled}</div>
-      <div class="reward-text">${biz.reward}</div>
-    </div>
-  `;
-}
-
-function renderForm() {
-  return `
-    <div class="card" id="form-card">
-      <div style="font-size:.85rem;font-weight:600;margin-bottom:14px">Get your free loyalty card</div>
-      <input class="inp" id="inp-name" placeholder="Your name" type="text"/>
-      <input class="inp" id="inp-phone" placeholder="Phone number (e.g. 0501234567)" type="tel"/>
-      <div class="msg" id="msg"></div>
-      <button class="btn" id="join-btn" onclick="joinCard()">Get my card →</button>
-    </div>
-    <div class="powered">✦ Powered by LoyalPass · loyalpass.co.il</div>
-  `;
-}
-
-async function joinCard() {
-  const name  = document.getElementById('inp-name')?.value?.trim();
-  const phone = document.getElementById('inp-phone')?.value?.trim();
-  const msg   = document.getElementById('msg');
-  const btn   = document.getElementById('join-btn');
-  if (!name || !phone) { msg.className='msg err'; msg.textContent='Please enter name and phone'; return; }
-  btn.disabled = true;
-  msg.className='msg'; msg.textContent='Creating your card...';
-  try {
-    const r = await fetch(API_BASE + '/api/pass/create', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({name, phone, businessId: bizId || 'cafe-carmel'})
-    });
-    const d = await r.json();
-    if (d.googleWalletUrl) {
-      msg.className='msg ok'; msg.textContent='Card ready! Opening Google Wallet...';
-      setTimeout(() => { window.location.href = d.googleWalletUrl; }, 800);
-    } else if (d.error) {
-      msg.className='msg err'; msg.textContent = d.error;
-      btn.disabled = false;
-    }
-  } catch(e) {
-    msg.className='msg err'; msg.textContent = 'Connection error. Try again.';
-    btn.disabled = false;
-  }
-}
-
-// Init
-const app = document.getElementById('app');
-if (isDemo) {
-  app.innerHTML = `<div class="demo-bar">✦ DEMO MODE — loyalpass.co.il</div>`
-    + `<div style="margin-top:48px;width:100%;max-width:420px">`
-    + renderCard(3)
-    + renderForm()
-    + `</div>`;
-} else {
-  app.innerHTML = renderCard(0) + renderForm();
-}
+const API='https://loyalpass-backend-production-5c8a.up.railway.app';
+const BIZ={'cafe-carmel':{name:'Café Carmel',emoji:'🍽️',max:10,reward:'Buy 9 meals → 10th FREE + fries & drink'},'ofeh-yisraeli':{name:'Ofeh Yisraeli',emoji:'🥐',max:10,reward:'Buy 9 items → 10th FREE'},'powerup-gym':{name:'PowerUp Gym',emoji:'🏋️',max:10,reward:'10 visits → FREE month'},'teva-hashuk':{name:'Teva HaShuk',emoji:'🌿',max:10,reward:'10 purchases → 20% OFF'}};
+const p=new URLSearchParams(location.search),bizId=p.get('biz'),biz=BIZ[bizId]||BIZ['cafe-carmel'];
+let cName='',cPhone='';
+function card(s){s=s||0;const dots=Array.from({length:biz.max},(_,i)=>'<div class="stamp '+(i<s?'filled':'')+'">'+( i<s?'★':'')+' </div>').join('');return '<div class="card"><div class="biz-emoji">'+biz.emoji+'</div><div class="biz-name">'+biz.name+'</div><div class="biz-sub">Your digital loyalty card</div><div class="stamps">'+dots+'</div><div class="reward-text">'+biz.reward+'</div></div>';}
+function form(){return '<div class="card"><div style="font-size:.85rem;font-weight:600;margin-bottom:14px">Get your free loyalty card</div><input class="inp" id="n" placeholder="Your name" type="text"/><input class="inp" id="ph" placeholder="Phone (e.g. 0501234567)" type="tel"/><div class="msg" id="msg"></div><div class="wallet-choice" id="wc"><div class="wallet-choice-title">Choose where to save your card:</div><button class="btn-google" id="bg" onclick="gWallet()">📱 Add to Google Wallet</button><div class="divider"><div class="divider-line"></div><div class="divider-text">or</div><div class="divider-line"></div></div><button class="btn-apple" id="ba" onclick="aWallet()"> Add to Apple Wallet</button></div><button class="btn" id="jb" onclick="join()">Get my card →</button></div><div class="powered">✦ Powered by LoyalPass · loyalpass.co.il</div>';}
+function setMsg(t,ok){const m=document.getElementById('msg');m.className='msg '+(ok?'ok':'err');m.textContent=t;}
+function join(){const n=document.getElementById('n').value.trim(),ph=document.getElementById('ph').value.trim();if(!n||!ph){setMsg('Please enter name and phone',false);return;}cName=n;cPhone=ph;document.getElementById('jb').style.display='none';document.getElementById('wc').classList.add('show');document.getElementById('n').disabled=document.getElementById('ph').disabled=true;setMsg('✓ Ready! Choose your wallet:',true);}
+async function gWallet(){const btn=document.getElementById('bg');btn.disabled=true;btn.textContent='Creating...';setMsg('Creating Google Wallet pass...',true);try{const r=await fetch(API+'/api/pass/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||'cafe-carmel'})});const d=await r.json();if(d.googleWalletUrl){setMsg('Opening Google Wallet...',true);setTimeout(()=>location.href=d.googleWalletUrl,600);}else{setMsg(d.error||'Error',false);btn.disabled=false;btn.textContent='📱 Add to Google Wallet';}}catch(e){setMsg('Connection error. Try again.',false);btn.disabled=false;btn.textContent='📱 Add to Google Wallet';}}
+async function aWallet(){const btn=document.getElementById('ba');btn.disabled=true;btn.textContent='Creating Apple pass...';setMsg('Creating Apple Wallet pass...',true);try{const r=await fetch(API+'/api/pass/apple/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||'cafe-carmel'})});if(r.ok){const blob=await r.blob(),url=URL.createObjectURL(blob);setMsg('✓ Pass ready! Opening Apple Wallet...',true);const a=document.createElement('a');a.href=url;a.download='loyalpass.pkpass';a.click();URL.revokeObjectURL(url);}else{const d=await r.json().catch(()=>({error:'Server error'}));setMsg(d.error||'Error',false);btn.disabled=false;btn.textContent=' Add to Apple Wallet';}}catch(e){setMsg('Connection error. Try again.',false);btn.disabled=false;btn.textContent=' Add to Apple Wallet';}}
+const app=document.getElementById('app');
+if(!bizId){app.innerHTML='<div class="demo-bar">✦ DEMO MODE · loyalpass.co.il</div><div style="margin-top:48px;width:100%;max-width:420px">'+card(3)+form()+'</div>';}
+else{app.innerHTML=card(0)+form();}
 </script>
 </body>
 </html>
