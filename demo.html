@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>LoyalPass Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0b0b0f;--bg2:#131319;--bg3:#1c1c24;--border:#25252d;--text:#e8e8f0;--text2:#9999aa;--gold:#f5a623;--gold2:#ffc95a;--success:#00b86f;--error:#ff4561;}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh}
+.demo-bar{position:fixed;top:0;left:0;right:0;background:linear-gradient(90deg,#1a1030,#0f1a30);border-bottom:1px solid rgba(245,166,35,.3);padding:7px 16px;font-size:.72rem;color:var(--gold);text-align:center;z-index:100;display:flex;align-items:center;justify-content:center;gap:8px}
+.demo-bar-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.app{max-width:420px;margin:0 auto;padding:56px 20px 20px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;margin-bottom:20px}
+.biz-emoji{font-size:2.5rem;text-align:center;margin-bottom:10px}
+.biz-name{font-size:1.3rem;font-weight:700;text-align:center;margin-bottom:4px}
+.biz-sub{font-size:.8rem;color:var(--text2);text-align:center;margin-bottom:24px}
+.stamps{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.stamp{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:.3s}
+.stamp.filled{background:var(--gold);border-color:var(--gold)}
+.reward-text{text-align:center;font-size:.78rem;color:var(--text2);margin-bottom:24px}
+.phone-row{display:flex;gap:8px;margin-bottom:10px}
+.country-select{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 10px;color:var(--text);font-family:"Inter",sans-serif;font-size:.85rem;outline:none;flex-shrink:0;width:110px;cursor:pointer}
+.phone-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:"Inter",sans-serif;font-size:.9rem;outline:none;transition:.15s}
+.phone-input:focus{border-color:rgba(245,166,35,.4)}
+.phone-input.err{border-color:var(--error)}
+.phone-hint{font-size:.68rem;color:var(--text2);margin:-6px 0 10px;padding-left:2px}
+.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:"Inter",sans-serif;font-size:.9rem;outline:none;margin-bottom:10px;transition:.15s}
+.inp:focus{border-color:rgba(245,166,35,.4)}
+.inp-label{font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:4px;margin-top:4px}
+.wallet-choice{display:none;flex-direction:column;gap:10px;width:100%;margin-bottom:10px}
+.wallet-choice.show{display:flex}
+.wallet-choice-title{font-size:.78rem;color:var(--text2);text-align:center;margin-bottom:2px}
+.btn-google{width:100%;background:#fff;border:none;border-radius:10px;padding:13px;color:#111;font-family:"Inter",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-google:hover{background:#f0f0f0}
+.btn-apple{width:100%;background:#000;border:1px solid #333;border-radius:10px;padding:13px;color:#fff;font-family:"Inter",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-apple:hover{background:#111}
+.btn{width:100%;background:var(--gold);border:none;border-radius:10px;padding:13px;color:#111;font-family:"Inter",sans-serif;font-size:.9rem;font-weight:700;cursor:pointer}
+.btn:hover{background:var(--gold2)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.powered{font-size:.65rem;color:var(--text2);text-align:center;margin-top:16px}
+.msg{font-size:.8rem;text-align:center;min-height:20px;margin-bottom:8px}
+.msg.ok{color:var(--success)}.msg.err{color:var(--error)}
+.divider{display:flex;align-items:center;gap:10px;margin:4px 0 6px}
+.divider-line{flex:1;height:1px;background:var(--border)}
+.divider-text{font-size:.7rem;color:var(--text2)}
+.card-added{background:var(--bg2);border:2px solid var(--success);border-radius:20px;padding:28px;width:100%;margin-bottom:20px;text-align:center}
+.shown-on-card{font-size:.62rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px 6px;margin-left:5px;vertical-align:middle}
+.demo-customers{background:var(--bg2);border:1px solid rgba(245,166,35,.2);border-radius:16px;padding:18px;width:100%;margin-bottom:20px}
+.demo-cust-title{font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.demo-cust{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.demo-cust:last-child{border-bottom:none}
+.demo-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a06800);display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;color:#0a0a10;flex-shrink:0}
+.demo-info{flex:1;min-width:0}
+.demo-name{font-size:.8rem;font-weight:600;margin-bottom:2px}
+.demo-stamps-row{display:flex;gap:3px}
+.demo-pip{width:12px;height:12px;border-radius:50%;background:var(--bg3);border:1px solid var(--border)}
+.demo-pip.on{background:var(--gold);border-color:var(--gold)}
+</style>
+</head>
+<body>
+<div class="demo-bar">
+  <div class="demo-bar-dot"></div>
+  <span>✦ DEMO MODE &nbsp;·&nbsp; This is a demo version of LoyalPass &nbsp;·&nbsp; loyalpass.co.il</span>
+  <div class="demo-bar-dot"></div>
+</div>
+<div id="app" class="app"><div style="color:var(--text2);font-size:.85rem">Loading...</div></div>
+<script>
+var API = "https://loyalpass-backend-production-5c8a.up.railway.app";
+var DEMO_MODE = true;
+var DEMO_PREFIX = "demo-"; // separate DB namespace
+
+var BIZ = {
+  "cafe-carmel":   {name:"Caf\u00e9 Carmel",  emoji:"\ud83c\udf7d\ufe0f",max:10,reward:"Buy 9 meals \u2192 10th FREE + fries & drink"},
+  "ofeh-yisraeli": {name:"Ofeh Yisraeli",emoji:"\ud83e\udd50",       max:10,reward:"Buy 9 items \u2192 10th FREE"},
+  "powerup-gym":   {name:"PowerUp Gym",  emoji:"\ud83c\udfcb\ufe0f",max:10,reward:"10 visits \u2192 FREE month"},
+  "teva-hashuk":   {name:"Teva HaShuk",  emoji:"\ud83c\udf3f",       max:10,reward:"10 purchases \u2192 20% OFF"}
+};
+
+// Pre-loaded fake demo customers to show during pitch
+var DEMO_CUSTOMERS = {
+  "cafe-carmel": [
+    {name:"Yael Cohen",    stamps:7, initials:"YC"},
+    {name:"Avi Levi",      stamps:4, initials:"AL"},
+    {name:"Shira Mizrahi", stamps:9, initials:"SM"}
+  ],
+  "ofeh-yisraeli": [
+    {name:"Dana Peretz",   stamps:5, initials:"DP"},
+    {name:"Ron Goldberg",  stamps:8, initials:"RG"},
+    {name:"Maya Bar",      stamps:2, initials:"MB"}
+  ],
+  "powerup-gym": [
+    {name:"Nir Shapiro",   stamps:6, initials:"NS"},
+    {name:"Tal Katz",      stamps:10,initials:"TK"},
+    {name:"Lior Ben-David",stamps:3, initials:"LB"}
+  ],
+  "teva-hashuk": [
+    {name:"Moran Alon",    stamps:8, initials:"MA"},
+    {name:"Yossi Green",   stamps:1, initials:"YG"},
+    {name:"Hila Schwartz", stamps:5, initials:"HS"}
+  ]
+};
+
+var COUNTRIES = [
+  {code:"+972",flag:"\ud83c\uddee\ud83c\uddf1",name:"Israel",     digits:9, ph:"50 123 4567"},
+  {code:"+1",  flag:"\ud83c\uddfa\ud83c\uddf8",name:"USA/CA",     digits:10,ph:"212 555 1234"},
+  {code:"+44", flag:"\ud83c\uddec\ud83c\udde7",name:"UK",         digits:10,ph:"7700 900123"},
+  {code:"+33", flag:"\ud83c\uddeb\ud83c\uddf7",name:"France",     digits:9, ph:"6 12 34 56 78"},
+  {code:"+49", flag:"\ud83c\udde9\ud83c\uddea",name:"Germany",    digits:10,ph:"151 1234 5678"},
+  {code:"+39", flag:"\ud83c\uddee\ud83c\uddf9",name:"Italy",      digits:10,ph:"320 123 4567"},
+  {code:"+34", flag:"\ud83c\uddea\ud83c\uddf8",name:"Spain",      digits:9, ph:"612 345 678"},
+  {code:"+971",flag:"\ud83c\udde6\ud83c\uddea",name:"UAE",        digits:9, ph:"50 123 4567"},
+  {code:"+966",flag:"\ud83c\uddf8\ud83c\udde6",name:"Saudi",      digits:9, ph:"50 123 4567"},
+  {code:"+20", flag:"\ud83c\uddea\ud83c\uddec",name:"Egypt",      digits:10,ph:"100 123 4567"},
+  {code:"+55", flag:"\ud83c\udde7\ud83c\uddf7",name:"Brazil",     digits:11,ph:"11 9 1234 5678"},
+  {code:"+52", flag:"\ud83c\uddf2\ud83c\uddfd",name:"Mexico",     digits:10,ph:"55 1234 5678"},
+  {code:"+86", flag:"\ud83c\udde8\ud83c\uddf3",name:"China",      digits:11,ph:"138 0013 8000"},
+  {code:"+81", flag:"\ud83c\uddef\ud83c\uddf5",name:"Japan",      digits:10,ph:"90 1234 5678"},
+  {code:"+82", flag:"\ud83c\uddf0\ud83c\uddf7",name:"Korea",      digits:9, ph:"10 1234 5678"},
+  {code:"+7",  flag:"\ud83c\uddf7\ud83c\uddfa",name:"Russia",     digits:10,ph:"912 345 6789"}
+];
+
+var p = new URLSearchParams(location.search);
+var bizId = p.get("biz") || "cafe-carmel";
+var biz = BIZ[bizId] || BIZ["cafe-carmel"];
+var demoBizId = DEMO_PREFIX + bizId; // "demo-cafe-carmel" in DB
+var cName = "", cPhone = "", cardAdded = false;
+
+function getCountry(){
+  var sel = document.getElementById("country-sel");
+  if(!sel) return COUNTRIES[0];
+  for(var i=0;i<COUNTRIES.length;i++) if(COUNTRIES[i].code===sel.value) return COUNTRIES[i];
+  return COUNTRIES[0];
+}
+
+function stamps(n, max){
+  var h="";
+  for(var i=0;i<max;i++) h+="<div class=\"stamp"+(i<n?" filled":"")+"\">"+(i<n?"\u2605":"")+"</div>";
+  return h;
+}
+
+function countryOpts(){
+  return COUNTRIES.map(function(c){
+    return "<option value=\""+c.code+"\""+( c.code==="+972"?" selected":"")+">"+c.flag+" "+c.code+"</option>";
+  }).join("");
+}
+
+function setMsg(t,ok){
+  var m=document.getElementById("msg");
+  if(!m)return;
+  m.className="msg "+(ok?"ok":"err");
+  m.textContent=t;
+}
+
+function onCountryChange(){
+  var c=getCountry();
+  var ph=document.getElementById("ph");
+  var ht=document.getElementById("ph-hint");
+  if(ph){ph.placeholder=c.ph;ph.value="";}
+  if(ht) ht.textContent=c.flag+" "+c.name+" \u00b7 "+c.digits+" digits required";
+}
+
+function onPhoneInput(el){
+  el.value=el.value.replace(/\D/g,"");
+  var c=getCountry();
+  if(el.value.length>c.digits) el.value=el.value.substring(0,c.digits);
+  var done=el.value.length===c.digits;
+  el.classList.toggle("err",el.value.length>0&&!done);
+  var ht=document.getElementById("ph-hint");
+  if(ht){
+    var rem=c.digits-el.value.length;
+    ht.textContent=done?"\u2713 "+c.flag+" "+c.name+" \u00b7 looks good":c.flag+" "+c.name+" \u00b7 "+c.digits+" digits required"+(el.value.length>0?" ("+rem+" more)":"");
+    ht.style.color=done?"var(--success)":"var(--text2)";
+  }
+}
+
+function renderCard(s){
+  return "<div class=\"card\"><div class=\"biz-emoji\">"+biz.emoji+"</div><div class=\"biz-name\">"+biz.name+"</div><div class=\"biz-sub\">Your digital loyalty card</div><div class=\"stamps\">"+stamps(s||0,biz.max)+"</div><div class=\"reward-text\">"+biz.reward+"</div></div>";
+}
+
+function renderDemoCustomers(){
+  var custs = DEMO_CUSTOMERS[bizId] || DEMO_CUSTOMERS["cafe-carmel"];
+  var rows = custs.map(function(c){
+    var pips="";
+    for(var i=0;i<10;i++) pips+="<div class=\"demo-pip"+(i<c.stamps?" on":"")+"\"</div>";
+    var isReward = c.stamps >= 10;
+    return "<div class=\"demo-cust\">"+
+      "<div class=\"demo-av\">"+c.initials+"</div>"+
+      "<div class=\"demo-info\">"+
+        "<div class=\"demo-name\">"+c.name+(isReward?" \ud83c\udf81":c.stamps>=8?" \u26a1":"")+"</div>"+
+        "<div class=\"demo-stamps-row\">"+pips+"</div>"+
+      "</div>"+
+      "<div style=\"font-size:.72rem;color:var(--gold);font-weight:700\">"+c.stamps+"/10</div>"+
+    "</div>";
+  }).join("");
+  return "<div class=\"demo-customers\">"+
+    "<div class=\"demo-cust-title\">✦ Active members</div>"+
+    rows+
+    "<div style=\"font-size:.65rem;color:var(--text2);margin-top:10px;text-align:center\">These are demo customers showing how the system works</div>"+
+  "</div>";
+}
+
+function renderForm(){
+  return "<div class=\"card\">"+
+    "<div style=\"font-size:.85rem;font-weight:600;margin-bottom:14px\">Try it yourself \u2014 add your card now</div>"+
+    "<div class=\"inp-label\">Full Name <span class=\"shown-on-card\">shown on card</span></div>"+
+    "<input class=\"inp\" id=\"n\" placeholder=\"e.g. David Cohen\" type=\"text\" autocomplete=\"name\"/>"+
+    "<div class=\"inp-label\" style=\"margin-top:6px\">Phone Number</div>"+
+    "<div class=\"phone-row\"><select class=\"country-select\" id=\"country-sel\" onchange=\"onCountryChange()\">"+countryOpts()+"</select>"+
+    "<input class=\"phone-input\" id=\"ph\" placeholder=\"50 123 4567\" type=\"tel\" inputmode=\"numeric\" oninput=\"onPhoneInput(this)\"/></div>"+
+    "<div class=\"phone-hint\" id=\"ph-hint\">\ud83c\uddee\ud83c\uddf1 Israel \u00b7 9 digits required</div>"+
+    "<div class=\"msg\" id=\"msg\"></div>"+
+    "<div class=\"wallet-choice\" id=\"wc\">"+
+      "<div class=\"wallet-choice-title\">Add to your wallet:</div>"+
+      "<button class=\"btn-google\" id=\"bg\" onclick=\"gWallet()\">\ud83d\udcf1 Add to Google Wallet</button>"+
+      "<div class=\"divider\"><div class=\"divider-line\"></div><div class=\"divider-text\">or</div><div class=\"divider-line\"></div></div>"+
+      "<button class=\"btn-apple\" id=\"ba\" onclick=\"aWallet()\"> Add to Apple Wallet</button>"+
+    "</div>"+
+    "<button class=\"btn\" id=\"jb\" onclick=\"join()\">Get my demo card \u2192</button>"+
+  "</div><div class=\"powered\">\u2726 Powered by LoyalPass \u00b7 loyalpass.co.il</div>";
+}
+
+function renderCardAdded(wallet){
+  return "<div class=\"card-added\">"+
+    "<div style=\"font-size:3rem;margin-bottom:12px\">\u2705</div>"+
+    "<div style=\"font-size:1.1rem;font-weight:700;color:var(--success);margin-bottom:6px\">Demo Card Added!</div>"+
+    "<div style=\"display:inline-flex;align-items:center;gap:5px;background:rgba(0,184,111,.1);border:1px solid rgba(0,184,111,.3);border-radius:100px;padding:3px 12px;font-size:.7rem;color:var(--success);margin-bottom:14px\">\u2713 Active in "+wallet+"</div>"+
+    "<div style=\"font-size:.95rem;font-weight:600;margin-bottom:6px\">"+cName+"</div>"+
+    "<div style=\"font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:16px\">Your <strong>"+biz.name+"</strong> demo card is in your wallet.<br/>In real life, show it at checkout to collect stamps.</div>"+
+    "<div style=\"padding:14px;background:var(--bg3);border-radius:12px;font-size:.75rem;color:var(--text2)\"><strong style=\"color:var(--gold)\">Demo reward:</strong><br/>"+biz.reward+"</div>"+
+    "<div style=\"margin-top:14px;padding:12px;background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.2);border-radius:10px;font-size:.73rem;color:var(--gold)\">\u2726 Ready to use LoyalPass for your business?<br/><a href=\"mailto:contact@loyalpass.co.il\" style=\"color:var(--gold);font-weight:700\">contact@loyalpass.co.il</a></div>"+
+  "</div><div class=\"powered\">\u2726 Powered by LoyalPass \u00b7 loyalpass.co.il</div>";
+}
+
+function join(){
+  var n=document.getElementById("n").value.trim();
+  var ph=document.getElementById("ph").value.trim();
+  var c=getCountry();
+  if(!n){setMsg("Please enter your full name",false);document.getElementById("n").focus();return;}
+  if(n.split(" ").filter(function(w){return w;}).length<2){setMsg("Please enter first + last name",false);document.getElementById("n").focus();return;}
+  if(!ph||ph.length!==c.digits){setMsg("Please enter a valid "+c.digits+"-digit phone number",false);document.getElementById("ph").focus();return;}
+  cName=n; cPhone=c.code+ph;
+  document.getElementById("jb").style.display="none";
+  document.getElementById("wc").classList.add("show");
+  document.getElementById("n").disabled=true;
+  document.getElementById("ph").disabled=true;
+  document.getElementById("country-sel").disabled=true;
+  setMsg("\u2713 Ready! Choose your wallet:",true);
+}
+
+function showCardAdded(wallet){
+  var app=document.getElementById("app");
+  app.innerHTML=renderCard(1)+renderCardAdded(wallet);
+}
+
+async function gWallet(){
+  var btn=document.getElementById("bg");
+  btn.disabled=true;btn.textContent="Creating...";
+  setMsg("Creating demo Google Wallet pass...",true);
+  try{
+    var r=await fetch(API+"/api/pass/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:cName,phone:cPhone,businessId:demoBizId})});
+    var d=await r.json();
+    if(d.googleWalletUrl){
+      showCardAdded("Google Wallet");
+      setTimeout(function(){location.href=d.googleWalletUrl;},700);
+    }else{setMsg(d.error||"Error",false);btn.disabled=false;btn.textContent="\ud83d\udcf1 Add to Google Wallet";}
+  }catch(e){setMsg("Connection error. Try again.",false);btn.disabled=false;btn.textContent="\ud83d\udcf1 Add to Google Wallet";}
+}
+
+async function aWallet(){
+  var btn=document.getElementById("ba");
+  var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  btn.disabled=true;btn.textContent=isIOS?"Opening Wallet...":"Preparing pass...";
+  setMsg(isIOS?"Opening Apple Wallet...":"Creating demo Apple Wallet pass...",true);
+  if(isIOS){
+    showCardAdded("Apple Wallet");
+    setTimeout(function(){
+      var url=API+"/api/pass/apple/create?name="+encodeURIComponent(cName)+"&phone="+encodeURIComponent(cPhone)+"&businessId="+demoBizId;
+      window.location.href=url;
+    },400);
+  }else{
+    try{
+      var r=await fetch(API+"/api/pass/apple/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:cName,phone:cPhone,businessId:demoBizId})});
+      if(r.ok){
+        var blob=await r.blob(),url=URL.createObjectURL(blob);
+        showCardAdded("Apple Wallet");
+        var a=document.createElement("a");a.href=url;a.download="loyalpass-demo.pkpass";
+        document.body.appendChild(a);a.click();
+        setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+      }else{
+        var d=await r.json().catch(function(){return{error:"Server error"};});
+        setMsg(d.error||"Error",false);btn.disabled=false;btn.textContent=" Add to Apple Wallet";
+      }
+    }catch(e){setMsg("Connection error",false);btn.disabled=false;btn.textContent=" Add to Apple Wallet";}
+  }
+}
+
+// Init - always shows biz (demo always has bizId defaulting to cafe-carmel)
+var app=document.getElementById("app");
+app.innerHTML=renderCard(0)+renderDemoCustomers()+renderForm();
+</script>
+</body>
+</html>
