@@ -94,6 +94,23 @@ body{display:flex;min-height:100vh}
 .stamp-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 #cam-prev{width:100%;border-radius:10px;background:#000;display:none}
 @keyframes scanDot{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── REWARD REDEMPTION ──────────────────────────────────────────────── */
+.reward-due-banner{background:linear-gradient(135deg,rgba(0,184,111,.15),rgba(0,184,111,.05));border:1px solid rgba(0,184,111,.4);border-radius:12px;padding:18px;text-align:center;animation:rewardPulse 2s ease-in-out infinite}
+@keyframes rewardPulse{0%,100%{box-shadow:0 0 0 0 rgba(0,184,111,.3)}50%{box-shadow:0 0 0 8px rgba(0,184,111,0)}}
+.reward-due-icon{font-size:2rem;margin-bottom:6px}
+.reward-due-title{font-size:1rem;font-weight:800;color:var(--green);margin-bottom:4px;letter-spacing:.04em}
+.reward-due-sub{font-size:.74rem;color:var(--muted)}
+.cres.reward-ready{border-color:var(--green);background:rgba(0,184,111,.04)}
+.redeem-btn{width:100%;padding:16px;border-radius:11px;border:none;background:linear-gradient(135deg,#00b86f,#006040);color:#fff;font-family:"Inter",sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.redeem-btn:hover{transform:scale(1.02);box-shadow:0 8px 28px rgba(0,184,111,.4)}
+.redeem-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+/* ── MULTI-STAMP ─────────────────────────────────────────────────────── */
+.stamp-btn-sm{padding:15px 14px !important;min-width:52px;font-size:.85rem !important;font-weight:700 !important;flex-shrink:0}
+/* ── TODAY FEED REDEEM BADGE ─────────────────────────────────────────── */
+.tag-redeem{background:rgba(0,184,111,.12);color:var(--green)}
+/* ── ANALYTICS REAL DATA ─────────────────────────────────────────────── */
+.near-reward-section{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:14px}
 </style>
 </head>
 <body>
@@ -171,14 +188,17 @@ body{display:flex;min-height:100vh}
 
     <div id="tab-analytics" class="tab-pane">
       <div class="stat-grid">
-        <div class="stat-card"><div class="stat-label">Conversion Rate</div><div class="stat-val">68%</div></div>
-        <div class="stat-card"><div class="stat-label">Retention (30d)</div><div class="stat-val">54%</div><div class="stat-sub" style="color:var(--green)">↑ 6%</div></div>
-        <div class="stat-card"><div class="stat-label">Avg Stamps/Visit</div><div class="stat-val">1.2</div></div>
-        <div class="stat-card"><div class="stat-label">Reward Redemption</div><div class="stat-val">81%</div></div>
+        <div class="stat-card"><div class="stat-label">Total Customers</div><div class="stat-val" id="an-customers">—</div><div class="stat-sub">registered cardholders</div></div>
+        <div class="stat-card"><div class="stat-label">Stamps (30d)</div><div class="stat-val" id="an-stamps">—</div><div class="stat-sub">stamps this month</div></div>
+        <div class="stat-card"><div class="stat-label">Rewards Redeemed</div><div class="stat-val" id="an-redeems">—</div><div class="stat-sub">this month</div></div>
+        <div class="stat-card"><div class="stat-label">Redemption Rate</div><div class="stat-val" id="an-rate">—</div><div class="stat-sub">of full cards redeemed</div></div>
       </div>
-      <div class="panel"><div class="panel-hdr"><div class="panel-title">Monthly Scans</div></div><div class="bar-chart" id="monthly-bars"></div><div class="bar-x" id="monthly-x"></div></div>
+      <div class="panel"><div class="panel-hdr"><div class="panel-title">Stamps Per Day — Last 30 Days</div></div><div class="bar-chart" id="monthly-bars"></div><div class="bar-x" id="monthly-x"></div></div>
+      <div class="panel near-reward-section">
+        <div class="panel-hdr"><div class="panel-title">⚡ Near Reward — Target These Customers</div></div>
+        <div id="near-reward-list"><div style="padding:16px;text-align:center;color:var(--muted);font-size:.78rem">Click Analytics to load live data...</div></div>
+      </div>
     </div>
-
     <div id="tab-scan" class="tab-pane">
       <div style="max-width:540px;margin:0 auto">
         <div style="margin-bottom:18px"><div style="font-size:1.25rem;font-weight:700;margin-bottom:4px">⬢ Scan Station</div><div style="font-size:.78rem;color:var(--muted)">Scan a customer QR to add a stamp. Works with scan gun, camera, or manual entry.</div></div>
@@ -355,7 +375,7 @@ function setScanMode(m) {
 
 function setStatus(type, text) {
   var el = document.getElementById("scan-status");
-  el.className = "ssb s-" + (type === "found" || type === "stamped" ? "ok" : type === "error" ? "err" : type === "waiting" ? "wait" : "ready");
+  el.className = "ssb s-" + (type==="found"||type==="stamped"||type==="reward" ? "ok" : type==="scan-error"||type==="error" ? "err" : type==="waiting" ? "wait" : "ready");
   document.getElementById("scan-text").textContent = text;
   var dot = document.getElementById("scan-dot");
   var cols = {ready:"#3b82f6", waiting:"var(--gold)", found:"var(--green)", stamped:"var(--green)", error:"var(--red)"};
@@ -399,24 +419,38 @@ function doLookup(raw) {
 
 function showCust(data, bizId) {
   var stamps = data.stamps || 0, goal = data.goal || 10;
+  var rewardReady = data.rewardReady || stamps >= goal;
   var b = curBiz;
   for (var i = 0; i < BIZ.length; i++) { if (BIZ[i].id === bizId) { b = BIZ[i]; break; } }
-  var pips = "", ini = (data.name||"?").split(" ").map(function(w){ return w[0]; }).join("").substring(0,2).toUpperCase();
-  for (var i = 0; i < goal; i++) pips += "<div class=\"sp " + (i < stamps ? "on" : "") + "\">" + (i < stamps ? "★" : "") + "</div>";
-  var banner = stamps >= goal
-    ? "<div style=\"background:linear-gradient(135deg,rgba(200,151,58,.2),rgba(200,151,58,.05));border:1px solid rgba(200,151,58,.4);border-radius:11px;padding:14px;text-align:center\"><div style=\"font-size:1.3rem;margin-bottom:5px\">🎁</div><div style=\"font-weight:700;color:var(--gold)\">REWARD DUE!</div></div>"
-    : stamps === goal - 1 ? "<div style=\"background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);border-radius:9px;padding:9px;text-align:center;font-size:.75rem;color:var(--gold)\">⚡ 1 more stamp to reward!</div>" : "";
+  var pips = "", ini = (data.name||"?").split(" ").map(function(w){return w[0];}).join("").substring(0,2).toUpperCase();
+  for (var i = 0; i < goal; i++) pips += "<div class=\"sp "+(i<stamps?"on ":"")+(i===stamps-1&&stamps>0?"new-pip ":"")+"\">"+(i<stamps?"\u2605":"")+"</div>";
+  var near = stamps === goal - 1;
+  var banner = rewardReady
+    ? "<div class=\"reward-due-banner\"><div class=\"reward-due-icon\">\ud83c\udf81</div><div class=\"reward-due-title\">REWARD READY!</div><div class=\"reward-due-sub\">This customer has earned their reward</div></div>"
+    : near ? "<div style=\"background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);border-radius:9px;padding:9px;text-align:center;font-size:.75rem;color:var(--gold)\">\u26a1 1 more stamp to reward!</div>" : "";
   var ph = data.phone || "", nm = data.name || "?";
+  var totalInfo = data.total_stamps > 0 ? "<span style=\"font-size:.62rem;color:var(--muted)\">\u00b7 "+data.total_stamps+" lifetime</span>" : "";
   document.getElementById("scan-result").style.display = "block";
   document.getElementById("scan-result").innerHTML =
-    "<div class=\"cres ok\">" +
+    "<div class=\"cres "+(rewardReady?"reward-ready":"ok")+"\">" +
     "<div style=\"display:flex;align-items:center;gap:12px\">" +
-    "<div style=\"width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--ink);flex-shrink:0\">" + ini + "</div>" +
-    "<div style=\"flex:1\"><div style=\"font-size:.95rem;font-weight:700;margin-bottom:2px\">" + nm + "</div><div style=\"font-size:.72rem;color:var(--muted)\">" + ph + " · " + b.emoji + " " + b.name + "</div></div>" +
-    "<div style=\"text-align:right\"><div style=\"font-size:1.5rem;font-weight:800;color:var(--gold)\">" + stamps + "<span style=\"font-size:.75rem;color:var(--muted)\">/"+goal+"</span></div><div style=\"font-size:.6rem;color:var(--muted)\">STAMPS</div></div>" +
-    "</div><div class=\"srow\">" + pips + "</div>" + banner +
-    "<button class=\"stamp-btn\" id=\"stamp-btn\" data-phone=\"" + ph + "\" data-biz=\"" + bizId + "\" data-name=\"" + nm + "\" data-stamps=\"" + stamps + "\" onclick=\"doAddStamp(this)\">⬢ Add Stamp</button>" +
-    "<button class=\"tb-btn\" style=\"width:100%;justify-content:center\" onclick=\"clearScan()\">← Scan Next</button>" +
+      "<div style=\"width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,"+(rewardReady?"#00b86f,#006040":"var(--gold),#7a4a10")+");display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:"+(rewardReady?"#fff":"var(--ink)")+";flex-shrink:0\">"+ini+"</div>" +
+      "<div style=\"flex:1;min-width:0\"><div style=\"font-size:.95rem;font-weight:700;margin-bottom:2px\">"+nm+"</div><div style=\"font-size:.72rem;color:var(--muted)\">"+ph+" \u00b7 "+b.emoji+" "+b.name+"</div></div>" +
+      "<div style=\"text-align:right\"><div style=\"font-size:1.5rem;font-weight:800;color:"+(rewardReady?"var(--green)":"var(--gold)")+"\">"+(rewardReady?"\u2605":stamps)+"<span style=\"font-size:.75rem;color:var(--muted)\">"+( rewardReady?"":" /"+goal)+"</span></div>"+totalInfo+"</div>" +
+    "</div>" +
+    "<div class=\"srow\">"+pips+"</div>" +
+    banner +
+    (rewardReady
+      ? "<button class=\"redeem-btn\" id=\"redeem-btn\" data-phone=\""+ph+"\" data-biz=\""+bizId+"\" data-name=\""+nm+"\" onclick=\"doRedeem(this)\">\ud83c\udf81 Redeem Reward \u2192 Reset Card</button>"
+      : "<div style=\"display:flex;flex-direction:column;gap:8px\">" +
+          "<div style=\"font-size:.68rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase;text-align:center\">Add Stamps</div>" +
+          "<div style=\"display:flex;gap:6px\">" +
+            "<button class=\"stamp-btn\" id=\"stamp-btn\" style=\"flex:1\" data-phone=\""+ph+"\" data-biz=\""+bizId+"\" data-name=\""+nm+"\" data-count=\"1\" onclick=\"doAddStamp(this)\">\u2b22 +1 Stamp</button>" +
+            "<button class=\"stamp-btn stamp-btn-sm\" data-phone=\""+ph+"\" data-biz=\""+bizId+"\" data-name=\""+nm+"\" data-count=\"2\" onclick=\"doAddStamp(this)\">+2</button>" +
+            "<button class=\"stamp-btn stamp-btn-sm\" data-phone=\""+ph+"\" data-biz=\""+bizId+"\" data-name=\""+nm+"\" data-count=\"3\" onclick=\"doAddStamp(this)\">+3</button>" +
+          "</div>" +
+        "</div>") +
+    "<button class=\"tb-btn\" style=\"width:100%;justify-content:center\" onclick=\"clearScan()\">\u2190 Scan Next</button>" +
     "</div>";
 }
 
@@ -436,29 +470,67 @@ function showNotFound(phone, bizId) {
 
 function doAddStamp(btn) {
   var phone = btn.dataset.phone, bizId = btn.dataset.biz, name = btn.dataset.name;
-  btn.disabled = true; btn.textContent = "Adding stamp...";
-  setStatus("waiting", "Adding stamp for " + name + "...");
-  fetch(API + "/api/pass/stamp", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({phone:phone, businessId:bizId})})
-    .then(function(r){ return r.json(); })
+  var count = parseInt(btn.dataset.count) || 1;
+  // Disable all stamp buttons
+  ["stamp-btn"].concat([...document.querySelectorAll(".stamp-btn")]).forEach(function(b){if(b.disabled!==undefined)b.disabled=true;});
+  var origText = btn.textContent;
+  btn.textContent = "Adding...";
+  setStatus("waiting", "Adding "+count+" stamp"+(count>1?"s":"")+" for "+name+"...");
+  fetch(API + "/api/pass/stamp", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({phone:phone, businessId:bizId, count:count})})
+    .then(function(r){return r.json();})
     .then(function(d){
       if (d.stamps !== undefined) {
-        var b = curBiz;
-        for (var i = 0; i < BIZ.length; i++) { if (BIZ[i].id === bizId) { b = BIZ[i]; break; } }
-        setStatus("stamped", "✅ Stamp added! " + name + " → " + d.stamps + "/" + (d.goal||10));
-        showToast("⬢ Stamp added — " + name + " · " + d.stamps + "/" + (d.goal||10));
-        todayScans.unshift({name:name, phone:phone, stamps:d.stamps, goal:d.goal||10, biz:b.name, emoji:b.emoji, time:new Date().toLocaleTimeString("en-IL",{hour:"2-digit",minute:"2-digit"})});
+        var b2 = curBiz;
+        for (var i=0;i<BIZ.length;i++){if(BIZ[i].id===bizId){b2=BIZ[i];break;}}
+        var msg = count > 1 ? count+" stamps added!" : "Stamp added!";
+        if (d.rewardReady) msg = "\ud83c\udf81 REWARD READY! "+d.stamps+"/"+d.goal;
+        setStatus(d.rewardReady?"reward":"stamped", "\u2705 "+msg+" "+name+" \u2192 "+d.stamps+"/"+(d.goal||10));
+        showToast("\u2b22 "+msg+" \u2014 "+name+" \u00b7 "+d.stamps+"/"+(d.goal||10));
+        todayScans.unshift({name:name,phone:phone,stamps:d.stamps,goal:d.goal||10,biz:b2.name,emoji:b2.emoji,time:new Date().toLocaleTimeString("en-IL",{hour:"2-digit",minute:"2-digit"}),count:count,rewardReady:d.rewardReady});
         updateTodayFeed();
         document.getElementById("ov-today").textContent = todayScans.length;
-        var at = document.getElementById("admin-today"); if(at) at.textContent = todayScans.length;
-        doLookup(phone + "|" + bizId);
-        setTimeout(function(){ clearScan(); setStatus("ready","Ready — scan next customer"); }, 3000);
+        var at=document.getElementById("admin-today");if(at)at.textContent=todayScans.length;
+        // Refresh customer card with new state
+        doLookup(phone+"|"+bizId);
+        setTimeout(function(){
+          if (!d.rewardReady) { clearScan(); setStatus("ready","\u2b22 Ready \u2014 scan next customer"); }
+        }, d.rewardReady ? 99999 : 3000);
       } else {
-        btn.disabled = false; btn.textContent = "⬢ Add Stamp";
-        setStatus("error", d.error || "Failed");
+        var allBtns = document.querySelectorAll(".stamp-btn");
+        allBtns.forEach(function(b){b.disabled=false;});
+        btn.textContent = origText;
+        setStatus("scan-error", "\u2717 "+(d.error||"Failed"));
       }
     })
-    .catch(function(e){ btn.disabled=false; btn.textContent="⬢ Add Stamp"; setStatus("error","Connection error"); });
+    .catch(function(e){
+      var allBtns = document.querySelectorAll(".stamp-btn");
+      allBtns.forEach(function(b){b.disabled=false;});
+      btn.textContent = origText;
+      setStatus("scan-error","\u2717 Connection error");
+    });
 }
+function doRedeem(btn) {
+  var phone = btn.dataset.phone, bizId = btn.dataset.biz, name = btn.dataset.name;
+  btn.disabled = true; btn.textContent = "\ud83c\udf81 Processing reward...";
+  setStatus("waiting", "\u231b Redeeming reward for " + name + "...");
+  fetch(API + "/api/pass/redeem", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({phone:phone, businessId:bizId})})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if (d.success) {
+        setStatus("stamped", "\ud83c\udf81 Reward redeemed! " + name + " card reset to 0");
+        showToast("\ud83c\udf81 Reward redeemed \u2014 " + name + " \u00b7 redemption #" + d.redemptions);
+        todayScans.unshift({name:name, phone:phone, stamps:0, goal:10, biz:(function(){for(var i=0;i<BIZ.length;i++){if(BIZ[i].id===bizId)return BIZ[i].name;}return bizId;})(), emoji:(function(){for(var i=0;i<BIZ.length;i++){if(BIZ[i].id===bizId)return BIZ[i].emoji;}return "\ud83c\udf1f";})(), time:new Date().toLocaleTimeString("en-IL",{hour:"2-digit",minute:"2-digit"}), count:0, rewardReady:false, redeemed:true});
+        updateTodayFeed();
+        document.getElementById("ov-today").textContent = todayScans.length;
+        setTimeout(function(){ clearScan(); setStatus("ready","\u2b22 Ready \u2014 scan next customer"); }, 3000);
+      } else {
+        btn.disabled = false; btn.textContent = "\ud83c\udf81 Redeem Reward \u2192 Reset Card";
+        setStatus("scan-error", "\u2717 " + (d.error||"Redeem failed"));
+      }
+    })
+    .catch(function(e){ btn.disabled=false; btn.textContent="\ud83c\udf81 Redeem Reward \u2192 Reset Card"; setStatus("scan-error","\u2717 Connection error"); });
+}
+
 
 function updateTodayFeed() {
   var el = document.getElementById("today-feed");
@@ -539,10 +611,65 @@ function feedItem(e){
 }
 function renderAll(){
   renderBar("weekly-bars","weekly-x",[42,38,55,61,48,72,65],DAYS);
-  document.getElementById("ov-feed").innerHTML=EVENTS.slice(0,4).map(feedItem).join("");
-  document.getElementById("main-feed").innerHTML=EVENTS.map(feedItem).join("");
+  // Load real recent events from API
+  fetch(API+"/api/pass/events/"+curBiz.id+"?limit=20")
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(!d.events||!d.events.length){
+        document.getElementById("ov-feed").innerHTML=EVENTS.slice(0,4).map(feedItem).join("");
+        document.getElementById("main-feed").innerHTML=EVENTS.map(feedItem).join("");
+        return;
+      }
+      function evItem(e){
+        var ini=(e.customer_name||"?").split(" ").map(function(w){return w[0];}).join("").substring(0,2).toUpperCase();
+        var t=new Date(e.created_at).toLocaleTimeString("en-IL",{hour:"2-digit",minute:"2-digit"});
+        var tag=e.event_type==="redeem"?"<span class=\"tag tag-redeem\">REDEEMED</span>":e.event_type==="multi_stamp"?"<span class=\"tag tag-stamp\">+"+e.stamp_count+" STAMPS</span>":"<span class=\"tag tag-stamp\">STAMP</span>";
+        var col=e.event_type==="redeem"?"var(--green)":"var(--gold)";
+        return "<div class=\"feed-item\"><div class=\"feed-av\" style=\"background:rgba(200,151,58,.12);color:"+col+"\">"+ini+"</div><div style=\"flex:1\"><div style=\"font-size:.8rem;font-weight:600;margin-bottom:2px\">"+(e.customer_name||"Unknown")+"</div><div style=\"font-size:.7rem;color:var(--muted)\">"+tag+" \u00b7 "+e.stamps_after+"/"+(10)+" stamps</div></div><div style=\"font-size:.64rem;color:var(--muted)\">"+t+"</div></div>";
+      }
+      document.getElementById("ov-feed").innerHTML=d.events.slice(0,4).map(evItem).join("")||EVENTS.slice(0,4).map(feedItem).join("");
+      document.getElementById("main-feed").innerHTML=d.events.map(evItem).join("")||EVENTS.map(feedItem).join("");
+    })
+    .catch(function(){
+      document.getElementById("ov-feed").innerHTML=EVENTS.slice(0,4).map(feedItem).join("");
+      document.getElementById("main-feed").innerHTML=EVENTS.map(feedItem).join("");
+    });
 }
-function renderMonthly(){ renderBar("monthly-bars","monthly-x",[210,245,198,320,415,380,520,490,610,580,720,810],MONTHS); }
+function renderMonthly() {
+  // Load real analytics
+  fetch(API+"/api/pass/analytics/"+curBiz.id+"?days=30")
+    .then(function(r){return r.json();})
+    .then(function(d){
+      // Stamps by day — last 12 days for bar chart
+      var byDay = d.stamps_by_day || [];
+      var last12 = byDay.slice(-12);
+      var vals = last12.map(function(x){return x.stamps||0;});
+      var lbls = last12.map(function(x){return x.date?x.date.substring(5):"-";});
+      if(vals.every(function(v){return v===0;})) { vals=[0,0,0,0,0,0,0,0,0,0,0,0]; lbls=["—","—","—","—","—","—","—","—","—","—","—","—"]; }
+      renderBar("monthly-bars","monthly-x",vals,lbls);
+      // Update real stat cards
+      var s1=document.getElementById("an-customers");if(s1)s1.textContent=d.total_customers;
+      var s2=document.getElementById("an-stamps");if(s2)s2.textContent=d.total_stamps;
+      var s3=document.getElementById("an-redeems");if(s3)s3.textContent=d.total_redemptions;
+      var s4=document.getElementById("an-rate");if(s4)s4.textContent=(d.redemption_rate||0)+"%";
+      // Near-reward list
+      var nearEl=document.getElementById("near-reward-list");
+      if(nearEl){
+        if(!d.near_reward||!d.near_reward.length){
+          nearEl.innerHTML="<div style=\"padding:16px;text-align:center;color:var(--muted);font-size:.78rem\">No customers near reward yet</div>";
+        } else {
+          nearEl.innerHTML=d.near_reward.map(function(c){
+            var g=c.goal||10,s=c.stamps||0,rem=g-s;
+            return "<div class=\"feed-item\"><div class=\"feed-av\" style=\"background:var(--gold-dim);color:var(--gold)\">"+c.name.split(" ").map(function(w){return w[0];}).join("").substring(0,2).toUpperCase()+"</div>"+
+              "<div style=\"flex:1\"><div style=\"font-size:.8rem;font-weight:600;margin-bottom:1px\">"+c.name+"</div><div style=\"font-size:.7rem;color:var(--muted)\">"+c.phone+"</div></div>"+
+              "<div style=\"text-align:right\"><div style=\"font-size:.8rem;font-weight:700;color:var(--gold)\">"+s+"/"+g+"</div>"+
+              "<div style=\"font-size:.62rem;color:var(--muted)\">"+rem+" more</div></div></div>";
+          }).join("");
+        }
+      }
+    })
+    .catch(function(){renderBar("monthly-bars","monthly-x",[0,0,0,0,0,0,0,0,0,0,0,0],["—","—","—","—","—","—","—","—","—","—","—","—"]);});
+}
 
 var CUSTS=[
   {name:"Avi Goldberg",phone:"+972501234567",stamps:7,joined:"Jan 2026"},
