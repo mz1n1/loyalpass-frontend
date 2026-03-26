@@ -10,7 +10,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh}
 .app{max-width:420px;margin:0 auto;padding:20px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;margin-bottom:20px}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;margin-bottom:20px} 
 .biz-emoji{font-size:2.5rem;text-align:center;margin-bottom:10px}
 .biz-name{font-size:1.3rem;font-weight:700;text-align:center;margin-bottom:4px}
 .biz-sub{font-size:.8rem;color:var(--text2);text-align:center;margin-bottom:24px}
@@ -51,7 +51,37 @@ function form(){return '<div class="card"><div style="font-size:.85rem;font-weig
 function setMsg(t,ok){const m=document.getElementById('msg');m.className='msg '+(ok?'ok':'err');m.textContent=t;}
 function join(){const n=document.getElementById('n').value.trim(),ph=document.getElementById('ph').value.trim();if(!n||!ph){setMsg('Please enter name and phone',false);return;}cName=n;cPhone=ph;document.getElementById('jb').style.display='none';document.getElementById('wc').classList.add('show');document.getElementById('n').disabled=document.getElementById('ph').disabled=true;setMsg('✓ Ready! Choose your wallet:',true);}
 async function gWallet(){const btn=document.getElementById('bg');btn.disabled=true;btn.textContent='Creating...';setMsg('Creating Google Wallet pass...',true);try{const r=await fetch(API+'/api/pass/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||'cafe-carmel'})});const d=await r.json();if(d.googleWalletUrl){setMsg('Opening Google Wallet...',true);setTimeout(()=>location.href=d.googleWalletUrl,600);}else{setMsg(d.error||'Error',false);btn.disabled=false;btn.textContent='📱 Add to Google Wallet';}}catch(e){setMsg('Connection error. Try again.',false);btn.disabled=false;btn.textContent='📱 Add to Google Wallet';}}
-async function aWallet(){const btn=document.getElementById('ba');btn.disabled=true;btn.textContent='Creating Apple pass...';setMsg('Creating Apple Wallet pass...',true);try{const r=await fetch(API+'/api/pass/apple/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||'cafe-carmel'})});if(r.ok){const blob=await r.blob(),url=URL.createObjectURL(blob);setMsg('✓ Pass ready! Opening Apple Wallet...',true);const a=document.createElement('a');a.href=url;a.download='loyalpass.pkpass';a.click();URL.revokeObjectURL(url);}else{const d=await r.json().catch(()=>({error:'Server error'}));setMsg(d.error||'Error',false);btn.disabled=false;btn.textContent=' Add to Apple Wallet';}}catch(e){setMsg('Connection error. Try again.',false);btn.disabled=false;btn.textContent=' Add to Apple Wallet';}}
+async function aWallet(){
+  const btn=document.getElementById('ba');
+  const isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  btn.disabled=true;
+  btn.textContent=isIOS?'Opening Wallet...':'Preparing pass...';
+  setMsg(isIOS?'Opening Apple Wallet...':'Creating Apple Wallet pass...',true);
+  if(isIOS){
+    // iOS Safari MUST navigate directly to the URL — blob download never opens Wallet
+    const url=API+'/api/pass/apple/create?name='+encodeURIComponent(cName)+'&phone='+encodeURIComponent(cPhone)+'&businessId='+(bizId||'cafe-carmel');
+    window.location.href=url;
+  } else {
+    // Non-iOS: download .pkpass file
+    try{
+      const r=await fetch(API+'/api/pass/apple/create',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||'cafe-carmel'})});
+      if(r.ok){
+        const blob=await r.blob(),url=URL.createObjectURL(blob);
+        setMsg('\u2713 Pass ready! Opening Wallet...',true);
+        const a=document.createElement('a');a.href=url;a.download='loyalpass.pkpass';
+        document.body.appendChild(a);a.click();
+        setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
+      }else{
+        const d=await r.json().catch(()=>({error:'Server error'}));
+        setMsg(d.error||'Error creating pass',false);
+        btn.disabled=false;btn.textContent='\uF8FF Add to Apple Wallet';
+      }
+    }catch(e){
+      setMsg('Connection error. Try again.',false);
+      btn.disabled=false;btn.textContent='\uF8FF Add to Apple Wallet';
+    }
+  }
+}
 const app=document.getElementById('app');
 if(!bizId){app.innerHTML='<div class="demo-bar">✦ DEMO MODE · loyalpass.co.il</div><div style="margin-top:48px;width:100%;max-width:420px">'+card(3)+form()+'</div>';}
 else{app.innerHTML=card(0)+form();}
