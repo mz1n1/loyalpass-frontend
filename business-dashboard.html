@@ -552,11 +552,26 @@ var CUSTS=[
   {name:"Ron Levy",phone:"+972535678901",stamps:2,joined:"Mar 2026"}
 ];
 function renderCustomers(q){
-  var rows=CUSTS.filter(function(c){ return !q||c.name.toLowerCase().indexOf(q.toLowerCase())>=0||c.phone.indexOf(q)>=0; });
-  document.getElementById("cust-tbody").innerHTML=rows.map(function(c){
-    var st=""; for(var i=0;i<c.stamps;i++) st+="★"; for(var i=c.stamps;i<10;i++) st+="☆";
-    return "<tr><td style=\"font-weight:600\">"+c.name+"</td><td style=\"color:var(--muted)\">"+c.phone+"</td><td>"+st+"</td><td style=\"color:var(--muted)\">"+c.joined+"</td></tr>";
-  }).join("");
+  var tbody = document.getElementById("cust-tbody");
+  if(!tbody) return;
+  tbody.innerHTML = "<tr><td colspan=\"4\" style=\"text-align:center;color:var(--muted);padding:20px\">Loading...</td></tr>";
+  var url = API + "/api/pass/lookup?all=true&businessId=" + curBiz.id;
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var rows = d.customers || [];
+      if(q) rows = rows.filter(function(c){return (c.name||"").toLowerCase().indexOf(q.toLowerCase())>=0||(c.phone||"").indexOf(q)>=0;});
+      if(!rows.length){tbody.innerHTML="<tr><td colspan=\"4\" style=\"text-align:center;color:var(--muted);padding:20px\">No customers yet</td></tr>";return;}
+      tbody.innerHTML = rows.map(function(c){
+        var s=c.stamps||0;
+        var stars="";for(var i=0;i<10;i++) stars+=i<s?"★":"☆";
+        var joined=c.created_at?new Date(c.created_at).toLocaleDateString("en-IL",{month:"short",year:"numeric"}):"—";
+        return "<tr><td style=\"font-weight:600\">"+(c.name||"—")+"</td><td style=\"color:var(--muted)\">"+(c.phone||"—")+"</td><td style=\"letter-spacing:1px\">"+stars+"</td><td style=\"color:var(--muted)\">"+joined+"</td></tr>";
+      }).join("");
+      // Update total count in stat card
+      var tot=document.getElementById("ov-total"); if(tot) tot.textContent=rows.length.toLocaleString();
+    })
+    .catch(function(e){tbody.innerHTML="<tr><td colspan=\"4\" style=\"text-align:center;color:var(--red);padding:20px\">Error loading customers</td></tr>";});
 }
 function filterCusts(q){ renderCustomers(q); }
 
@@ -577,25 +592,49 @@ function updateChar(){ var v=document.getElementById("notif-msg").value; documen
 function sendNotif(){ showToast("✅ Sent to "+document.getElementById("recip-c").textContent+" cardholders"); document.getElementById("notif-msg").value=""; document.getElementById("char-c").textContent="0/160"; document.getElementById("send-btn").disabled=true; }
 
 function renderAdmin(){
-  var html="";
-  for(var i=0;i<BIZ.length;i++){
-    var b=BIZ[i];
-    html+="<div style=\"background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:10px\">"+
-      "<div style=\"font-size:1.8rem\">"+b.emoji+"</div>"+
-      "<div style=\"flex:1\"><div style=\"font-size:.88rem;font-weight:700;margin-bottom:3px\">"+b.name+"</div><div style=\"font-size:.7rem;color:var(--muted)\">"+b.n+" customers · "+b.plan+"</div></div>"+
-      "<button class=\"tb-btn\" data-id=\""+b.id+"\" onclick=\"window.open(BASE+'/?biz='+this.dataset.id,'_blank')\">View card →</button>"+
-    "</div>";
-  }
-  document.getElementById("admin-biz-list").innerHTML=html;
+  var list = document.getElementById("admin-biz-list");
+  if(!list) return;
+  list.innerHTML = "<div style=\"padding:20px;text-align:center;color:var(--muted)\">Loading...</div>";
+  fetch(API+"/api/pass/lookup?all=true")
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var all = d.customers||[];
+      var total=all.length;
+      var by={};
+      all.forEach(function(c){by[c.business_id]=(by[c.business_id]||0)+1;});
+      // Update stat cards
+      var st=document.getElementById("admin-stat-total"); if(st) st.textContent=total;
+      var html="";
+      BIZ.forEach(function(b){
+        var n=by[b.id]||0;
+        html+="<div style=\"background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:10px\">"+
+          "<div style=\"font-size:1.8rem\">"+b.emoji+"</div>"+
+          "<div style=\"flex:1\"><div style=\"font-size:.88rem;font-weight:700;margin-bottom:3px\">"+b.name+"</div>"+
+          "<div style=\"font-size:.7rem;color:var(--muted)\">"+n+" customers \u00b7 "+b.plan+"</div></div>"+
+          "<button class=\"tb-btn\" data-id=\""+b.id+"\" onclick=\"window.open(BASE+\'/?biz=\'+this.dataset.id,\'_blank\')\">View card \u2192</button>"+
+        "</div>";
+      });
+      list.innerHTML=html||"<div style=\"padding:20px;text-align:center;color:var(--muted)\">No data</div>";
+    })
+    .catch(function(){list.innerHTML="<div style=\"padding:20px;text-align:center;color:var(--red)\">Error loading data</div>";});
 }
 function renderQR(){
-  var c=document.getElementById("qr-canvas"); if(!c) return;
-  c.width=160; c.height=160;
-  var ctx=c.getContext("2d");
-  ctx.fillStyle="white"; ctx.fillRect(0,0,160,160);
-  ctx.fillStyle="#111"; ctx.font="9px monospace"; ctx.textAlign="center";
-  ctx.fillText("Scan to get loyalty card",80,75);
-  ctx.fillText(BASE.replace("https://",""),80,90);
+  var url = BASE + "/?biz=" + curBiz.id;
+  var imgUrl = API + "/api/pass/qr/" + curBiz.id;
+  var cu = document.getElementById("card-url");
+  if(cu) cu.textContent = url;
+  var canvas = document.getElementById("qr-canvas");
+  if(!canvas) return;
+  // Replace canvas with real QR image
+  var img = document.createElement("img");
+  img.src = imgUrl;
+  img.style.cssText = "width:160px;height:160px;border-radius:12px;display:block;margin:0 auto 14px;background:white;padding:8px";
+  img.alt = "QR Code";
+  img.onerror = function(){
+    // Fallback: use QR server directly
+    img.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(url) + "&bgcolor=ffffff&color=000000&qzone=2&format=png";
+  };
+  canvas.parentNode.replaceChild(img, canvas);
 }
 function openCardLink(){ window.open(BASE+"/?biz="+curBiz.id,"_blank"); }
 function copyCardLink(){ navigator.clipboard.writeText(BASE+"/?biz="+curBiz.id).then(function(){ showToast("📋 Link copied!"); }); }
