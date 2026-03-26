@@ -8,7 +8,7 @@
 <style>
 :root{--ink:#09090b;--ink2:#111114;--ink3:#18181c;--border:#242428;--border2:#2e2e34;--muted:#52525c;--paper:#f4f2ee;--gold:#c8973a;--gold-l:#e2b35a;--gold-dim:rgba(200,151,58,.12);--green:#22c55e;--red:#ef4444;--blue:#3b82f6;--r:14px;--r2:10px;--sidebar:240px}
 *{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--ink);color:var(--paper);font-family:'Inter',sans-serif;font-size:14px}
+html{background:var(--ink);color:var(--paper);font-family:"Inter",sans-serif;font-size:14px}
 body{display:flex;min-height:100vh}
 #login-screen{position:fixed;inset:0;z-index:1000;background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column}
 #login-screen.hide{animation:fadeOut .3s forwards;pointer-events:none}
@@ -17,9 +17,9 @@ body{display:flex;min-height:100vh}
 .login-logo{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 16px}
 .login-title{font-size:1.5rem;font-weight:700;margin-bottom:4px}
 .login-sub{font-size:.78rem;color:var(--muted);margin-bottom:28px}
-.inp-field{width:100%;background:var(--ink3);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--paper);font-family:'Inter',sans-serif;font-size:.82rem;outline:none;transition:.14s}
+.inp-field{width:100%;background:var(--ink3);border:1px solid var(--border2);border-radius:7px;padding:9px 12px;color:var(--paper);font-family:"Inter",sans-serif;font-size:.82rem;outline:none;transition:.14s}
 .inp-field:focus{border-color:rgba(200,151,58,.4)}
-.send-btn{display:flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:.17s}
+.send-btn{display:flex;align-items:center;gap:6px;padding:9px 20px;border-radius:8px;border:none;background:var(--gold);color:var(--ink);font-family:"Inter",sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:.17s}
 .send-btn:hover{background:var(--gold-l)}.send-btn:disabled{opacity:.5;cursor:not-allowed}
 .sidebar{width:var(--sidebar);flex-shrink:0;background:var(--ink2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100}
 .sb-logo{padding:20px 18px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
@@ -31,7 +31,7 @@ body{display:flex;min-height:100vh}
 .sb-section{font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:12px 8px 5px}
 .sbi{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:7px;cursor:pointer;transition:.13s;color:var(--muted);font-size:.82rem;font-weight:500;margin-bottom:1px;position:relative}
 .sbi:hover,.sbi.active{background:var(--ink3);color:var(--paper)}
-.sbi.active::before{content:'';position:absolute;left:0;top:22%;bottom:22%;width:2px;background:var(--gold);border-radius:2px}
+.sbi.active::before{content:"";position:absolute;left:0;top:22%;bottom:22%;width:2px;background:var(--gold);border-radius:2px}
 .sb-bottom{padding:10px;border-top:1px solid var(--border)}
 .sb-user{display:flex;align-items:center;gap:9px;padding:9px;border-radius:7px;cursor:pointer;transition:.15s}
 .sb-user:hover{background:var(--ink3)}
@@ -49,12 +49,12 @@ body{display:flex;min-height:100vh}
 .panel-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
 .panel-title{font-size:.8rem;font-weight:600}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.tb-btn{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.76rem;font-weight:500;cursor:pointer;transition:.14s}
+.tb-btn{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:"Inter",sans-serif;font-size:.76rem;font-weight:500;cursor:pointer;transition:.14s}
 .tb-btn:hover{background:var(--ink3);color:var(--paper)}
 .tb-btn.gold{background:var(--gold);border-color:var(--gold);color:var(--ink);font-weight:700}
 .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green)}
 .bar-chart{display:flex;align-items:flex-end;gap:5px;height:130px;padding:16px 16px 0}
-.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center}
 .bar{width:100%;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--gold-l),var(--gold));min-height:3px;transition:height .9s cubic-bezier(.4,0,.2,1)}
 .bar-x{display:flex;justify-content:space-around;padding:5px 6px 12px;font-size:.59rem;color:var(--muted)}
 .feed-item{display:flex;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.03)}
@@ -64,49 +64,35 @@ body{display:flex;min-height:100vh}
 .tag-reward{background:var(--gold-dim);color:var(--gold)}
 .tag-new{background:rgba(34,197,94,.1);color:#86efac}
 .admin-badge{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);background:var(--gold-dim);border:1px solid rgba(200,151,58,.25);padding:2px 7px;border-radius:100px;margin-left:auto}
-.notif-compose{background:var(--ink3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:14px}
 .n-label{font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
-.n-textarea{width:100%;background:var(--ink2);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;color:var(--paper);font-family:'Inter',sans-serif;font-size:.82rem;resize:vertical;min-height:76px;outline:none;line-height:1.6}
+.n-textarea{width:100%;background:var(--ink2);border:1px solid var(--border2);border-radius:8px;padding:11px 13px;color:var(--paper);font-family:"Inter",sans-serif;font-size:.82rem;resize:vertical;min-height:76px;outline:none;line-height:1.6}
 .n-textarea:focus{border-color:rgba(200,151,58,.4)}
 .inp-group{margin-bottom:14px}
 .inp-label{font-size:.63rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
 .tbl{width:100%;border-collapse:collapse}
 .tbl th{padding:9px 15px;text-align:left;font-size:.62rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border)}
 .tbl td{padding:11px 15px;font-size:.76rem;border-bottom:1px solid rgba(255,255,255,.03)}
-.admin-biz-card{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:10px;transition:.15s}
-.plan-tag{font-size:.62rem;font-weight:700;padding:3px 8px;border-radius:100px}
-.plan-business{background:rgba(59,130,246,.1);color:#93c5fd}
-.plan-agency{background:var(--gold-dim);color:var(--gold)}
 .toast{position:fixed;bottom:22px;right:22px;z-index:9999;background:var(--ink3);border:1px solid var(--border2);color:var(--paper);padding:11px 16px;border-radius:9px;font-size:.78rem;display:flex;align-items:center;gap:8px;transform:translateY(14px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
-/* SCAN STATION */
-#scan-input-field{width:100%;background:var(--ink3);border:2px solid var(--border2);border-radius:12px;padding:16px 18px;color:var(--paper);font-family:'Inter',sans-serif;font-size:1rem;outline:none;transition:.2s;text-align:center;letter-spacing:.05em}
+#scan-input-field{width:100%;background:var(--ink3);border:2px solid var(--border2);border-radius:12px;padding:16px 18px;color:var(--paper);font-family:"Inter",sans-serif;font-size:1rem;outline:none;transition:.2s;text-align:center}
 #scan-input-field:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,151,58,.15)}
-#scan-input-field.scanning{border-color:#3b82f6;animation:scanPulse .5s ease}
-@keyframes scanPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.01)}}
-.customer-card-result{background:var(--ink2);border:1px solid var(--border2);border-radius:var(--r);padding:22px;margin-top:0;display:flex;flex-direction:column;gap:14px}
-.customer-card-result.success{border-color:var(--green)}
-.customer-card-result.error-card{border-color:var(--red)}
-.customer-card-result.not-found{border-color:#f59e0b}
-.stamp-track{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:4px 0}
-.stamp-pip{width:30px;height:30px;border-radius:50%;border:2px solid var(--border2);background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:.85rem;transition:.3s}
-.stamp-pip.filled{background:var(--gold);border-color:var(--gold)}
-.stamp-pip.new-stamp{background:var(--green);border-color:var(--green);animation:stampPop .4s cubic-bezier(.34,1.56,.64,1)}
-@keyframes stampPop{0%{transform:scale(0)}70%{transform:scale(1.2)}100%{transform:scale(1)}}
-.big-stamp-btn{width:100%;padding:16px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--gold-l),var(--gold));color:var(--ink);font-family:'Inter',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:.2s;display:flex;align-items:center;justify-content:center;gap:10px}
-.big-stamp-btn:hover{transform:scale(1.02);box-shadow:0 8px 30px rgba(200,151,58,.35)}
-.big-stamp-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .scan-mode-tabs{display:flex;gap:6px;margin-bottom:14px}
-.scan-mode-tab{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:.14s;text-align:center}
-.scan-mode-tab.active{background:var(--gold-dim);border-color:rgba(200,151,58,.4);color:var(--gold)}
-.scan-status-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;font-size:.76rem;font-weight:500;margin-bottom:14px}
-.scan-status-bar.ready{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#93c5fd}
-.scan-status-bar.waiting{background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);color:var(--gold)}
-.scan-status-bar.found,.scan-status-bar.stamped{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)}
-.scan-status-bar.scan-error{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
-.reward-banner{background:linear-gradient(135deg,rgba(200,151,58,.2),rgba(200,151,58,.05));border:1px solid rgba(200,151,58,.4);border-radius:12px;padding:14px 18px;text-align:center}
-#camera-preview{width:100%;border-radius:10px;background:#000;display:none}
-#camera-preview.active{display:block}
+.smt{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:"Inter",sans-serif;font-size:.76rem;font-weight:600;cursor:pointer;transition:.14s;text-align:center}
+.smt.active{background:var(--gold-dim);border-color:rgba(200,151,58,.4);color:var(--gold)}
+.ssb{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:9px;font-size:.76rem;font-weight:500;margin-bottom:14px}
+.ssb.s-ready{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);color:#93c5fd}
+.ssb.s-wait{background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);color:var(--gold)}
+.ssb.s-ok{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);color:var(--green)}
+.ssb.s-err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+.cres{background:var(--ink2);border:1px solid var(--border2);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:14px}
+.cres.ok{border-color:var(--green)}.cres.nf{border-color:#f59e0b}.cres.er{border-color:var(--red)}
+.srow{display:flex;flex-wrap:wrap;gap:5px;justify-content:center}
+.sp{width:28px;height:28px;border-radius:50%;border:2px solid var(--border2);background:var(--ink3);display:flex;align-items:center;justify-content:center;font-size:.8rem}
+.sp.on{background:var(--gold);border-color:var(--gold)}
+.stamp-btn{width:100%;padding:15px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--gold-l),var(--gold));color:var(--ink);font-family:"Inter",sans-serif;font-size:1rem;font-weight:800;cursor:pointer;transition:.2s}
+.stamp-btn:hover{transform:scale(1.02);box-shadow:0 8px 28px rgba(200,151,58,.35)}
+.stamp-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+#cam-prev{width:100%;border-radius:10px;background:#000;display:none}
 @keyframes scanDot{0%,100%{opacity:1}50%{opacity:.3}}
 </style>
 </head>
@@ -126,6 +112,7 @@ body{display:flex;min-height:100vh}
   </div>
   <div style="margin-top:20px;font-size:.65rem;color:var(--muted)">Powered by LoyalPass</div>
 </div>
+
 <aside class="sidebar">
   <div class="sb-logo"><div class="sb-logo-mark">✦</div><div style="font-size:1.1rem;font-weight:700">Loyal<span style="color:var(--gold)">·</span>Pass</div></div>
   <div class="sb-biz" onclick="showTab('profile',null)"><div class="sb-biz-name" id="sb-name">Café Carmel</div><div class="sb-biz-plan">Business Plan · Active</div></div>
@@ -136,7 +123,7 @@ body{display:flex;min-height:100vh}
     <div class="sbi" onclick="showTab('analytics',this)">◉ Analytics</div>
     <div class="sb-section">Operations</div>
     <div class="sbi scan-nav" onclick="showTab('scan',this)" style="color:var(--gold);font-weight:600">
-      <span>⬡</span> Scan Station
+      ⬢ Scan Station
       <span style="margin-left:auto;font-size:.55rem;font-weight:800;text-transform:uppercase;background:var(--gold);color:var(--ink);padding:2px 5px;border-radius:4px">HOT</span>
     </div>
     <div class="sbi" onclick="showTab('notifications',this)">🔔 Notifications</div>
@@ -146,44 +133,42 @@ body{display:flex;min-height:100vh}
     <div class="sbi" id="admin-nav" style="display:none" onclick="showTab('admin',this)">🛡️ All Businesses<span class="admin-badge">Admin</span></div>
   </nav>
   <div class="sb-bottom">
-    <div class="sb-user" onclick="logout()" title="Sign out">
+    <div class="sb-user" onclick="logout()">
       <div class="sb-avatar" id="sb-avatar">MZ</div>
       <div><div style="font-size:.78rem;font-weight:600" id="sb-uname">Meir Zini</div><div style="font-size:.65rem;color:var(--muted)" id="sb-role">Admin</div></div>
-      <div style="margin-left:auto;font-size:.75rem;color:var(--muted)">⏏</div>
+      <div style="margin-left:auto;font-size:.75rem;color:var(--muted)">⏯</div>
     </div>
   </div>
 </aside>
+
 <main class="main">
   <div class="topbar">
-    <div style="font-family:'Georgia',serif;font-size:1.1rem" id="page-title">Overview</div>
+    <div style="font-family:Georgia,serif;font-size:1.1rem" id="page-title">Overview</div>
     <div style="display:flex;align-items:center;gap:8px">
       <div style="display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--muted);padding:5px 10px;border-radius:100px;border:1px solid var(--border)"><div class="live-dot"></div>Live</div>
-      <button class="tb-btn" onclick="showTab('scan',document.querySelector('.scan-nav'))" style="color:var(--gold);border-color:rgba(200,151,58,.3)">⬡ Scan Station</button>
+      <button class="tb-btn" onclick="showTab('scan',document.querySelector('.scan-nav'))" style="color:var(--gold);border-color:rgba(200,151,58,.3)">⬢ Scan Station</button>
       <button class="tb-btn gold" onclick="openCardLink()">📱 My card link</button>
     </div>
   </div>
   <div class="content">
 
-    <!-- OVERVIEW -->
     <div id="tab-overview" class="tab-pane active">
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-label">Total Cardholders</div><div class="stat-val" id="ov-total">—</div><div class="stat-sub" style="color:var(--green)">↑ 12% vs last month</div></div>
-        <div class="stat-card"><div class="stat-label">Active this month</div><div class="stat-val">—</div><div class="stat-sub" style="color:var(--green)">↑ 8%</div></div>
+        <div class="stat-card"><div class="stat-label">Active this month</div><div class="stat-val" id="ov-active">—</div><div class="stat-sub" style="color:var(--green)">↑ 8%</div></div>
         <div class="stat-card"><div class="stat-label">Rewards redeemed</div><div class="stat-val">—</div><div class="stat-sub" style="color:var(--green)">↑ 19%</div></div>
-        <div class="stat-card"><div class="stat-label">Today's Scans</div><div class="stat-val" id="ov-today-scans">0</div><div class="stat-sub">stamps added today</div></div>
+        <div class="stat-card"><div class="stat-label">Today's Scans</div><div class="stat-val" id="ov-today">0</div><div class="stat-sub">stamps added today</div></div>
       </div>
       <div class="grid-2">
-        <div class="panel"><div class="panel-hdr"><div><div class="panel-title">Weekly Scans</div></div></div><div class="bar-chart" id="weekly-bars"></div><div class="bar-x" id="weekly-x"></div></div>
+        <div class="panel"><div class="panel-hdr"><div class="panel-title">Weekly Scans</div></div><div class="bar-chart" id="weekly-bars"></div><div class="bar-x" id="weekly-x"></div></div>
         <div class="panel"><div class="panel-hdr"><div class="panel-title">Recent Activity</div></div><div id="ov-feed"></div></div>
       </div>
     </div>
 
-    <!-- LIVE FEED -->
     <div id="tab-feed" class="tab-pane">
-      <div class="panel"><div class="panel-hdr"><div><div class="panel-title" style="display:flex;align-items:center;gap:8px"><div class="live-dot"></div>Real-time activity</div></div></div><div id="main-feed" style="max-height:500px;overflow-y:auto"></div></div>
+      <div class="panel"><div class="panel-hdr"><div class="panel-title" style="display:flex;align-items:center;gap:8px"><div class="live-dot"></div>Real-time activity</div></div><div id="main-feed" style="max-height:500px;overflow-y:auto"></div></div>
     </div>
 
-    <!-- ANALYTICS -->
     <div id="tab-analytics" class="tab-pane">
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-label">Conversion Rate</div><div class="stat-val">68%</div></div>
@@ -191,87 +176,53 @@ body{display:flex;min-height:100vh}
         <div class="stat-card"><div class="stat-label">Avg Stamps/Visit</div><div class="stat-val">1.2</div></div>
         <div class="stat-card"><div class="stat-label">Reward Redemption</div><div class="stat-val">81%</div></div>
       </div>
-      <div class="panel"><div class="panel-hdr"><div class="panel-title">Monthly Scans — Last 12 Months</div></div><div class="bar-chart" id="monthly-bars"></div><div class="bar-x" id="monthly-x"></div></div>
+      <div class="panel"><div class="panel-hdr"><div class="panel-title">Monthly Scans</div></div><div class="bar-chart" id="monthly-bars"></div><div class="bar-x" id="monthly-x"></div></div>
     </div>
-    <!-- ════════════════════════════════════════ -->
-    <!-- SCAN STATION -->
-    <!-- ════════════════════════════════════════ -->
+
     <div id="tab-scan" class="tab-pane">
       <div style="max-width:540px;margin:0 auto">
-        <div style="margin-bottom:18px">
-          <div style="font-size:1.25rem;font-weight:700;margin-bottom:4px">⬡ Scan Station</div>
-          <div style="font-size:.78rem;color:var(--muted)">Scan customer QR to add a stamp. Works with any scan gun, phone camera, or manual entry.</div>
-        </div>
-
-        <!-- Info box -->
+        <div style="margin-bottom:18px"><div style="font-size:1.25rem;font-weight:700;margin-bottom:4px">⬢ Scan Station</div><div style="font-size:.78rem;color:var(--muted)">Scan a customer QR to add a stamp. Works with scan gun, camera, or manual entry.</div></div>
         <div style="background:rgba(59,130,246,.06);border:1px solid rgba(59,130,246,.15);border-radius:12px;padding:13px 15px;margin-bottom:16px;font-size:.74rem;color:#93c5fd;line-height:1.7">
-          <strong>💡 How to use:</strong>
-          🔫 <strong>Scan gun</strong> — plug USB/BT gun, click this page, point at QR → auto stamps
-          &nbsp;·&nbsp; 📱 <strong>Camera</strong> — tap Camera below
-          &nbsp;·&nbsp; ⌨️ <strong>Manual</strong> — type phone number
-          &nbsp;·&nbsp; Press <kbd style="background:var(--ink3);border:1px solid var(--border2);padding:1px 5px;border-radius:4px;font-size:.7rem">/</kbd> anywhere to jump here
+          <strong>💡 How to use:</strong> 🔫 <strong>Scan gun</strong> — plug USB/BT gun, click this page, point at QR → auto stamps &nbsp;·&nbsp; 📷 <strong>Camera</strong> — tap Camera below &nbsp;·&nbsp; ⌨️ <strong>Manual</strong> — type phone number. Press <kbd style="background:var(--ink3);border:1px solid var(--border2);padding:1px 5px;border-radius:4px;font-size:.7rem">/</kbd> anywhere to jump here.
         </div>
-
-        <!-- Mode tabs -->
         <div class="scan-mode-tabs">
-          <button class="scan-mode-tab active" id="mode-gun" onclick="setScanMode('gun')">🔫 Scan Gun / Auto</button>
-          <button class="scan-mode-tab" id="mode-camera" onclick="setScanMode('camera')">📷 Camera</button>
-          <button class="scan-mode-tab" id="mode-manual" onclick="setScanMode('manual')">⌨️ Manual</button>
+          <button class="smt active" id="mode-gun" onclick="setScanMode('gun')">🔫 Scan Gun</button>
+          <button class="smt" id="mode-camera" onclick="setScanMode('camera')">📷 Camera</button>
+          <button class="smt" id="mode-manual" onclick="setScanMode('manual')">⌨️ Manual</button>
         </div>
-
-        <!-- Status -->
-        <div class="scan-status-bar ready" id="scan-status">
-          <span id="scan-status-dot" style="width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0;animation:scanDot 1.5s ease-in-out infinite"></span>
-          <span id="scan-status-text">Ready — waiting for scan...</span>
-        </div>
-
-        <!-- GUN MODE -->
+        <div class="ssb s-ready" id="scan-status"><span id="scan-dot" style="width:8px;height:8px;border-radius:50%;background:#3b82f6;flex-shrink:0;animation:scanDot 1.5s ease-in-out infinite"></span><span id="scan-text">Ready — waiting for scan...</span></div>
         <div id="gun-mode-ui">
-          <div style="font-size:.68rem;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Scan QR Code or Enter Phone</div>
-          <input id="scan-input-field" type="text" placeholder="Point scan gun here — or type phone number..." autocomplete="off" autocorrect="off" spellcheck="false" onkeydown="if(event.key==='Enter')processInput()" oninput="onScanInput(this)"/>
+          <div style="font-size:.68rem;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Scan QR or Enter Phone</div>
+          <input id="scan-input-field" type="text" placeholder="Point scan gun here — or type phone number..." autocomplete="off" spellcheck="false" onkeydown="if(event.key==='Enter')processInput()" oninput="if(this.value.indexOf('|')>=0)processInput()"/>
           <div style="display:flex;gap:8px;margin-top:10px">
             <button class="send-btn" style="flex:1;justify-content:center" onclick="processInput()">🔍 Lookup</button>
-            <button class="tb-btn" onclick="clearScan()">✕ Clear</button>
+            <button class="tb-btn" onclick="clearScan()">× Clear</button>
           </div>
         </div>
-
-        <!-- CAMERA MODE -->
         <div id="camera-mode-ui" style="display:none">
-          <div style="position:relative;margin-bottom:10px">
-            <video id="camera-preview" autoplay playsinline></video>
+          <video id="cam-prev" autoplay playsinline></video>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="send-btn" style="flex:1;justify-content:center" id="start-cam-btn" onclick="startCamera()">📷 Start Camera</button>
+            <button class="tb-btn" id="stop-cam-btn" style="display:none" onclick="stopCamera()">■ Stop</button>
           </div>
-          <div style="display:flex;gap:8px">
-            <button class="send-btn" style="flex:1;justify-content:center" id="start-camera-btn" onclick="startCamera()">📷 Start Camera</button>
-            <button class="tb-btn" id="stop-camera-btn" style="display:none" onclick="stopCamera()">■ Stop</button>
-          </div>
-          <div style="font-size:.7rem;color:var(--muted);margin-top:8px;text-align:center">Point camera at the QR on the customer's wallet card</div>
         </div>
-
-        <!-- MANUAL MODE -->
         <div id="manual-mode-ui" style="display:none">
           <div style="font-size:.68rem;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.05em;text-transform:uppercase">Enter Phone Number</div>
-          <input id="manual-phone-input" type="tel" class="inp-field" placeholder="e.g. +972501234567" style="font-size:.95rem;padding:12px 14px;margin-bottom:10px;border-radius:10px" onkeydown="if(event.key==='Enter')processManual()"/>
-          <button class="send-btn" style="width:100%;justify-content:center" onclick="processManual()">🔍 Lookup Customer</button>
+          <input id="manual-phone" type="tel" class="inp-field" placeholder="e.g. +972501234567" style="font-size:.95rem;padding:12px 14px;margin-bottom:10px;border-radius:10px" onkeydown="if(event.key==='Enter')processManual()"/>
+          <button class="send-btn" style="width:100%;justify-content:center" onclick="processManual()">🔍 Lookup</button>
         </div>
-
-        <!-- RESULT -->
         <div id="scan-result" style="display:none;margin-top:16px"></div>
-
-        <!-- TODAY'S LOG -->
         <div style="margin-top:22px">
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:flex;justify-content:space-between">
-            <span>Today's Scans</span><span id="today-count" style="color:var(--gold)">0 stamps</span>
-          </div>
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:flex;justify-content:space-between"><span>Today's Scans</span><span id="today-count" style="color:var(--gold)">0 stamps</span></div>
           <div id="today-feed" class="panel"><div style="padding:18px;text-align:center;color:var(--muted);font-size:.78rem">No scans yet today</div></div>
         </div>
       </div>
     </div>
 
-    <!-- NOTIFICATIONS -->
     <div id="tab-notifications" class="tab-pane">
       <div class="grid-2">
         <div>
-          <div class="notif-compose">
+          <div style="background:var(--ink3);border:1px solid var(--border2);border-radius:var(--r);padding:20px;margin-bottom:14px">
             <div class="n-label">Message</div>
             <textarea class="n-textarea" id="notif-msg" maxlength="160" placeholder="e.g. ☀️ Double stamps today until 14:00!" oninput="updateChar()"></textarea>
             <div style="display:flex;justify-content:space-between;margin-top:4px"><div style="font-size:.65rem;color:var(--muted)">Delivered as push to Wallet</div><span style="font-size:.65rem;color:var(--muted)" id="char-c">0/160</span></div>
@@ -287,7 +238,6 @@ body{display:flex;min-height:100vh}
       </div>
     </div>
 
-    <!-- CUSTOMERS -->
     <div id="tab-customers" class="tab-pane">
       <div class="panel">
         <div class="panel-hdr"><div class="panel-title">All Customers</div><input placeholder="Search..." style="background:var(--ink3);border:1px solid var(--border2);color:var(--paper);padding:6px 10px;border-radius:7px;font-family:'Inter',sans-serif;font-size:.76rem;outline:none" oninput="filterCusts(this.value)"/></div>
@@ -295,13 +245,12 @@ body{display:flex;min-height:100vh}
       </div>
     </div>
 
-    <!-- PROFILE -->
     <div id="tab-profile" class="tab-pane">
       <div class="grid-2">
         <div class="panel"><div class="panel-hdr"><div class="panel-title">Business Details</div></div><div style="padding:20px">
           <div class="inp-group"><div class="inp-label">Business Name</div><input class="inp-field" id="prof-name"/></div>
           <div class="inp-group"><div class="inp-label">Reward Description</div><input class="inp-field" id="prof-reward"/></div>
-          <button class="send-btn" style="margin-top:8px" onclick="showToast('✅ Saved')">Save changes</button>
+          <button class="send-btn" style="margin-top:8px" onclick="showToast('✓ Saved')">Save changes</button>
         </div></div>
         <div class="panel"><div class="panel-hdr"><div class="panel-title">Card QR Code</div></div><div style="padding:20px;text-align:center">
           <canvas id="qr-canvas" style="border-radius:12px;background:white;padding:12px;margin:0 auto 14px;display:block"></canvas>
@@ -311,8 +260,8 @@ body{display:flex;min-height:100vh}
       </div>
     </div>
 
-    <!-- ADMIN -->
     <div id="tab-admin" class="tab-pane">
+      <div style="font-size:.72rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:14px">All Businesses — Admin</div>
       <div class="stat-grid">
         <div class="stat-card"><div class="stat-label">Active Businesses</div><div class="stat-val">4</div></div>
         <div class="stat-card"><div class="stat-label">Total Cardholders</div><div class="stat-val">1,891</div></div>
@@ -326,272 +275,339 @@ body{display:flex;min-height:100vh}
 </main>
 <div class="toast" id="toast"></div>
 <script>
-const API='https://loyalpass-backend-production-5c8a.up.railway.app';
-const BASE_URL='https://loyalpass-frontend.pages.dev';
-const BUSINESSES=[
-  {id:'cafe-carmel',   name:'Café Carmel',   emoji:'🍽️',plan:'business',username:'carmel',  password:'Carmel2026!',  customers:847, active:true},
-  {id:'ofeh-yisraeli', name:'Ofeh Yisraeli', emoji:'🥐', plan:'business',username:'ofeh',    password:'Ofeh2026!',    customers:312, active:true},
-  {id:'powerup-gym',   name:'PowerUp Gym',   emoji:'🏋️',plan:'agency',  username:'powerup', password:'PowerUp2026!', customers:534, active:true},
-  {id:'teva-hashuk',   name:'Teva HaShuk',   emoji:'🌿', plan:'business',username:'teva',    password:'Teva2026!',    customers:198, active:true},
+var API = "https://loyalpass-backend-production-5c8a.up.railway.app";
+var BASE = "https://loyalpass-frontend.pages.dev";
+var BIZ = [
+  {id:"cafe-carmel",   name:"Café Carmel",  emoji:"🍽️", plan:"business", u:"carmel",  p:"Carmel2026!",  n:847,  active:true},
+  {id:"ofeh-yisraeli", name:"Ofeh Yisraeli", emoji:"🥐",        plan:"business", u:"ofeh",    p:"Ofeh2026!",    n:312,  active:true},
+  {id:"powerup-gym",   name:"PowerUp Gym",   emoji:"🏋️", plan:"agency",   u:"powerup", p:"PowerUp2026!", n:534,  active:true},
+  {id:"teva-hashuk",   name:"Teva HaShuk",   emoji:"🌿",        plan:"business", u:"teva",    p:"Teva2026!",    n:198,  active:true}
 ];
-let currentBiz=BUSINESSES[0],isAdmin=false,todayScans=[],scanMode='gun',cameraStream=null,qrScanner=null;
+var curBiz = BIZ[0], isAdmin = false, todayScans = [], scanMode = "gun", camStream = null, qrTimer = null;
 
-function doLogin(){
-  const u=document.getElementById('login-user').value.trim().toLowerCase();
-  const p=document.getElementById('login-pass').value.trim();
-  const err=document.getElementById('login-error');
-  if(!u||!p){err.textContent='Enter username and password';return;}
-  if(u==='admin'&&p==='LoyalPass2026!'){isAdmin=true;currentBiz=BUSINESSES[0];unlockDashboard();return;}
-  const biz=BUSINESSES.find(b=>b.username===u&&b.password===p&&b.active);
-  if(biz){isAdmin=false;currentBiz=biz;unlockDashboard();return;}
-  err.textContent='Incorrect username or password';
-  document.getElementById('login-pass').value='';
+function doLogin() {
+  var u = document.getElementById("login-user").value.trim().toLowerCase();
+  var pw = document.getElementById("login-pass").value.trim();
+  var err = document.getElementById("login-error");
+  if (!u || !pw) { err.textContent = "Enter username and password"; return; }
+  if (u === "admin" && pw === "LoyalPass2026!") { isAdmin = true; curBiz = BIZ[0]; unlockDash(); return; }
+  for (var i = 0; i < BIZ.length; i++) {
+    if (BIZ[i].u === u && BIZ[i].p === pw && BIZ[i].active) { isAdmin = false; curBiz = BIZ[i]; unlockDash(); return; }
+  }
+  err.textContent = "Incorrect username or password";
+  document.getElementById("login-pass").value = "";
 }
-function unlockDashboard(){
-  const ls=document.getElementById('login-screen');
-  ls.classList.add('hide');setTimeout(()=>ls.style.display='none',400);
-  document.getElementById('sb-name').textContent=currentBiz.name;
-  document.getElementById('sb-uname').textContent=isAdmin?'Meir Zini':currentBiz.name;
-  document.getElementById('sb-role').textContent=isAdmin?'LoyalPass Admin':currentBiz.plan+' plan';
-  document.getElementById('sb-avatar').textContent=isAdmin?'MZ':currentBiz.name.substring(0,2).toUpperCase();
-  document.getElementById('ov-total').textContent=currentBiz.customers.toLocaleString();
-  if(isAdmin)document.getElementById('admin-nav').style.display='flex';
-  document.getElementById('card-url').textContent=BASE_URL+'/?biz='+currentBiz.id;
-  const pn=document.getElementById('prof-name');if(pn)pn.value=currentBiz.name;
+
+function unlockDash() {
+  var ls = document.getElementById("login-screen");
+  ls.classList.add("hide");
+  setTimeout(function(){ ls.style.display = "none"; }, 400);
+  document.getElementById("sb-name").textContent = curBiz.name;
+  document.getElementById("sb-uname").textContent = isAdmin ? "Meir Zini" : curBiz.name;
+  document.getElementById("sb-role").textContent = isAdmin ? "LoyalPass Admin" : curBiz.plan + " plan";
+  document.getElementById("sb-avatar").textContent = isAdmin ? "MZ" : curBiz.name.substring(0,2).toUpperCase();
+  document.getElementById("ov-total").textContent = curBiz.n.toLocaleString();
+  document.getElementById("ov-active").textContent = Math.round(curBiz.n * 0.37).toLocaleString();
+  if (isAdmin) document.getElementById("admin-nav").style.display = "flex";
+  document.getElementById("card-url").textContent = BASE + "/?biz=" + curBiz.id;
+  var pn = document.getElementById("prof-name"); if (pn) pn.value = curBiz.name;
   renderAll();
-  setTimeout(()=>document.getElementById('scan-input-field')?.focus(),500);
-}
-function logout(){stopCamera();document.getElementById('login-screen').style.display='flex';document.getElementById('login-screen').classList.remove('hide');document.getElementById('login-user').value='';document.getElementById('login-pass').value='';}
-function showTab(id,el){
-  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.sbi').forEach(s=>s.classList.remove('active'));
-  document.getElementById('tab-'+id).classList.add('active');
-  if(el)el.classList.add('active');
-  const T={overview:'Overview',feed:'Live Feed',analytics:'Analytics',scan:'Scan Station',notifications:'Notifications',customers:'Customers',profile:'Business Profile',admin:'All Businesses'};
-  document.getElementById('page-title').textContent=T[id]||id;
-  if(id==='analytics')renderMonthly();
-  if(id==='customers')renderCustomers();
-  if(id==='notifications')renderNotif();
-  if(id==='admin')renderAdmin();
-  if(id==='profile')renderQR();
-  if(id==='scan')setTimeout(()=>{if(scanMode==='gun')document.getElementById('scan-input-field')?.focus();},100);
+  setTimeout(function(){ var f = document.getElementById("scan-input-field"); if(f) f.focus(); }, 500);
 }
 
-// SCAN STATION
-function setScanMode(mode){
-  scanMode=mode;
-  ['gun','camera','manual'].forEach(m=>{
-    document.getElementById('mode-'+m).classList.toggle('active',m===mode);
-    document.getElementById(m+'-mode-ui').style.display=m===mode?'block':'none';
-  });
-  if(mode!=='camera')stopCamera();
-  if(mode==='gun'){document.getElementById('scan-input-field').value='';document.getElementById('scan-input-field').focus();}
-  setScanStatus('ready','⬡ Ready — '+(mode==='gun'?'point scan gun at QR':mode==='camera'?'tap Start Camera':'enter phone number'));
-}
-function setScanStatus(type,text){
-  const el=document.getElementById('scan-status');
-  el.className='scan-status-bar '+type;
-  document.getElementById('scan-status-text').textContent=text;
-  const colors={ready:'#3b82f6',waiting:'var(--gold)',found:'var(--green)',stamped:'var(--green)','scan-error':'var(--red)'};
-  const dot=document.getElementById('scan-status-dot');
-  dot.style.background=colors[type]||'#3b82f6';
-  dot.style.animation=type==='stamped'?'none':'scanDot 1.5s ease-in-out infinite';
-}
-function clearScan(){
-  document.getElementById('scan-input-field').value='';
-  document.getElementById('scan-input-field').focus();
-  document.getElementById('scan-result').style.display='none';
-  setScanStatus('ready','⬡ Ready — point scan gun at QR code...');
-}
-function onScanInput(el){if(el.value.includes('|'))processInput();}
-async function processInput(){const raw=document.getElementById('scan-input-field').value.trim();if(!raw)return;await processQRValue(raw);}
-async function processManual(){const raw=document.getElementById('manual-phone-input').value.trim();if(!raw)return;await processQRValue(raw);}
-
-async function processQRValue(raw){
-  setScanStatus('waiting','🔍 Looking up customer...');
-  document.getElementById('scan-input-field').classList.add('scanning');
-  document.getElementById('scan-result').style.display='none';
-  let phone,bizId;
-  if(raw.includes('|')){[phone,bizId]=raw.split('|');}else{phone=raw;bizId=currentBiz.id;}
-  const cleanPhone=phone.replace(/\D/g,'');
-  if(!cleanPhone){showScanError('Invalid input');return;}
-  const targetBiz=bizId||currentBiz.id;
-  try{
-    const r=await fetch(API+'/api/pass/lookup?phone='+encodeURIComponent(cleanPhone)+'&businessId='+targetBiz);
-    const d=await r.json();
-    setTimeout(()=>document.getElementById('scan-input-field').classList.remove('scanning'),300);
-    if(d.found){showCustomerCard(d,targetBiz);setScanStatus('found','✓ Found — '+d.name);}
-    else{showNotFound(cleanPhone,targetBiz);setScanStatus('scan-error','⚠ Not registered');}
-  }catch(e){document.getElementById('scan-input-field').classList.remove('scanning');showScanError('Connection error: '+e.message);}
+function logout() {
+  stopCamera();
+  document.getElementById("login-screen").style.display = "flex";
+  document.getElementById("login-screen").classList.remove("hide");
+  document.getElementById("login-user").value = "";
+  document.getElementById("login-pass").value = "";
 }
 
-function showCustomerCard(data,bizId){
-  const stamps=data.stamps||0,goal=data.goal||10;
-  const biz=BUSINESSES.find(b=>b.id===bizId)||currentBiz;
-  const pips=Array.from({length:goal},(_,i)=>'<div class="stamp-pip '+(i<stamps?'filled':'')+'">'+( i<stamps?'★':'')+' </div>').join('');
-  const isReward=stamps>=goal;
-  const near=stamps>=goal-1&&!isReward;
-  let banner=isReward
-    ?'<div class="reward-banner"><div style="font-size:1.3rem;margin-bottom:5px">🎁</div><div style="font-weight:700;color:var(--gold)">REWARD DUE!</div><div style="font-size:.74rem;color:var(--muted);margin-top:4px">Card is complete — give reward</div></div>'
-    :near?'<div style="background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);border-radius:9px;padding:9px 13px;text-align:center;font-size:.75rem;color:var(--gold)">⚡ Almost! <strong>'+(goal-stamps)+'</strong> stamp'+(goal-stamps===1?'':'s')+' to reward</div>':'';
-  const initials=(data.name||'?').split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
-  document.getElementById('scan-result').style.display='block';
-  document.getElementById('scan-result').innerHTML='<div class="customer-card-result success">'+
-    '<div style="display:flex;align-items:center;gap:12px">'+
-      '<div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--ink);flex-shrink:0">'+initials+'</div>'+
-      '<div style="flex:1;min-width:0"><div style="font-size:.95rem;font-weight:700;margin-bottom:2px">'+data.name+'</div><div style="font-size:.72rem;color:var(--muted)">'+data.phone+' · '+biz.emoji+' '+biz.name+'</div></div>'+
-      '<div style="text-align:right"><div style="font-size:1.5rem;font-weight:800;color:var(--gold)">'+stamps+'<span style="font-size:.75rem;color:var(--muted)">/'+goal+'</span></div><div style="font-size:.6rem;color:var(--muted)">STAMPS</div></div>'+
-    '</div>'+
-    '<div class="stamp-track">'+pips+'</div>'+
-    banner+
-    '<button class="big-stamp-btn" id="add-stamp-btn" onclick="addStampToCustomer(''+data.phone+'',''+bizId+'',''+data.name+'','+stamps+')">⬡ Add Stamp</button>'+
-    '<button class="tb-btn" style="width:100%;justify-content:center" onclick="clearScan()">← Scan Next Customer</button>'+
-  '</div>';
+function showTab(id, el) {
+  var panes = document.querySelectorAll(".tab-pane");
+  for (var i = 0; i < panes.length; i++) panes[i].classList.remove("active");
+  var sbis = document.querySelectorAll(".sbi");
+  for (var i = 0; i < sbis.length; i++) sbis[i].classList.remove("active");
+  var tab = document.getElementById("tab-" + id);
+  if (tab) tab.classList.add("active");
+  if (el) el.classList.add("active");
+  var T = {overview:"Overview",feed:"Live Feed",analytics:"Analytics",scan:"Scan Station",notifications:"Notifications",customers:"Customers",profile:"Business Profile",admin:"All Businesses"};
+  document.getElementById("page-title").textContent = T[id] || id;
+  if (id === "analytics") renderMonthly();
+  if (id === "customers") renderCustomers("");
+  if (id === "notifications") renderNotif();
+  if (id === "admin") renderAdmin();
+  if (id === "profile") renderQR();
+  if (id === "scan") setTimeout(function(){ if(scanMode==="gun"){ var f=document.getElementById("scan-input-field"); if(f) f.focus(); } }, 100);
 }
 
-function showNotFound(phone,bizId){
-  const biz=BUSINESSES.find(b=>b.id===bizId)||currentBiz;
-  document.getElementById('scan-result').style.display='block';
-  document.getElementById('scan-result').innerHTML='<div class="customer-card-result not-found" style="text-align:center">'+
-    '<div style="font-size:2rem;margin-bottom:8px">🤔</div>'+
-    '<div style="font-size:.88rem;font-weight:700;margin-bottom:6px">Customer not registered</div>'+
-    '<div style="font-size:.75rem;color:var(--muted);margin-bottom:14px">Phone <strong>'+phone+'</strong> has no card at '+biz.name+'</div>'+
-    '<div style="font-size:.73rem;color:var(--muted)">Ask them to visit: <strong>'+BASE_URL+'/?biz='+bizId+'</strong></div>'+
-    '<button class="tb-btn" style="width:100%;justify-content:center;margin-top:12px" onclick="clearScan()">← Try Again</button>'+
-  '</div>';
+function setScanMode(m) {
+  scanMode = m;
+  var modes = ["gun","camera","manual"];
+  for (var i = 0; i < modes.length; i++) {
+    document.getElementById("mode-" + modes[i]).classList.toggle("active", modes[i] === m);
+    document.getElementById(modes[i] + "-mode-ui").style.display = modes[i] === m ? "block" : "none";
+  }
+  if (m !== "camera") stopCamera();
+  if (m === "gun") { document.getElementById("scan-input-field").value = ""; document.getElementById("scan-input-field").focus(); }
+  setStatus("ready", "Ready — " + (m === "gun" ? "point scan gun at QR" : m === "camera" ? "tap Start Camera" : "enter phone number"));
 }
 
-function showScanError(msg){
-  setScanStatus('scan-error','✗ '+msg);
-  document.getElementById('scan-input-field').classList.remove('scanning');
-  document.getElementById('scan-result').style.display='block';
-  document.getElementById('scan-result').innerHTML='<div class="customer-card-result error-card" style="text-align:center;padding:18px"><div style="font-size:.85rem;font-weight:600;color:#fca5a5">⚠️ '+msg+'</div><button class="tb-btn" style="width:100%;justify-content:center;margin-top:12px" onclick="clearScan()">← Try Again</button></div>';
+function setStatus(type, text) {
+  var el = document.getElementById("scan-status");
+  el.className = "ssb s-" + (type === "found" || type === "stamped" ? "ok" : type === "error" ? "err" : type === "waiting" ? "wait" : "ready");
+  document.getElementById("scan-text").textContent = text;
+  var dot = document.getElementById("scan-dot");
+  var cols = {ready:"#3b82f6", waiting:"var(--gold)", found:"var(--green)", stamped:"var(--green)", error:"var(--red)"};
+  dot.style.background = cols[type] || "#3b82f6";
+  dot.style.animation = (type === "stamped") ? "none" : "scanDot 1.5s ease-in-out infinite";
 }
 
-async function addStampToCustomer(phone,bizId,name,currentStamps){
-  const btn=document.getElementById('add-stamp-btn');
-  if(!btn)return;
-  btn.disabled=true;btn.textContent='⏳ Adding stamp...';
-  setScanStatus('waiting','⏳ Adding stamp for '+name+'...');
-  try{
-    const r=await fetch(API+'/api/pass/stamp',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({phone,businessId:bizId})});
-    const d=await r.json();
-    if(r.ok&&d.stamps!==undefined){
-      const biz=BUSINESSES.find(b=>b.id===bizId)||currentBiz;
-      setScanStatus('stamped','✅ Stamp added! '+name+' → '+d.stamps+'/'+(d.goal||10));
-      showToast('⬡ Stamp added — '+name+' · '+d.stamps+'/'+(d.goal||10));
-      todayScans.unshift({name,phone,stamps:d.stamps,goal:d.goal||10,biz:biz.name,emoji:biz.emoji,time:new Date().toLocaleTimeString('en-IL',{hour:'2-digit',minute:'2-digit'})});
-      updateTodayFeed();
-      document.getElementById('ov-today-scans').textContent=todayScans.length;
-      if(document.getElementById('admin-today'))document.getElementById('admin-today').textContent=todayScans.length;
-      // Re-fetch and show updated card
-      try{
-        const r2=await fetch(API+'/api/pass/lookup?phone='+encodeURIComponent(phone.replace(/\D/g,''))+'&businessId='+bizId);
-        const d2=await r2.json();
-        if(d2.found)showCustomerCard(d2,bizId);
-      }catch(e){}
-      setTimeout(()=>{clearScan();setScanStatus('ready','⬡ Ready — scan next customer');},3000);
-    }else{
-      btn.disabled=false;btn.textContent='⬡ Add Stamp';
-      setScanStatus('scan-error','✗ '+(d.error||'Failed'));
-    }
-  }catch(e){btn.disabled=false;btn.textContent='⬡ Add Stamp';setScanStatus('scan-error','✗ Connection error');}
+function clearScan() {
+  document.getElementById("scan-input-field").value = "";
+  document.getElementById("scan-result").style.display = "none";
+  document.getElementById("scan-input-field").focus();
+  setStatus("ready", "Ready — scan next customer");
 }
 
-function updateTodayFeed(){
-  const el=document.getElementById('today-feed');
-  const c=document.getElementById('today-count');
-  c.textContent=todayScans.length+' stamp'+(todayScans.length!==1?'s':'');
-  if(!todayScans.length){el.innerHTML='<div style="padding:18px;text-align:center;color:var(--muted);font-size:.78rem">No scans yet today</div>';return;}
-  el.innerHTML='<div style="overflow:hidden">'+todayScans.slice(0,8).map(s=>'<div class="feed-item">'+
-    '<div class="feed-av" style="background:var(--gold-dim);color:var(--gold)">'+s.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()+'</div>'+
-    '<div style="flex:1"><div style="font-size:.8rem;font-weight:600;margin-bottom:1px">'+s.name+'</div><div style="font-size:.7rem;color:var(--muted)">'+s.emoji+' '+s.biz+' · '+s.stamps+'/'+s.goal+'</div></div>'+
-    '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">'+
-    (s.stamps>=s.goal?'<span class="tag tag-reward">REWARD</span>':'<span class="tag tag-stamp">STAMP</span>')+
-    '<span style="font-size:.62rem;color:var(--muted)">'+s.time+'</span></div>'+
-  '</div>').join('')+'</div>';
+function processInput() {
+  var v = document.getElementById("scan-input-field").value.trim();
+  if (v) doLookup(v);
+}
+function processManual() {
+  var v = document.getElementById("manual-phone").value.trim();
+  if (v) doLookup(v);
 }
 
-// Camera QR
-async function startCamera(){
-  try{
-    const video=document.getElementById('camera-preview');
-    cameraStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
-    video.srcObject=cameraStream;video.style.display='block';
-    document.getElementById('start-camera-btn').style.display='none';
-    document.getElementById('stop-camera-btn').style.display='flex';
-    setScanStatus('waiting','📷 Camera active — point at QR code');
-    if(!window.jsQR){
-      await new Promise((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';s.onload=res;s.onerror=rej;document.head.appendChild(s);});
-    }
-    const canvas=document.createElement('canvas');const ctx=canvas.getContext('2d');let lastCode='';
-    qrScanner=setInterval(()=>{
-      if(!video.videoWidth)return;
-      canvas.width=video.videoWidth;canvas.height=video.videoHeight;
-      ctx.drawImage(video,0,0);
-      const img=ctx.getImageData(0,0,canvas.width,canvas.height);
-      const code=window.jsQR&&window.jsQR(img.data,img.width,img.height);
-      if(code&&code.data&&code.data!==lastCode){
-        lastCode=code.data;stopCamera();
-        document.getElementById('scan-input-field').value=code.data;
-        setScanMode('gun');processQRValue(code.data);
+function doLookup(raw) {
+  setStatus("waiting", "Looking up customer...");
+  document.getElementById("scan-result").style.display = "none";
+  var phone, bizId;
+  if (raw.indexOf("|") >= 0) { var pts = raw.split("|"); phone = pts[0]; bizId = pts[1]; }
+  else { phone = raw; bizId = curBiz.id; }
+  var clean = phone.replace(/D/g, "");
+  if (!clean) { setStatus("error", "Invalid input"); return; }
+  var target = bizId || curBiz.id;
+  fetch(API + "/api/pass/lookup?phone=" + encodeURIComponent(clean) + "&businessId=" + target)
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.found) { showCust(d, target); setStatus("found", "✓ Found — " + d.name); }
+      else { showNotFound(clean, target); setStatus("error", "⚠ Not registered"); }
+    })
+    .catch(function(e){ setStatus("error", "Error: " + e.message); });
+}
+
+function showCust(data, bizId) {
+  var stamps = data.stamps || 0, goal = data.goal || 10;
+  var b = curBiz;
+  for (var i = 0; i < BIZ.length; i++) { if (BIZ[i].id === bizId) { b = BIZ[i]; break; } }
+  var pips = "", ini = (data.name||"?").split(" ").map(function(w){ return w[0]; }).join("").substring(0,2).toUpperCase();
+  for (var i = 0; i < goal; i++) pips += "<div class=\"sp " + (i < stamps ? "on" : "") + "\">" + (i < stamps ? "★" : "") + "</div>";
+  var banner = stamps >= goal
+    ? "<div style=\"background:linear-gradient(135deg,rgba(200,151,58,.2),rgba(200,151,58,.05));border:1px solid rgba(200,151,58,.4);border-radius:11px;padding:14px;text-align:center\"><div style=\"font-size:1.3rem;margin-bottom:5px\">🎁</div><div style=\"font-weight:700;color:var(--gold)\">REWARD DUE!</div></div>"
+    : stamps === goal - 1 ? "<div style=\"background:rgba(200,151,58,.08);border:1px solid rgba(200,151,58,.2);border-radius:9px;padding:9px;text-align:center;font-size:.75rem;color:var(--gold)\">⚡ 1 more stamp to reward!</div>" : "";
+  var ph = data.phone || "", nm = data.name || "?";
+  document.getElementById("scan-result").style.display = "block";
+  document.getElementById("scan-result").innerHTML =
+    "<div class=\"cres ok\">" +
+    "<div style=\"display:flex;align-items:center;gap:12px\">" +
+    "<div style=\"width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#7a4a10);display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:700;color:var(--ink);flex-shrink:0\">" + ini + "</div>" +
+    "<div style=\"flex:1\"><div style=\"font-size:.95rem;font-weight:700;margin-bottom:2px\">" + nm + "</div><div style=\"font-size:.72rem;color:var(--muted)\">" + ph + " · " + b.emoji + " " + b.name + "</div></div>" +
+    "<div style=\"text-align:right\"><div style=\"font-size:1.5rem;font-weight:800;color:var(--gold)\">" + stamps + "<span style=\"font-size:.75rem;color:var(--muted)\">/"+goal+"</span></div><div style=\"font-size:.6rem;color:var(--muted)\">STAMPS</div></div>" +
+    "</div><div class=\"srow\">" + pips + "</div>" + banner +
+    "<button class=\"stamp-btn\" id=\"stamp-btn\" data-phone=\"" + ph + "\" data-biz=\"" + bizId + "\" data-name=\"" + nm + "\" data-stamps=\"" + stamps + "\" onclick=\"doAddStamp(this)\">⬢ Add Stamp</button>" +
+    "<button class=\"tb-btn\" style=\"width:100%;justify-content:center\" onclick=\"clearScan()\">← Scan Next</button>" +
+    "</div>";
+}
+
+function showNotFound(phone, bizId) {
+  var b = curBiz;
+  for (var i = 0; i < BIZ.length; i++) { if (BIZ[i].id === bizId) { b = BIZ[i]; break; } }
+  document.getElementById("scan-result").style.display = "block";
+  document.getElementById("scan-result").innerHTML =
+    "<div class=\"cres nf\" style=\"text-align:center\">" +
+    "<div style=\"font-size:2rem;margin-bottom:8px\">🤔</div>" +
+    "<div style=\"font-size:.88rem;font-weight:700;margin-bottom:6px\">Not registered</div>" +
+    "<div style=\"font-size:.75rem;color:var(--muted);margin-bottom:14px\">Phone <strong>" + phone + "</strong> has no card at " + b.name + "</div>" +
+    "<div style=\"font-size:.73rem;color:var(--muted)\">Ask them to visit: <strong>" + BASE + "/?biz=" + bizId + "</strong></div>" +
+    "<button class=\"tb-btn\" style=\"width:100%;justify-content:center;margin-top:12px\" onclick=\"clearScan()\">← Try Again</button>" +
+    "</div>";
+}
+
+function doAddStamp(btn) {
+  var phone = btn.dataset.phone, bizId = btn.dataset.biz, name = btn.dataset.name;
+  btn.disabled = true; btn.textContent = "Adding stamp...";
+  setStatus("waiting", "Adding stamp for " + name + "...");
+  fetch(API + "/api/pass/stamp", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({phone:phone, businessId:bizId})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.stamps !== undefined) {
+        var b = curBiz;
+        for (var i = 0; i < BIZ.length; i++) { if (BIZ[i].id === bizId) { b = BIZ[i]; break; } }
+        setStatus("stamped", "✅ Stamp added! " + name + " → " + d.stamps + "/" + (d.goal||10));
+        showToast("⬢ Stamp added — " + name + " · " + d.stamps + "/" + (d.goal||10));
+        todayScans.unshift({name:name, phone:phone, stamps:d.stamps, goal:d.goal||10, biz:b.name, emoji:b.emoji, time:new Date().toLocaleTimeString("en-IL",{hour:"2-digit",minute:"2-digit"})});
+        updateTodayFeed();
+        document.getElementById("ov-today").textContent = todayScans.length;
+        var at = document.getElementById("admin-today"); if(at) at.textContent = todayScans.length;
+        doLookup(phone + "|" + bizId);
+        setTimeout(function(){ clearScan(); setStatus("ready","Ready — scan next customer"); }, 3000);
+      } else {
+        btn.disabled = false; btn.textContent = "⬢ Add Stamp";
+        setStatus("error", d.error || "Failed");
       }
-    },300);
-  }catch(e){setScanStatus('scan-error','Camera: '+e.message);}
-}
-function stopCamera(){
-  if(cameraStream){cameraStream.getTracks().forEach(t=>t.stop());cameraStream=null;}
-  if(qrScanner){clearInterval(qrScanner);qrScanner=null;}
-  const v=document.getElementById('camera-preview');
-  if(v){v.style.display='none';v.srcObject=null;}
-  const sb=document.getElementById('start-camera-btn');if(sb)sb.style.display='flex';
-  const stb=document.getElementById('stop-camera-btn');if(stb)stb.style.display='none';
+    })
+    .catch(function(e){ btn.disabled=false; btn.textContent="⬢ Add Stamp"; setStatus("error","Connection error"); });
 }
 
-// Other tabs
-const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-const MONTHS=['Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb'];
+function updateTodayFeed() {
+  var el = document.getElementById("today-feed");
+  document.getElementById("today-count").textContent = todayScans.length + " stamp" + (todayScans.length !== 1 ? "s" : "");
+  if (!todayScans.length) { el.innerHTML = "<div style=\"padding:18px;text-align:center;color:var(--muted);font-size:.78rem\">No scans yet today</div>"; return; }
+  var html = "";
+  for (var i = 0; i < Math.min(todayScans.length, 8); i++) {
+    var s = todayScans[i];
+    var ini = s.name.split(" ").map(function(w){ return w[0]; }).join("").substring(0,2).toUpperCase();
+    html += "<div class=\"feed-item\">" +
+      "<div class=\"feed-av\" style=\"background:var(--gold-dim);color:var(--gold)\">" + ini + "</div>" +
+      "<div style=\"flex:1\"><div style=\"font-size:.8rem;font-weight:600;margin-bottom:1px\">" + s.name + "</div><div style=\"font-size:.7rem;color:var(--muted)\">" + s.emoji + " " + s.biz + " · " + s.stamps + "/" + s.goal + "</div></div>" +
+      "<div style=\"display:flex;flex-direction:column;align-items:flex-end;gap:3px\">" +
+      (s.stamps >= s.goal ? "<span class=\"tag tag-reward\">REWARD</span>" : "<span class=\"tag tag-stamp\">STAMP</span>") +
+      "<span style=\"font-size:.62rem;color:var(--muted)\">" + s.time + "</span></div></div>";
+  }
+  el.innerHTML = html;
+}
+
+function startCamera() {
+  navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}})
+  .then(function(stream){
+    camStream = stream;
+    var v = document.getElementById("cam-prev");
+    v.srcObject = stream; v.style.display = "block";
+    document.getElementById("start-cam-btn").style.display = "none";
+    document.getElementById("stop-cam-btn").style.display = "flex";
+    setStatus("waiting","Camera active — point at QR code");
+    var sc = document.createElement("script");
+    sc.src = "https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js";
+    sc.onload = function(){
+      var canvas = document.createElement("canvas"), ctx = canvas.getContext("2d"), last = "";
+      qrTimer = setInterval(function(){
+        if (!v.videoWidth) return;
+        canvas.width = v.videoWidth; canvas.height = v.videoHeight;
+        ctx.drawImage(v,0,0);
+        var img = ctx.getImageData(0,0,canvas.width,canvas.height);
+        var code = window.jsQR && window.jsQR(img.data,img.width,img.height);
+        if (code && code.data && code.data !== last) {
+          last = code.data; stopCamera();
+          document.getElementById("scan-input-field").value = code.data;
+          setScanMode("gun"); doLookup(code.data);
+        }
+      }, 300);
+    };
+    document.head.appendChild(sc);
+  })
+  .catch(function(e){ setStatus("error","Camera: " + e.message); });
+}
+
+function stopCamera() {
+  if (camStream) { camStream.getTracks().forEach(function(t){t.stop();}); camStream = null; }
+  if (qrTimer) { clearInterval(qrTimer); qrTimer = null; }
+  var v = document.getElementById("cam-prev"); if(v){ v.style.display="none"; v.srcObject=null; }
+  var sb = document.getElementById("start-cam-btn"); if(sb) sb.style.display = "flex";
+  var stb = document.getElementById("stop-cam-btn"); if(stb) stb.style.display = "none";
+}
+
+var DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+var MONTHS=["Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan","Feb"];
 function renderBar(cid,xid,vals,labels){
-  const mx=Math.max(...vals);
-  const bc=document.getElementById(cid);const bx=document.getElementById(xid);
-  if(!bc)return;
-  bc.innerHTML=vals.map(v=>'<div class="bar-col"><div class="bar" style="height:'+(mx?v/mx*100:5)+'%"></div></div>').join('');
-  if(bx)bx.innerHTML=labels.map(l=>'<span>'+l+'</span>').join('');
+  var mx=Math.max.apply(null,vals);
+  var bc=document.getElementById(cid); var bx=document.getElementById(xid);
+  if(!bc) return;
+  bc.innerHTML=vals.map(function(v){ return "<div class=\"bar-col\"><div class=\"bar\" style=\"height:"+(mx?v/mx*100:5)+"%\"></div></div>"; }).join("");
+  if(bx) bx.innerHTML=labels.map(function(l){ return "<span>"+l+"</span>"; }).join("");
 }
-const EVENTS=[
-  {name:'Avi Goldberg',type:'stamp',time:'2m ago',av:'AG',color:'#3b82f6'},
-  {name:'Shira Cohen',type:'reward',time:'8m ago',av:'SC',color:'#f59e0b'},
-  {name:'Yonatan Dahan',type:'stamp',time:'14m ago',av:'YD',color:'#8b5cf6'},
-  {name:'Michal Bar',type:'new',time:'21m ago',av:'MB',color:'#22c55e'},
-  {name:'Dana Peretz',type:'stamp',time:'35m ago',av:'DP',color:'#ef4444'},
+var EVENTS=[
+  {name:"Avi Goldberg",type:"stamp",time:"2m ago",av:"AG",c:"#3b82f6"},
+  {name:"Shira Cohen",type:"reward",time:"8m ago",av:"SC",c:"#f59e0b"},
+  {name:"Yonatan Dahan",type:"stamp",time:"14m ago",av:"YD",c:"#8b5cf6"},
+  {name:"Michal Bar",type:"new",time:"21m ago",av:"MB",c:"#22c55e"},
+  {name:"Dana Peretz",type:"stamp",time:"35m ago",av:"DP",c:"#ef4444"}
 ];
-function feedItem(e){const tag=e.type==='stamp'?'<span class="tag tag-stamp">STAMP</span>':e.type==='reward'?'<span class="tag tag-reward">REWARD</span>':'<span class="tag tag-new">NEW</span>';return '<div class="feed-item"><div class="feed-av" style="background:'+e.color+'20;color:'+e.color+'">'+e.av+'</div><div style="flex:1"><div style="font-size:.8rem;font-weight:600;margin-bottom:2px">'+e.name+'</div><div style="font-size:.7rem;color:var(--muted)">'+tag+'</div></div><div style="font-size:.64rem;color:var(--muted)">'+e.time+'</div></div>';}
-function renderAll(){renderBar('weekly-bars','weekly-x',[42,38,55,61,48,72,65],DAYS);document.getElementById('ov-feed').innerHTML=EVENTS.slice(0,4).map(feedItem).join('');document.getElementById('main-feed').innerHTML=EVENTS.map(feedItem).join('');}
-function renderMonthly(){renderBar('monthly-bars','monthly-x',[210,245,198,320,415,380,520,490,610,580,720,810],MONTHS);}
-const CUSTS=[
-  {name:'Avi Goldberg',phone:'+972501234567',stamps:7,joined:'Jan 2026'},
-  {name:'Shira Cohen',phone:'+972522345678',stamps:9,joined:'Dec 2025'},
-  {name:'Michal Bar',phone:'+972543456789',stamps:3,joined:'Feb 2026'},
-  {name:'Dana Peretz',phone:'+972554567890',stamps:5,joined:'Nov 2025'},
-  {name:'Ron Levy',phone:'+972535678901',stamps:2,joined:'Mar 2026'},
+function feedItem(e){
+  var tag = e.type==="stamp" ? "<span class=\"tag tag-stamp\">STAMP</span>" : e.type==="reward" ? "<span class=\"tag tag-reward\">REWARD</span>" : "<span class=\"tag tag-new\">NEW</span>";
+  return "<div class=\"feed-item\"><div class=\"feed-av\" style=\"background:"+e.c+"20;color:"+e.c+"\">"+e.av+"</div><div style=\"flex:1\"><div style=\"font-size:.8rem;font-weight:600;margin-bottom:2px\">"+e.name+"</div><div style=\"font-size:.7rem;color:var(--muted)\">"+tag+"</div></div><div style=\"font-size:.64rem;color:var(--muted)\">"+e.time+"</div></div>";
+}
+function renderAll(){
+  renderBar("weekly-bars","weekly-x",[42,38,55,61,48,72,65],DAYS);
+  document.getElementById("ov-feed").innerHTML=EVENTS.slice(0,4).map(feedItem).join("");
+  document.getElementById("main-feed").innerHTML=EVENTS.map(feedItem).join("");
+}
+function renderMonthly(){ renderBar("monthly-bars","monthly-x",[210,245,198,320,415,380,520,490,610,580,720,810],MONTHS); }
+
+var CUSTS=[
+  {name:"Avi Goldberg",phone:"+972501234567",stamps:7,joined:"Jan 2026"},
+  {name:"Shira Cohen",phone:"+972522345678",stamps:9,joined:"Dec 2025"},
+  {name:"Michal Bar",phone:"+972543456789",stamps:3,joined:"Feb 2026"},
+  {name:"Dana Peretz",phone:"+972554567890",stamps:5,joined:"Nov 2025"},
+  {name:"Ron Levy",phone:"+972535678901",stamps:2,joined:"Mar 2026"}
 ];
-function renderCustomers(q=''){const rows=CUSTS.filter(c=>!q||c.name.toLowerCase().includes(q.toLowerCase())||c.phone.includes(q));document.getElementById('cust-tbody').innerHTML=rows.map(c=>'<tr><td style="font-weight:600">'+c.name+'</td><td style="color:var(--muted)">'+c.phone+'</td><td>'+'★'.repeat(c.stamps)+'☆'.repeat(10-c.stamps)+'</td><td style="color:var(--muted)">'+c.joined+'</td></tr>').join('');}
-function filterCusts(q){renderCustomers(q);}
-let selSeg='all';
-const SEGS=[{id:'all',label:'All',n:847},{id:'active',label:'Active (30d)',n:312},{id:'reward',label:'Near reward',n:127},{id:'new',label:'New (7d)',n:43}];
-function renderNotif(){document.getElementById('seg-grid').innerHTML=SEGS.map(s=>'<button style="padding:6px 12px;border-radius:7px;border:1px solid '+(s.id===selSeg?'var(--gold)':'var(--border2)')+';background:'+(s.id===selSeg?'var(--gold-dim)':'transparent')+';color:'+(s.id===selSeg?'var(--gold)':'var(--muted)')+';font-family:\'Inter\',sans-serif;font-size:.72rem;cursor:pointer" onclick="selSeg=\''+s.id+'\';renderNotif();document.getElementById(\'recip-c\').textContent=\''+s.n+'\'">'+s.label+' ('+s.n+')</button>').join('');document.getElementById('notif-hist').innerHTML='<div class="feed-item"><div style="flex:1"><div style="font-size:.78rem;margin-bottom:3px">☀️ Double stamps today!</div><div style="font-size:.65rem;color:var(--muted)">All · Mar 18</div></div><div style="font-size:.78rem;font-weight:700;color:var(--green)">68%</div></div><div class="feed-item"><div style="flex:1"><div style="font-size:.78rem;margin-bottom:3px">🎁 Reward waiting!</div><div style="font-size:.65rem;color:var(--muted)">Near reward · Mar 10</div></div><div style="font-size:.78rem;font-weight:700;color:var(--green)">81%</div></div>';}
-function updateChar(){const v=document.getElementById('notif-msg').value;document.getElementById('char-c').textContent=v.length+'/160';document.getElementById('send-btn').disabled=v.length===0;}
-function sendNotif(){showToast('✅ Sent to '+document.getElementById('recip-c').textContent+' cardholders');document.getElementById('notif-msg').value='';document.getElementById('char-c').textContent='0/160';document.getElementById('send-btn').disabled=true;}
-function renderAdmin(){document.getElementById('admin-biz-list').innerHTML=BUSINESSES.map(b=>'<div class="admin-biz-card"><div style="font-size:1.8rem">'+b.emoji+'</div><div style="flex:1"><div style="font-size:.88rem;font-weight:700;margin-bottom:3px">'+b.name+'</div><div style="font-size:.7rem;color:var(--muted)">'+b.customers+' customers · <span class="plan-tag plan-'+b.plan+'">'+b.plan+'</span></div></div><button class="tb-btn" onclick="window.open(\''+BASE_URL+'/?biz='+b.id+'\',\'_blank\')">View card →</button></div>').join('');}
-function renderQR(){const c=document.getElementById('qr-canvas');if(!c)return;c.width=160;c.height=160;const ctx=c.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,160,160);ctx.fillStyle='#111';ctx.font='9px monospace';ctx.textAlign='center';ctx.fillText('Scan to get loyalty card',80,75);ctx.fillText(BASE_URL.replace('https://',''),80,90);}
-function openCardLink(){window.open(BASE_URL+'/?biz='+currentBiz.id,'_blank');}
-function copyCardLink(){navigator.clipboard.writeText(BASE_URL+'/?biz='+currentBiz.id).then(()=>showToast('📋 Link copied!'));}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+function renderCustomers(q){
+  var rows=CUSTS.filter(function(c){ return !q||c.name.toLowerCase().indexOf(q.toLowerCase())>=0||c.phone.indexOf(q)>=0; });
+  document.getElementById("cust-tbody").innerHTML=rows.map(function(c){
+    var st=""; for(var i=0;i<c.stamps;i++) st+="★"; for(var i=c.stamps;i<10;i++) st+="☆";
+    return "<tr><td style=\"font-weight:600\">"+c.name+"</td><td style=\"color:var(--muted)\">"+c.phone+"</td><td>"+st+"</td><td style=\"color:var(--muted)\">"+c.joined+"</td></tr>";
+  }).join("");
+}
+function filterCusts(q){ renderCustomers(q); }
 
-// Press '/' to jump to scan station
-document.addEventListener('keydown',e=>{if(e.key==='/'&&document.activeElement?.tagName!=='INPUT'&&document.activeElement?.tagName!=='TEXTAREA'){e.preventDefault();showTab('scan',document.querySelector('.scan-nav'));setTimeout(()=>document.getElementById('scan-input-field')?.focus(),100);}});
+var selSeg="all";
+var SEGS=[{id:"all",label:"All",n:847},{id:"active",label:"Active (30d)",n:312},{id:"reward",label:"Near reward",n:127},{id:"new",label:"New (7d)",n:43}];
+function renderNotif(){
+  var html="";
+  for(var i=0;i<SEGS.length;i++){
+    var s=SEGS[i], sel=s.id===selSeg;
+    html+="<button style=\"padding:6px 12px;border-radius:7px;border:1px solid "+(sel?"var(--gold)":"var(--border2)")+";background:"+(sel?"var(--gold-dim)":"transparent")+";color:"+(sel?"var(--gold)":"var(--muted)")+";font-family:Inter,sans-serif;font-size:.72rem;cursor:pointer\" data-id=\""+s.id+"\" data-n=\""+s.n+"\" onclick=\"selSeg=this.dataset.id;document.getElementById('recip-c').textContent=this.dataset.n;renderNotif()\">"+s.label+" ("+s.n+")</button>";
+  }
+  document.getElementById("seg-grid").innerHTML=html;
+  document.getElementById("notif-hist").innerHTML=
+    "<div class=\"feed-item\"><div style=\"flex:1\"><div style=\"font-size:.78rem;margin-bottom:3px\">☀️ Double stamps today!</div><div style=\"font-size:.65rem;color:var(--muted)\">All · Mar 18</div></div><div style=\"font-size:.78rem;font-weight:700;color:var(--green)\">68%</div></div>"+
+    "<div class=\"feed-item\"><div style=\"flex:1\"><div style=\"font-size:.78rem;margin-bottom:3px\">🎁 Reward waiting!</div><div style=\"font-size:.65rem;color:var(--muted)\">Near reward · Mar 10</div></div><div style=\"font-size:.78rem;font-weight:700;color:var(--green)\">81%</div></div>";
+}
+function updateChar(){ var v=document.getElementById("notif-msg").value; document.getElementById("char-c").textContent=v.length+"/160"; document.getElementById("send-btn").disabled=v.length===0; }
+function sendNotif(){ showToast("✅ Sent to "+document.getElementById("recip-c").textContent+" cardholders"); document.getElementById("notif-msg").value=""; document.getElementById("char-c").textContent="0/160"; document.getElementById("send-btn").disabled=true; }
 
-setTimeout(()=>document.getElementById('login-user')?.focus(),200);
+function renderAdmin(){
+  var html="";
+  for(var i=0;i<BIZ.length;i++){
+    var b=BIZ[i];
+    html+="<div style=\"background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;display:flex;align-items:center;gap:14px;margin-bottom:10px\">"+
+      "<div style=\"font-size:1.8rem\">"+b.emoji+"</div>"+
+      "<div style=\"flex:1\"><div style=\"font-size:.88rem;font-weight:700;margin-bottom:3px\">"+b.name+"</div><div style=\"font-size:.7rem;color:var(--muted)\">"+b.n+" customers · "+b.plan+"</div></div>"+
+      "<button class=\"tb-btn\" data-id=\""+b.id+"\" onclick=\"window.open(BASE+'/?biz='+this.dataset.id,'_blank')\">View card →</button>"+
+    "</div>";
+  }
+  document.getElementById("admin-biz-list").innerHTML=html;
+}
+function renderQR(){
+  var c=document.getElementById("qr-canvas"); if(!c) return;
+  c.width=160; c.height=160;
+  var ctx=c.getContext("2d");
+  ctx.fillStyle="white"; ctx.fillRect(0,0,160,160);
+  ctx.fillStyle="#111"; ctx.font="9px monospace"; ctx.textAlign="center";
+  ctx.fillText("Scan to get loyalty card",80,75);
+  ctx.fillText(BASE.replace("https://",""),80,90);
+}
+function openCardLink(){ window.open(BASE+"/?biz="+curBiz.id,"_blank"); }
+function copyCardLink(){ navigator.clipboard.writeText(BASE+"/?biz="+curBiz.id).then(function(){ showToast("📋 Link copied!"); }); }
+function showToast(msg){ var t=document.getElementById("toast"); t.textContent=msg; t.classList.add("show"); setTimeout(function(){ t.classList.remove("show"); },3000); }
+
+document.addEventListener("keydown", function(e){
+  if(e.key==="/"&&document.activeElement.tagName!=="INPUT"&&document.activeElement.tagName!=="TEXTAREA"){
+    e.preventDefault(); showTab("scan",document.querySelector(".scan-nav"));
+    setTimeout(function(){ var f=document.getElementById("scan-input-field"); if(f) f.focus(); },100);
+  }
+});
+setTimeout(function(){ var f=document.getElementById("login-user"); if(f) f.focus(); },200);
 </script>
 </body>
 </html>
