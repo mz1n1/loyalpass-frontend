@@ -111,6 +111,9 @@ body{display:flex;min-height:100vh}
 .tag-redeem{background:rgba(0,184,111,.12);color:var(--green)}
 /* ── ANALYTICS REAL DATA ─────────────────────────────────────────────── */
 .near-reward-section{background:var(--ink2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-top:14px}
+
+.wa-btn{width:100%;padding:13px;border-radius:10px;border:none;background:linear-gradient(135deg,#25d366,#128c7e);color:#fff;font-family:"Inter",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:.2s;margin-top:6px}
+.wa-btn:hover{transform:scale(1.02);box-shadow:0 6px 20px rgba(37,211,102,.35)}
 </style>
 </head>
 <body>
@@ -250,7 +253,8 @@ body{display:flex;min-height:100vh}
             <div style="display:flex;gap:7px;flex-wrap:wrap;margin:11px 0" id="seg-grid"></div>
             <div style="display:flex;align-items:center;justify-content:space-between;margin-top:12px">
               <div style="font-size:.72rem;color:var(--muted)">Sending to <strong id="recip-c" style="color:var(--paper)">847</strong></div>
-              <button class="send-btn" id="send-btn" onclick="sendNotif()" disabled>📤 Send now</button>
+              <button class="send-btn" id="send-btn" onclick="sendNotif()">📲 Send via WhatsApp</button>
+            <div style="font-size:.72rem;color:#555;text-align:center;margin-top:8px">💡 Opens WhatsApp on your phone — send to each customer with one tap</div>
             </div>
           </div>
         </div>
@@ -451,6 +455,7 @@ function showCust(data, bizId) {
           "</div>" +
         "</div>") +
     "<button class=\"tb-btn\" style=\"width:100%;justify-content:center\" onclick=\"clearScan()\">\u2190 Scan Next</button>" +
+    "<button class=\"wa-btn\" data-phone=\""+ph+"\" data-biz=\""+bizId+"\" onclick=\"sendWhatsAppStamp(this)\">\ud83d\udcf2 WhatsApp Stamp</button>" +
     "</div>";
 }
 
@@ -715,8 +720,42 @@ function renderNotif(){
     "<div class=\"feed-item\"><div style=\"flex:1\"><div style=\"font-size:.78rem;margin-bottom:3px\">☀️ Double stamps today!</div><div style=\"font-size:.65rem;color:var(--muted)\">All · Mar 18</div></div><div style=\"font-size:.78rem;font-weight:700;color:var(--green)\">68%</div></div>"+
     "<div class=\"feed-item\"><div style=\"flex:1\"><div style=\"font-size:.78rem;margin-bottom:3px\">🎁 Reward waiting!</div><div style=\"font-size:.65rem;color:var(--muted)\">Near reward · Mar 10</div></div><div style=\"font-size:.78rem;font-weight:700;color:var(--green)\">81%</div></div>";
 }
-function updateChar(){ var v=document.getElementById("notif-msg").value; document.getElementById("char-c").textContent=v.length+"/160"; document.getElementById("send-btn").disabled=v.length===0; }
-function sendNotif(){ showToast("✅ Sent to "+document.getElementById("recip-c").textContent+" cardholders"); document.getElementById("notif-msg").value=""; document.getElementById("char-c").textContent="0/160"; document.getElementById("send-btn").disabled=true; }
+function updateChar(){
+  var ta=document.getElementById("notif-msg");
+  var btn=document.getElementById("notif-send");
+  var cc=document.getElementById("notif-cc");
+  var len=ta?ta.value.length:0;
+  if(cc) cc.textContent=len+"/160";
+  if(btn) btn.disabled = len < 3;
+}
+function sendNotif(){
+  var msg=document.getElementById("notif-msg")?.value?.trim();
+  if(!msg){showToast("\u26a0\ufe0f Please write a message first");return;}
+  // Get all customers for this business
+  fetch(API+"/api/pass/lookup?all=true&businessId="+curBiz.id)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var custs=d.customers||[];
+      if(!custs.length){showToast("No customers to notify");return;}
+      // Open WhatsApp for each customer (opens on owner's phone)
+      // This sends via the owner's WhatsApp — no API cost
+      var bizName=curBiz.name||curBiz.id;
+      var text=encodeURIComponent("\ud83c\udf1f "+bizName+" \u2014 "+msg+"\n\n\u2726 Powered by LoyalPass");
+      var sent=0;
+      // Show confirmation with count
+      var confirmed=confirm("Send this message to "+custs.length+" customers via WhatsApp?\n\n"+msg);
+      if(!confirmed)return;
+      // Open WhatsApp for first customer, then show instructions
+      custs.forEach(function(c,i){
+        setTimeout(function(){
+          var waUrl="https://wa.me/"+c.phone.replace(/\D/g,"")+"?text="+text;
+          window.open(waUrl,"_blank");
+        }, i*1500);
+      });
+      showToast("\ud83d\udcf2 Opening WhatsApp for "+custs.length+" customers...");
+    })
+    .catch(function(){showToast("\u274c Error loading customers");});
+}
 
 function renderAdmin(){
   var list = document.getElementById("admin-biz-list");
@@ -774,6 +813,26 @@ document.addEventListener("keydown", function(e){
   }
 });
 setTimeout(function(){ var f=document.getElementById("login-user"); if(f) f.focus(); },200);
+
+function sendWhatsAppStamp(btn) {
+  var phone = btn.dataset.phone.replace(/\D/g,'');
+  var biz   = btn.dataset.biz;
+  var bizName = curBiz.name || biz;
+  fetch(API+"/api/pass/whatsapp-link?phone="+phone+"&businessId="+biz)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      if(d.waUrl){
+        window.open(d.waUrl,"_blank");
+        showToast("\ud83d\udcf2 WhatsApp opened \u2014 send the link to stamp!");
+      } else {
+        showToast("\u274c "+( d.error||"Error generating link"));
+      }
+    })
+    .catch(function(){showToast("\u274c Connection error");});
+}
 </script>
+<div style="text-align:center;padding:8px;font-size:.6rem;color:#333;border-top:1px solid #1a1a22;margin-top:auto">
+  <a href="privacy.html" target="_blank" style="color:#444;text-decoration:none">Privacy Policy</a> &nbsp;&middot;&nbsp; &copy; 2026 LoyalPass
+</div>
 </body>
 </html>
