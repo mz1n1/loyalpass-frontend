@@ -2,260 +2,653 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Your Loyalty Card</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="theme-color" content="#ffffff"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<title>LoyalPass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0b0b0f;--bg2:#131319;--bg3:#1c1c24;--border:#25252d;--text:#e8e8f0;--text2:#9999aa;--gold:#f5a623;--gold2:#ffc95a;--success:#00b86f;--error:#ff4561;}
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{background:var(--bg);color:var(--text);font-family:"Inter",sans-serif;min-height:100vh}
-.app{max-width:420px;margin:0 auto;padding:20px;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:28px;width:100%;margin-bottom:20px}
-.biz-emoji{font-size:2.5rem;text-align:center;margin-bottom:10px}
-.biz-name{font-size:1.3rem;font-weight:700;text-align:center;margin-bottom:4px}
-.biz-sub{font-size:.8rem;color:var(--text2);text-align:center;margin-bottom:24px}
-.stamps{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
-.stamp{width:40px;height:40px;border-radius:50%;border:2px solid var(--border);background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;transition:.3s}
-.stamp.filled{background:var(--gold);border-color:var(--gold)}
-.reward-text{text-align:center;font-size:.78rem;color:var(--text2);margin-bottom:24px}
-.phone-row{display:flex;gap:8px;margin-bottom:10px}
-.country-select{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 10px;color:var(--text);font-family:"Inter",sans-serif;font-size:.85rem;outline:none;flex-shrink:0;width:110px;cursor:pointer}
-.phone-input{flex:1;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:"Inter",sans-serif;font-size:.9rem;outline:none;transition:.15s}
-.phone-input:focus{border-color:rgba(245,166,35,.4)}
-.phone-input.err{border-color:var(--error)}
-.phone-hint{font-size:.68rem;color:var(--text2);margin:-6px 0 10px;padding-left:2px}
-.inp{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:"Inter",sans-serif;font-size:.9rem;outline:none;margin-bottom:10px;transition:.15s}
-.inp:focus{border-color:rgba(245,166,35,.4)}
-.inp-label{font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--text2);margin-bottom:4px;margin-top:4px}
-.inp-sub{font-size:.65rem;color:var(--text2);margin:-6px 0 10px}
-.wallet-choice{display:none;flex-direction:column;gap:10px;width:100%;margin-bottom:10px}
-.wallet-choice.show{display:flex}
-.wallet-choice-title{font-size:.78rem;color:var(--text2);text-align:center;margin-bottom:2px}
-.btn-google{width:100%;background:#fff;border:none;border-radius:10px;padding:13px;color:#111;font-family:"Inter",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-google:hover{background:#f0f0f0}
-.btn-apple{width:100%;background:#000;border:1px solid #333;border-radius:10px;padding:13px;color:#fff;font-family:"Inter",sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-apple:hover{background:#111}
-.btn{width:100%;background:var(--gold);border:none;border-radius:10px;padding:13px;color:#111;font-family:"Inter",sans-serif;font-size:.9rem;font-weight:700;cursor:pointer;transition:.15s}
-.btn:hover{background:var(--gold2)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.powered{font-size:.65rem;color:var(--text2);text-align:center;margin-top:16px}
-.msg{font-size:.8rem;text-align:center;min-height:20px;margin-bottom:8px}
-.msg.ok{color:var(--success)}.msg.err{color:var(--error)}
-.divider{display:flex;align-items:center;gap:10px;margin:4px 0 6px}
-.divider-line{flex:1;height:1px;background:var(--border)}
-.divider-text{font-size:.7rem;color:var(--text2)}
-.card-added{background:var(--bg2);border:2px solid var(--success);border-radius:20px;padding:28px;width:100%;margin-bottom:20px;text-align:center}
-.shown-on-card{font-size:.62rem;color:var(--text2);background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:2px 6px;margin-left:5px;vertical-align:middle}
-.returning-user{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:22px;width:100%;margin-bottom:20px}
+  /* ── Reset ─────────────────────────────────────────── */
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-font-smoothing:antialiased; }
+
+  /* ── Apple design tokens ────────────────────────────── */
+  :root {
+    --white:    #ffffff;
+    --black:    #1d1d1f;
+    --blue:     #0071e3;
+    --blue-h:   #0077ed;
+    --gray:     #86868b;
+    --gray-lt:  #f5f5f7;
+    --gray-md:  #d2d2d7;
+    --green:    #34c759;
+    --gold:     #f5a623;
+    --red:      #ff3b30;
+    --radius:   20px;
+    --radius-sm:12px;
+    --shadow-sm:0 2px 12px rgba(0,0,0,.06);
+    --shadow:   0 8px 40px rgba(0,0,0,.10);
+    --shadow-lg:0 20px 60px rgba(0,0,0,.14);
+    --blur:     blur(20px) saturate(180%);
+    --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  /* ── Base ───────────────────────────────────────────── */
+  html { scroll-behavior:smooth; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+    background: var(--white);
+    color: var(--black);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ── Mesh gradient background ───────────────────────── */
+  .bg-mesh {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 10%, rgba(0,113,227,.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(52,199,89,.05) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, #f5f5f7 0%, #ffffff 100%);
+  }
+
+  /* ── Page layout ────────────────────────────────────── */
+  .page { position:relative; z-index:1; width:100%; max-width:440px; padding:24px 16px 40px; }
+
+  /* ── Top bar ────────────────────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; justify-content: center;
+    padding: 16px 0 8px;
+    position: relative;
+  }
+  .topbar-logo {
+    font-size: .8rem; font-weight: 700; letter-spacing: .04em;
+    color: var(--gray); text-transform: uppercase;
+  }
+
+  /* ── Card ───────────────────────────────────────────── */
+  .card-wrap { margin: 16px 0 20px; perspective: 1200px; }
+  .card {
+    background: linear-gradient(145deg, #1d1d1f 0%, #2c2c2e 100%);
+    border-radius: 24px;
+    padding: 28px 24px 24px;
+    box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,.08);
+    position: relative; overflow: hidden;
+    transition: transform .5s var(--transition), box-shadow .5s var(--transition);
+    cursor: default;
+    user-select: none;
+  }
+  .card:hover { transform: translateY(-4px) rotateX(2deg); box-shadow: 0 28px 70px rgba(0,0,0,.20); }
+  .card-shimmer {
+    position: absolute; inset: 0; border-radius: 24px; pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,.04) 50%, transparent 60%);
+  }
+  .card-top { display:flex; align-items:center; gap:12px; margin-bottom:22px; }
+  .card-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: rgba(255,255,255,.1); display:flex; align-items:center; justify-content:center;
+    font-size: 1.3rem; flex-shrink: 0;
+    backdrop-filter: var(--blur);
+  }
+  .card-biz { flex: 1; }
+  .card-name { font-size: 1rem; font-weight: 700; color: #fff; line-height: 1.2; }
+  .card-sub  { font-size: .72rem; color: rgba(255,255,255,.45); font-weight: 500; margin-top: 2px; }
+  .card-chip {
+    font-size: .65rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+    color: rgba(255,255,255,.35); background: rgba(255,255,255,.07);
+    padding: 4px 10px; border-radius: 100px;
+  }
+
+  /* ── Stamps pips ────────────────────────────────────── */
+  .stamp-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    margin-bottom: 18px;
+  }
+  .pip {
+    aspect-ratio: 1; border-radius: 50%;
+    background: rgba(255,255,255,.08);
+    border: 1.5px solid rgba(255,255,255,.12);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .4s var(--transition);
+    position: relative; overflow: hidden;
+  }
+  .pip.filled {
+    background: var(--gold);
+    border-color: var(--gold);
+    box-shadow: 0 0 0 0 rgba(245,166,35,.4);
+    animation: none;
+  }
+  .pip.filled::after {
+    content: ''; position: absolute; inset: 0; border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,.3), transparent 60%);
+  }
+  .pip.reward { background: var(--green); border-color: var(--green); }
+  .pip-star { font-size: .8rem; z-index: 1; }
+
+  /* ── Card footer ────────────────────────────────────── */
+  .card-footer { display:flex; justify-content:space-between; align-items:flex-end; }
+  .card-reward-text { font-size:.68rem; color:rgba(255,255,255,.4); max-width:65%; line-height:1.4; }
+  .card-count { font-size:1.8rem; font-weight:800; color:#fff; line-height:1; }
+  .card-count span { font-size:.75rem; font-weight:500; color:rgba(255,255,255,.45); }
+
+  /* ── Reward banner ──────────────────────────────────── */
+  .reward-banner {
+    display: none; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, #34c759, #28a046);
+    border-radius: 16px; padding: 14px 18px; margin-bottom: 20px;
+    box-shadow: 0 8px 30px rgba(52,199,89,.25);
+  }
+  .reward-banner.show { display: flex; }
+  .reward-banner-icon { font-size: 1.4rem; }
+  .reward-banner-text h3 { font-size:.88rem; font-weight:700; color:#fff; }
+  .reward-banner-text p  { font-size:.72rem; color:rgba(255,255,255,.8); }
+
+  /* ── Form section ───────────────────────────────────── */
+  .section {
+    background: var(--white);
+    border: 1px solid var(--gray-md);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-size: 1.05rem; font-weight: 700; color: var(--black);
+    margin-bottom: 6px;
+  }
+  .section-sub {
+    font-size: .8rem; color: var(--gray); margin-bottom: 20px; line-height: 1.5;
+  }
+
+  /* ── Input fields ───────────────────────────────────── */
+  .field { margin-bottom: 14px; }
+  .field-label {
+    font-size: .72rem; font-weight: 600; color: var(--gray);
+    letter-spacing: .04em; text-transform: uppercase; margin-bottom: 6px; display:block;
+  }
+  .field-input {
+    width: 100%; padding: 13px 15px;
+    font-family: inherit; font-size: .95rem; color: var(--black);
+    background: var(--gray-lt);
+    border: 1.5px solid transparent;
+    border-radius: var(--radius-sm);
+    outline: none; transition: all .25s var(--transition);
+    -webkit-appearance: none;
+  }
+  .field-input::placeholder { color: var(--gray-md); }
+  .field-input:focus {
+    background: #fff; border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(0,113,227,.12);
+  }
+  .phone-row { display: flex; gap: 8px; }
+  .country-sel {
+    padding: 13px 10px; border-radius: var(--radius-sm);
+    border: 1.5px solid transparent; background: var(--gray-lt);
+    font-family: inherit; font-size: .88rem; color: var(--black);
+    outline: none; cursor: pointer; flex-shrink: 0;
+    transition: all .25s var(--transition);
+  }
+  .country-sel:focus { background:#fff; border-color:var(--blue); box-shadow:0 0 0 4px rgba(0,113,227,.12); }
+  .phone-hint { font-size:.7rem; color:var(--gray); margin-top:5px; }
+
+  /* ── Primary button ─────────────────────────────────── */
+  .btn-primary {
+    width: 100%; padding: 16px;
+    background: var(--blue); color: #fff;
+    font-family: inherit; font-size: .95rem; font-weight: 600;
+    border: none; border-radius: var(--radius-sm);
+    cursor: pointer; outline: none;
+    transition: all .2s var(--transition);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    -webkit-appearance: none; margin-top: 8px;
+    letter-spacing: -.01em;
+  }
+  .btn-primary:hover { background: var(--blue-h); transform: scale(1.01); box-shadow: 0 8px 24px rgba(0,113,227,.35); }
+  .btn-primary:active { transform: scale(.98); }
+  .btn-primary:disabled { opacity:.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+  /* ── Wallet buttons ─────────────────────────────────── */
+  .wallet-section { margin-bottom: 16px; }
+  .wallet-title {
+    font-size: .78rem; font-weight: 600; color: var(--gray);
+    text-align: center; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .wallet-title::before, .wallet-title::after {
+    content: ''; flex: 1; height: 1px; background: var(--gray-md);
+  }
+  .wallet-btns { display: flex; gap: 10px; }
+  .btn-wallet {
+    flex: 1; padding: 13px 10px;
+    border-radius: var(--radius-sm);
+    font-family: inherit; font-size: .82rem; font-weight: 600;
+    cursor: pointer; border: 1.5px solid var(--gray-md);
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+    transition: all .2s var(--transition); outline: none;
+    -webkit-appearance: none; white-space: nowrap;
+  }
+  .btn-apple  { background: var(--black); color: #fff; border-color: var(--black); }
+  .btn-apple:hover  { background: #3a3a3c; transform: scale(1.01); box-shadow: 0 6px 20px rgba(0,0,0,.25); }
+  .btn-google { background: #fff; color: var(--black); }
+  .btn-google:hover { background: var(--gray-lt); transform: scale(1.01); }
+
+  /* ── Success screen ─────────────────────────────────── */
+  .success-screen {
+    display: none; text-align: center; padding: 8px 0 0;
+  }
+  .success-screen.show { display: block; }
+  .success-icon-wrap {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--green); margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 0 rgba(52,199,89,.3);
+    animation: pulse-green 2s infinite;
+  }
+  @keyframes pulse-green {
+    0%   { box-shadow: 0 0 0 0 rgba(52,199,89,.35); }
+    70%  { box-shadow: 0 0 0 16px rgba(52,199,89,.0); }
+    100% { box-shadow: 0 0 0 0 rgba(52,199,89,.0); }
+  }
+  .success-check { font-size: 1.8rem; }
+  .success-title { font-size: 1.3rem; font-weight: 700; color: var(--black); margin-bottom: 6px; }
+  .success-sub   { font-size: .88rem; color: var(--gray); margin-bottom: 24px; line-height: 1.5; }
+  .success-card-mini {
+    background: var(--gray-lt); border-radius: 16px; padding: 16px;
+    margin-bottom: 20px; text-align: left;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .success-card-mini-icon { font-size: 1.5rem; }
+  .success-card-mini-text h4 { font-size:.88rem; font-weight:600; }
+  .success-card-mini-text p  { font-size:.75rem; color:var(--gray); }
+
+  /* ── Powered by ─────────────────────────────────────── */
+  .powered {
+    text-align: center; font-size: .7rem; color: var(--gray-md);
+    padding: 8px 0 0; letter-spacing: .02em;
+  }
+  .powered a { color: var(--gray); text-decoration: none; font-weight: 500; }
+  .powered a:hover { color: var(--blue); }
+
+  /* ── Loading spinner ────────────────────────────────── */
+  .spinner {
+    width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.3);
+    border-top-color: #fff; border-radius: 50%;
+    animation: spin .7s linear infinite; display: none;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Animations ─────────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .fade-up { animation: fadeUp .6s var(--transition) both; }
+  .fade-up-2 { animation: fadeUp .6s .1s var(--transition) both; }
+  .fade-up-3 { animation: fadeUp .6s .2s var(--transition) both; }
+  .fade-up-4 { animation: fadeUp .6s .3s var(--transition) both; }
+
+  /* ── Media: mobile safe area ────────────────────────── */
+  @supports (padding: env(safe-area-inset-bottom)) {
+    body { padding-bottom: env(safe-area-inset-bottom); }
+  }
+  @media (max-width: 380px) {
+    .card { padding: 22px 18px 18px; }
+    .page { padding: 16px 12px 32px; }
+  }
 </style>
 </head>
 <body>
-<div id="app" class="app"><div style="color:var(--text2);font-size:.85rem">Loading...</div></div>
-<script>
-var API = "https://loyalpass-backend-production-5c8a.up.railway.app";
-var DEMO_MODE = false; // LIVE version
+<div class="bg-mesh"></div>
 
-var BIZ = {
-  "cafe-carmel":   {name:"Caf\u00e9 Carmel",  emoji:"\ud83c\udf7d\ufe0f",max:10,reward:"Buy 9 meals \u2192 10th FREE + fries & drink"},
-  "ofeh-yisraeli": {name:"Ofeh Yisraeli",emoji:"\ud83e\udd50",       max:10,reward:"Buy 9 items \u2192 10th FREE"},
-  "powerup-gym":   {name:"PowerUp Gym",  emoji:"\ud83c\udfcb\ufe0f",max:10,reward:"10 visits \u2192 FREE month"},
-  "teva-hashuk":   {name:"Teva HaShuk",  emoji:"\ud83c\udf3f",       max:10,reward:"10 purchases \u2192 20% OFF"}
+<div class="page">
+  <!-- Top bar -->
+  <div class="topbar fade-up">
+    <div class="topbar-logo">LoyalPass</div>
+  </div>
+
+  <!-- Loyalty card visual -->
+  <div class="card-wrap fade-up-2" id="card-wrap">
+    <div class="card" id="main-card">
+      <div class="card-shimmer"></div>
+      <div class="card-top">
+        <div class="card-icon" id="biz-icon">☕</div>
+        <div class="card-biz">
+          <div class="card-name" id="biz-name">Café Carmel</div>
+          <div class="card-sub">Loyalty Card</div>
+        </div>
+        <div class="card-chip" id="card-chip">MEMBER</div>
+      </div>
+
+      <div class="stamp-grid" id="stamp-grid">
+        <!-- filled by JS -->
+      </div>
+
+      <div class="card-footer">
+        <div class="card-reward-text" id="reward-text">Buy 9 → 10th FREE</div>
+        <div class="card-count"><span>stamps </span><span id="stamp-count-display">0/10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reward ready banner (shown when stamps = goal) -->
+  <div class="reward-banner fade-up-3" id="reward-banner">
+    <div class="reward-banner-icon">🎁</div>
+    <div class="reward-banner-text">
+      <h3>Reward Ready!</h3>
+      <p>Show this to the cashier to claim your reward</p>
+    </div>
+  </div>
+
+  <!-- Registration form -->
+  <div id="form-screen">
+    <div class="section fade-up-3">
+      <div class="section-title">Get your free loyalty card</div>
+      <div class="section-sub">Add it to your wallet. Earn stamps on every visit.</div>
+
+      <div class="field">
+        <label class="field-label" for="fn">Full name</label>
+        <input class="field-input" type="text" id="fn" placeholder="e.g. David Cohen" autocomplete="name" autocapitalize="words"/>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="ph">Phone number</label>
+        <div class="phone-row">
+          <select class="country-sel" id="country-sel"></select>
+          <input class="field-input" type="tel" id="ph" placeholder="50 123 4567" autocomplete="tel" inputmode="numeric"/>
+        </div>
+        <div class="phone-hint" id="ph-hint">🇮🇱 Israel · 9 digits required</div>
+      </div>
+
+      <button class="btn-primary" id="jb" onclick="handleJoin()">
+        <span id="btn-text">Get my card</span>
+        <span id="btn-arrow">→</span>
+        <div class="spinner" id="btn-spin"></div>
+      </button>
+    </div>
+
+    <!-- Wallet buttons (shown after registration) -->
+    <div class="wallet-section fade-up-4" id="wallet-section" style="display:none">
+      <div class="wallet-title">Add to your wallet</div>
+      <div class="wallet-btns">
+        <button class="btn-wallet btn-apple" id="ba" onclick="addApple()">
+          <span style="font-size:1rem">🍎</span> Apple Wallet
+        </button>
+        <button class="btn-wallet btn-google" id="bg" onclick="addGoogle()">
+          <span style="font-size:1rem">🟡</span> Google Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success screen (shown after wallet added) -->
+  <div class="success-screen" id="success-screen">
+    <div class="section fade-up-2">
+      <div class="success-icon-wrap">
+        <div class="success-check">✓</div>
+      </div>
+      <div class="success-title">Card added!</div>
+      <div class="success-sub" id="success-sub">Your loyalty card is ready. Show it at the counter on your next visit.</div>
+
+      <div class="success-card-mini">
+        <div class="success-card-mini-icon" id="success-icon">☕</div>
+        <div class="success-card-mini-text">
+          <h4 id="success-biz-name">Café Carmel</h4>
+          <p>Tap your wallet card to show stamps</p>
+        </div>
+      </div>
+
+      <div class="wallet-title">Also add to wallet</div>
+      <div class="wallet-btns" style="margin-bottom:0">
+        <button class="btn-wallet btn-apple" id="ba2" onclick="addApple()">
+          <span style="font-size:1rem">🍎</span> Apple Wallet
+        </button>
+        <button class="btn-wallet btn-google" id="bg2" onclick="addGoogle()">
+          <span style="font-size:1rem">🟡</span> Google Wallet
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="powered">
+    ✦ <a href="privacy.html">Privacy</a> · Powered by LoyalPass
+  </div>
+</div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+const DEMO_MODE = false;
+const API  = 'https://loyalpass-backend-production-5c8a.up.railway.app';
+const BASE = 'https://loyalpass-frontend.pages.dev';
+
+const BIZ = {
+  'cafe-carmel':   { name:'Café Carmel',   emoji:'☕', reward:'Buy 9 meals → 10th meal FREE', goal:10 },
+  'ofeh-yisraeli': { name:'Ofeh Yisraeli', emoji:'🥐', reward:'Buy 9 items → 10th item FREE', goal:10 },
+  'powerup-gym':   { name:'PowerUp Gym',   emoji:'💪', reward:'10 visits → FREE month',       goal:10 },
+  'teva-hashuk':   { name:'Teva HaShuk',   emoji:'🌿', reward:'10 purchases → 20% OFF',       goal:10 },
 };
 
-var COUNTRIES = [
-  {code:"+972",flag:"\ud83c\uddee\ud83c\uddf1",name:"Israel",     digits:9, ph:"50 123 4567"},
-  {code:"+1",  flag:"\ud83c\uddfa\ud83c\uddf8",name:"USA/CA",     digits:10,ph:"212 555 1234"},
-  {code:"+44", flag:"\ud83c\uddec\ud83c\udde7",name:"UK",         digits:10,ph:"7700 900123"},
-  {code:"+33", flag:"\ud83c\uddeb\ud83c\uddf7",name:"France",     digits:9, ph:"6 12 34 56 78"},
-  {code:"+49", flag:"\ud83c\udde9\ud83c\uddea",name:"Germany",    digits:10,ph:"151 1234 5678"},
-  {code:"+39", flag:"\ud83c\uddee\ud83c\uddf9",name:"Italy",      digits:10,ph:"320 123 4567"},
-  {code:"+34", flag:"\ud83c\uddea\ud83c\uddf8",name:"Spain",      digits:9, ph:"612 345 678"},
-  {code:"+971",flag:"\ud83c\udde6\ud83c\uddea",name:"UAE",        digits:9, ph:"50 123 4567"},
-  {code:"+966",flag:"\ud83c\uddf8\ud83c\udde6",name:"Saudi",      digits:9, ph:"50 123 4567"},
-  {code:"+20", flag:"\ud83c\uddea\ud83c\uddec",name:"Egypt",      digits:10,ph:"100 123 4567"},
-  {code:"+90", flag:"\ud83c\uddf9\ud83c\uddf7",name:"Turkey",     digits:10,ph:"501 234 5678"},
-  {code:"+55", flag:"\ud83c\udde7\ud83c\uddf7",name:"Brazil",     digits:11,ph:"11 9 1234 5678"},
-  {code:"+52", flag:"\ud83c\uddf2\ud83c\uddfd",name:"Mexico",     digits:10,ph:"55 1234 5678"},
-  {code:"+86", flag:"\ud83c\udde8\ud83c\uddf3",name:"China",      digits:11,ph:"138 0013 8000"},
-  {code:"+81", flag:"\ud83c\uddef\ud83c\uddf5",name:"Japan",      digits:10,ph:"90 1234 5678"},
-  {code:"+82", flag:"\ud83c\uddf0\ud83c\uddf7",name:"Korea",      digits:9, ph:"10 1234 5678"},
-  {code:"+7",  flag:"\ud83c\uddf7\ud83c\uddfa",name:"Russia",     digits:10,ph:"912 345 6789"},
-  {code:"+31", flag:"\ud83c\uddf3\ud83c\uddf1",name:"Netherlands",digits:9, ph:"6 12345678"},
-  {code:"+41", flag:"\ud83c\udde8\ud83c\udded",name:"Switzerland",digits:9, ph:"78 123 45 67"},
-  {code:"+54", flag:"\ud83c\udde6\ud83c\uddf7",name:"Argentina",  digits:10,ph:"11 2345 6789"}
+// ── Countries ─────────────────────────────────────────────────────────────────
+const COUNTRIES=[
+  {c:'IL',f:'🇮🇱',n:'Israel',      code:'+972',len:9, ph:'50 123 4567'},
+  {c:'US',f:'🇺🇸',n:'United States',code:'+1',  len:10,ph:'555 123 4567'},
+  {c:'GB',f:'🇬🇧',n:'UK',          code:'+44', len:10,ph:'7700 900 123'},
+  {c:'FR',f:'🇫🇷',n:'France',      code:'+33', len:9, ph:'6 12 34 56 78'},
+  {c:'DE',f:'🇩🇪',n:'Germany',     code:'+49', len:10,ph:'151 234 56789'},
+  {c:'IT',f:'🇮🇹',n:'Italy',       code:'+39', len:10,ph:'312 345 6789'},
+  {c:'ES',f:'🇪🇸',n:'Spain',       code:'+34', len:9, ph:'612 345 678'},
+  {c:'AE',f:'🇦🇪',n:'UAE',         code:'+971',len:9, ph:'50 123 4567'},
 ];
 
-var p = new URLSearchParams(location.search);
-var bizId = p.get("biz");
-var biz = BIZ[bizId] || null;
-var cName = "", cPhone = "", cardAdded = false;
+// ── State ─────────────────────────────────────────────────────────────────────
+let curBiz = null, curPhone = null, curName = null;
+let googleWalletUrl = null;
 
-function getCountry(){
-  var sel = document.getElementById("country-sel");
-  if(!sel) return COUNTRIES[0];
-  for(var i=0;i<COUNTRIES.length;i++) if(COUNTRIES[i].code===sel.value) return COUNTRIES[i];
-  return COUNTRIES[0];
+// ── Init ─────────────────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', function() {
+  // Country selector
+  var sel = document.getElementById('country-sel');
+  COUNTRIES.forEach(function(c) {
+    var o = document.createElement('option');
+    o.value = c.c;
+    o.textContent = c.f + ' ' + c.code;
+    sel.appendChild(o);
+  });
+  sel.value = 'IL';
+  sel.addEventListener('change', updateHint);
+  document.getElementById('ph').addEventListener('input', onPhoneInput);
+  document.getElementById('fn').addEventListener('input', onNameInput);
+
+  // Load biz from URL
+  var biz = new URLSearchParams(location.search).get('biz') || 'cafe-carmel';
+  if (!BIZ[biz]) biz = 'cafe-carmel';
+  curBiz = { id: biz, ...BIZ[biz] };
+  loadBiz();
+});
+
+function loadBiz() {
+  document.title = curBiz.name + ' · LoyalPass';
+  document.getElementById('biz-name').textContent = curBiz.name;
+  document.getElementById('biz-icon').textContent  = curBiz.emoji;
+  document.getElementById('reward-text').textContent = curBiz.reward;
+  document.getElementById('success-biz-name').textContent = curBiz.name;
+  document.getElementById('success-icon').textContent = curBiz.emoji;
+  renderStamps(0, curBiz.goal || 10);
 }
 
-function stamps(n, max){
-  var h="";
-  for(var i=0;i<max;i++) h+="<div class=\"stamp"+(i<n?" filled":"")+"\">"+(i<n?"\u2605":"")+"</div>";
-  return h;
-}
-
-function countryOpts(){
-  return COUNTRIES.map(function(c){
-    return "<option value=\""+c.code+"\""+( c.code==="+972"?" selected":"")+">"+c.flag+" "+c.code+"</option>";
-  }).join("");
-}
-
-function setMsg(t,ok){
-  var m=document.getElementById("msg");
-  if(!m)return;
-  m.className="msg "+(ok?"ok":"err");
-  m.textContent=t;
-}
-
-function onCountryChange(){
-  var c=getCountry();
-  var ph=document.getElementById("ph");
-  var ht=document.getElementById("ph-hint");
-  if(ph){ph.placeholder=c.ph;ph.value="";}
-  if(ht) ht.textContent=c.flag+" "+c.name+" \u00b7 "+c.digits+" digits required";
-}
-
-function onPhoneInput(el){
-  el.value=el.value.replace(/\D/g,"");
-  var c=getCountry();
-  if(el.value.length>c.digits) el.value=el.value.substring(0,c.digits);
-  var done=el.value.length===c.digits;
-  el.classList.toggle("err",el.value.length>0&&!done);
-  var ht=document.getElementById("ph-hint");
-  if(ht){
-    var rem=c.digits-el.value.length;
-    ht.textContent=done?"\u2713 "+c.flag+" "+c.name+" \u00b7 looks good":c.flag+" "+c.name+" \u00b7 "+c.digits+" digits required"+(el.value.length>0?" ("+rem+" more)":"");
-    ht.style.color=done?"var(--success)":"var(--text2)";
+// ── Stamp pips ───────────────────────────────────────────────────────────────
+function renderStamps(n, goal) {
+  var grid = document.getElementById('stamp-grid');
+  grid.innerHTML = '';
+  // Use 2 rows — dynamic column count based on goal
+  var cols = goal <= 6 ? goal : 5;
+  grid.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+  for (var i = 0; i < goal; i++) {
+    var pip = document.createElement('div');
+    pip.className = 'pip' + (i < n ? ' filled' : '') + (n >= goal && i < goal ? ' reward' : '');
+    if (i < n) pip.innerHTML = '<span class="pip-star">★</span>';
+    grid.appendChild(pip);
+  }
+  document.getElementById('stamp-count-display').textContent = n + '/' + goal;
+  document.getElementById('reward-banner').classList.toggle('show', n >= goal);
+  // Card color when reward ready
+  var card = document.getElementById('main-card');
+  if (n >= goal) {
+    card.style.background = 'linear-gradient(145deg, #1a3d24 0%, #0d2618 100%)';
+  } else {
+    card.style.background = '';
   }
 }
 
-function renderCard(bizData, s){
-  if(!bizData) return "<div style=\"color:var(--text2);font-size:.85rem;text-align:center\">No business found.</div>";
-  return "<div class=\"card\"><div class=\"biz-emoji\">"+bizData.emoji+"</div><div class=\"biz-name\">"+bizData.name+"</div><div class=\"biz-sub\">Your digital loyalty card</div><div class=\"stamps\">"+stamps(s||0,bizData.max)+"</div><div class=\"reward-text\">"+bizData.reward+"</div></div>";
+// ── Country hint ─────────────────────────────────────────────────────────────
+function updateHint() {
+  var sel = document.getElementById('country-sel');
+  var c   = COUNTRIES.find(function(x) { return x.c === sel.value; }) || COUNTRIES[0];
+  document.getElementById('ph-hint').textContent = c.f + ' ' + c.n + ' · ' + c.len + ' digits required';
+  document.getElementById('ph').placeholder = c.ph;
 }
 
-function renderForm(){
-  return "<div class=\"card\">"+
-    "<div style=\"font-size:.85rem;font-weight:600;margin-bottom:14px\">Get your free loyalty card</div>"+
-    "<div class=\"inp-label\">Full Name <span class=\"shown-on-card\">shown on card</span></div>"+
-    "<input class=\"inp\" id=\"n\" placeholder=\"e.g. David Cohen\" type=\"text\" autocomplete=\"name\"/>"+
-    "<div class=\"inp-label\" style=\"margin-top:6px\">Phone Number</div>"+
-    "<div class=\"phone-row\"><select class=\"country-select\" id=\"country-sel\" onchange=\"onCountryChange()\">"+countryOpts()+"</select>"+
-    "<input class=\"phone-input\" id=\"ph\" placeholder=\"50 123 4567\" type=\"tel\" inputmode=\"numeric\" oninput=\"onPhoneInput(this)\"/></div>"+
-    "<div class=\"phone-hint\" id=\"ph-hint\">\ud83c\uddee\ud83c\uddf1 Israel \u00b7 9 digits required</div>"+
-    "<div class=\"msg\" id=\"msg\"></div>"+
-    "<div class=\"wallet-choice\" id=\"wc\">"+
-      "<div class=\"wallet-choice-title\">Choose where to save your card:</div>"+
-      "<button class=\"btn-google\" id=\"bg\" onclick=\"gWallet()\">\ud83d\udcf1 Add to Google Wallet</button>"+
-      "<div class=\"divider\"><div class=\"divider-line\"></div><div class=\"divider-text\">or</div><div class=\"divider-line\"></div></div>"+
-      "<button class=\"btn-apple\" id=\"ba\" onclick=\"aWallet()\"> Add to Apple Wallet</button>"+
-    "</div>"+
-    "<button class=\"btn\" id=\"jb\" onclick=\"join()\">Get my card \u2192</button>"+
-  "</div><div class=\"powered\">\u2726 Powered by LoyalPass \u00b7 loyalpass.co.il</div>";
+function onPhoneInput() {
+  var v = this.value.replace(/\D/g, '');
+  this.value = v;
 }
 
-function renderCardAdded(name, wallet, s, bizData){
-  return "<div class=\"card-added\">"+
-    "<div style=\"font-size:3rem;margin-bottom:12px\">\u2705</div>"+
-    "<div style=\"font-size:1.1rem;font-weight:700;color:var(--success);margin-bottom:6px\">Card Added!</div>"+
-    "<div style=\"display:inline-flex;align-items:center;gap:5px;background:rgba(0,184,111,.1);border:1px solid rgba(0,184,111,.3);border-radius:100px;padding:3px 12px;font-size:.7rem;color:var(--success);margin-bottom:14px\">\u2713 Active in "+wallet+"</div>"+
-    "<div style=\"font-size:.95rem;font-weight:600;margin-bottom:6px\">"+name+"</div>"+
-    "<div style=\"font-size:.78rem;color:var(--text2);line-height:1.6;margin-bottom:16px\">Your <strong>"+bizData.name+"</strong> loyalty card is in your wallet.<br/>Show it at checkout to collect stamps.</div>"+
-    "<div style=\"padding:14px;background:var(--bg3);border-radius:12px;font-size:.75rem;color:var(--text2)\"><strong style=\"color:var(--text)\">Your reward:</strong><br/>"+bizData.reward+"</div>"+
-  "</div><div class=\"powered\">\u2726 Powered by LoyalPass \u00b7 loyalpass.co.il</div>";
+function onNameInput() {
+  // Enable button only when both fields valid
+  var name = document.getElementById('fn').value.trim();
+  var phone = document.getElementById('ph').value.replace(/\D/g,'');
+  var sel = document.getElementById('country-sel');
+  var c = COUNTRIES.find(function(x){return x.c===sel.value;}) || COUNTRIES[0];
+  var valid = name.length >= 2 && phone.length >= c.len;
+  document.getElementById('jb').disabled = false; // always allow click, validate on submit
 }
 
-function join(){
-  var n=document.getElementById("n").value.trim();
-  var ph=document.getElementById("ph").value.trim();
-  var c=getCountry();
-  if(!n){setMsg("Please enter your full name",false);document.getElementById("n").focus();return;}
-  if(n.split(" ").filter(function(w){return w;}).length<2){setMsg("Please enter first + last name",false);document.getElementById("n").focus();return;}
-  if(!ph||ph.length!==c.digits){setMsg("Please enter a valid "+c.digits+"-digit phone number",false);document.getElementById("ph").focus();return;}
-  cName=n; cPhone=c.code+ph;
-  document.getElementById("jb").style.display="none";
-  document.getElementById("wc").classList.add("show");
-  document.getElementById("n").disabled=true;
-  document.getElementById("ph").disabled=true;
-  document.getElementById("country-sel").disabled=true;
-  setMsg("\u2713 Ready! Choose your wallet:",true);
+// ── Join / Get card ──────────────────────────────────────────────────────────
+function handleJoin() {
+  var name  = document.getElementById('fn').value.trim();
+  var rawPh = document.getElementById('ph').value.replace(/\D/g,'');
+  var sel   = document.getElementById('country-sel');
+  var c     = COUNTRIES.find(function(x){return x.c===sel.value;}) || COUNTRIES[0];
+  var phone = c.code.replace('+','') + rawPh;
+
+  if (!name || name.length < 2)   { shake('fn'); return; }
+  if (!rawPh || rawPh.length < c.len) { shake('ph'); return; }
+
+  curName = name; curPhone = phone;
+
+  // Loading state
+  document.getElementById('btn-text').textContent = 'Setting up…';
+  document.getElementById('btn-arrow').style.display = 'none';
+  document.getElementById('btn-spin').style.display  = 'block';
+  document.getElementById('jb').disabled = true;
+
+  fetch(API + '/api/pass/create', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ name: name, phone: phone, businessId: curBiz.id })
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(d) {
+    googleWalletUrl = d.googleWalletUrl;
+    renderStamps(d.stamps || 0, d.goal || 10);
+
+    // Show wallet buttons
+    document.getElementById('wallet-section').style.display = 'block';
+
+    // Reset button
+    document.getElementById('btn-text').textContent = '✓ Card ready';
+    document.getElementById('btn-arrow').style.display = 'none';
+    document.getElementById('btn-spin').style.display  = 'none';
+    document.getElementById('jb').style.background = '#34c759';
+
+    // Update card chip
+    document.getElementById('card-chip').textContent = name.split(' ')[0].toUpperCase();
+  })
+  .catch(function(e) {
+    document.getElementById('btn-text').textContent = 'Get my card';
+    document.getElementById('btn-arrow').style.display = 'inline';
+    document.getElementById('btn-spin').style.display  = 'none';
+    document.getElementById('jb').disabled = false;
+    showError('Connection error — please try again');
+  });
 }
 
-function showCardAdded(wallet){
-  var app=document.getElementById("app");
-  app.innerHTML=renderCard(biz,0)+renderCardAdded(cName,wallet,0,biz);
+// ── Apple Wallet ─────────────────────────────────────────────────────────────
+function addApple() {
+  if (!curPhone || !curName) { return; }
+  var url = API + '/api/pass/apple/create?name=' + encodeURIComponent(curName) +
+            '&phone=' + encodeURIComponent(curPhone) + '&businessId=' + curBiz.id;
+  window.location.href = url;
+  showSuccess();
 }
 
-async function gWallet(){
-  var btn=document.getElementById("bg");
-  btn.disabled=true;btn.textContent="Creating...";
-  setMsg("Creating Google Wallet pass...",true);
-  try{
-    var r=await fetch(API+"/api/pass/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||"cafe-carmel"})});
-    var d=await r.json();
-    if(d.googleWalletUrl){
-      showCardAdded("Google Wallet");
-      setTimeout(function(){location.href=d.googleWalletUrl;},700);
-    }else{setMsg(d.error||"Error",false);btn.disabled=false;btn.textContent="\ud83d\udcf1 Add to Google Wallet";}
-  }catch(e){setMsg("Connection error. Try again.",false);btn.disabled=false;btn.textContent="\ud83d\udcf1 Add to Google Wallet";}
-}
-
-async function aWallet(){
-  var btn=document.getElementById("ba");
-  var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
-  btn.disabled=true;btn.textContent=isIOS?"Opening Wallet...":"Preparing pass...";
-  setMsg(isIOS?"Opening Apple Wallet...":"Creating Apple Wallet pass...",true);
-  if(isIOS){
-    showCardAdded("Apple Wallet");
-    setTimeout(function(){
-      var url=API+"/api/pass/apple/create?name="+encodeURIComponent(cName)+"&phone="+encodeURIComponent(cPhone)+"&businessId="+(bizId||"cafe-carmel");
-      window.location.href=url;
-    },400);
-  }else{
-    try{
-      var r=await fetch(API+"/api/pass/apple/create",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name:cName,phone:cPhone,businessId:bizId||"cafe-carmel"})});
-      if(r.ok){
-        var blob=await r.blob(),url=URL.createObjectURL(blob);
-        showCardAdded("Apple Wallet");
-        var a=document.createElement("a");a.href=url;a.download="loyalpass.pkpass";
-        document.body.appendChild(a);a.click();
-        setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
-      }else{
-        var d=await r.json().catch(function(){return{error:"Server error"};});
-        setMsg(d.error||"Error",false);btn.disabled=false;btn.textContent=" Add to Apple Wallet";
-      }
-    }catch(e){setMsg("Connection error",false);btn.disabled=false;btn.textContent=" Add to Apple Wallet";}
+// ── Google Wallet ─────────────────────────────────────────────────────────────
+function addGoogle() {
+  if (!googleWalletUrl) {
+    if (!curPhone || !curName) return;
+    fetch(API + '/api/pass/create', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name: curName, phone: curPhone, businessId: curBiz.id })
+    }).then(function(r){return r.json();}).then(function(d){
+      if (d.googleWalletUrl) { window.open(d.googleWalletUrl, '_blank'); showSuccess(); }
+    });
+    return;
   }
+  window.open(googleWalletUrl, '_blank');
+  showSuccess();
 }
 
-// Check if returning user has existing card
-async function checkReturning(phone, bizId2){
-  try{
-    var r=await fetch(API+"/api/pass/lookup?phone="+encodeURIComponent(phone)+"&businessId="+bizId2);
-    return await r.json();
-  }catch(e){return null;}
+// ── Success screen ────────────────────────────────────────────────────────────
+function showSuccess() {
+  document.getElementById('success-sub').textContent =
+    'Your ' + curBiz.name + ' loyalty card is ready. Show it at the counter!';
+  document.getElementById('form-screen').style.display    = 'none';
+  document.getElementById('success-screen').classList.add('show');
 }
 
-// INIT
-var app=document.getElementById("app");
-if(!biz){
-  app.innerHTML="<div style=\"text-align:center;padding:40px 20px\">"+
-    "<div style=\"font-size:2rem;margin-bottom:12px\">\u2726</div>"+
-    "<div style=\"font-size:1.2rem;font-weight:700;margin-bottom:8px\">LoyalPass</div>"+
-    "<div style=\"font-size:.85rem;color:var(--text2)\">Scan a business QR code to get your loyalty card.</div>"+
-  "</div>";
-}else{
-  app.innerHTML=renderCard(biz,0)+renderForm();
+// ── Shake animation on invalid input ─────────────────────────────────────────
+function shake(id) {
+  var el = document.getElementById(id);
+  el.style.animation = 'none';
+  el.style.borderColor = '#ff3b30';
+  el.style.boxShadow  = '0 0 0 4px rgba(255,59,48,.15)';
+  setTimeout(function(){
+    el.style.borderColor = '';
+    el.style.boxShadow   = '';
+  }, 2000);
+  el.focus();
 }
+
+function showError(msg) {
+  // Simple inline error — can be upgraded to toast
+  var btn = document.getElementById('jb');
+  btn.style.background = '#ff3b30';
+  btn.querySelector('#btn-text').textContent = msg;
+  setTimeout(function(){
+    btn.style.background = '';
+    btn.querySelector('#btn-text').textContent = 'Get my card';
+    document.getElementById('btn-arrow').style.display = 'inline';
+    btn.disabled = false;
+  }, 3000);
+}
+
+// ── Card tilt on mouse move ───────────────────────────────────────────────────
+(function() {
+  var card = document.getElementById('main-card');
+  if (!card) return;
+  card.addEventListener('mousemove', function(e) {
+    var rect = card.getBoundingClientRect();
+    var x = (e.clientX - rect.left) / rect.width  - 0.5;
+    var y = (e.clientY - rect.top)  / rect.height - 0.5;
+    card.style.transform = 'translateY(-4px) rotateY(' + (x*8) + 'deg) rotateX(' + (-y*5) + 'deg)';
+  });
+  card.addEventListener('mouseleave', function() {
+    card.style.transform = '';
+  });
+})();
 </script>
 </body>
 </html>
